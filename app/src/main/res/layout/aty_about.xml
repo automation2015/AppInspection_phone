@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
+
+<include layout="@layout/common_title"></include>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:text="设备点巡检软件介绍"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:text="世界上最遥远的距离，是我在if里你在else里，似乎一直相伴又永远分离；世界上最痴心的等待，是我当case你是switch，或许永远都选不上自己；世界上最真情的相依，是你在try我在catch。无论你发神马脾气，我都默默承受，静静处理。到那时，再来期待我们的finally。"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:text="世界上最遥远的距离，是我在if里你在else里，似乎一直相伴又永远分离；世界上最痴心的等待，是我当case你是switch，或许永远都选不上自己；世界上最真情的相依，是你在try我在catch。无论你发神马脾气，我都默默承受，静静处理。到那时，再来期待我们的finally。"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:text="世界上最遥远的距离，是我在if里你在else里，似乎一直相伴又永远分离；世界上最痴心的等待，是我当case你是switch，或许永远都选不上自己；"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:text="世界上最遥远的距离，是我在if里你在else里，似乎一直相伴又永远分离；世界上最痴心的等待，是我当case你是switch，或许永远都选不上自己；世界上最真情的相依，是你在try我在catch。无论你发神马脾气，我都默默承受，静静处理。到那时，再来期待我们的finally。"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:text="世界上最遥远的距离，是我在if里你在else里，似乎一直相伴又永远分离；世界上最痴心的等待，是我当case你是switch，或许永远都选不上自己；"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+</ScrollView>
+</LinearLayout>

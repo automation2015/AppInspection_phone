@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="auto.cn.appinspection">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <application
+        android:name=".bases.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/icon_shangang"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/icon_shangang"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".atys.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".atys.AtyLogin" />
+        <activity android:name=".atys.AtyWelcome" />
+        <activity android:name=".atys.AtyPlan" />
+        <activity android:name=".atys.AtyUserRegist" />
+        <activity android:name=".atys.GestureEditActivity" />
+        <activity android:name=".atys.GestureVerifyActivity" />
+        <activity android:name=".atys.AtyAbout"></activity>
+    </application>
+
+</manifest>
