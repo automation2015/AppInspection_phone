@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -27,7 +29,11 @@ import auto.cn.appinspection.atys.AtyAbout;
 import auto.cn.appinspection.atys.AtyUserRegist;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.bases.BaseFragment;
-import auto.cn.appinspection.commons.AppNetConfig;
+import auto.cn.appinspection.beans.DownLoadBean;
+import auto.cn.appinspection.net.AppUpdater;
+import auto.cn.appinspection.net.INetCallback;
+import auto.cn.appinspection.ui.UpdateVersionShowDialog;
+import auto.cn.appinspection.utils.DownloadUtils;
 import auto.cn.appinspection.utils.UIUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -54,6 +60,8 @@ public class MoreFragment extends BaseFragment {
     TextView tvMoreAbout;
     @Bind(R.id.tv_more_feedback)
     TextView tvMoreFeedback;
+    @Bind(R.id.tv_more_checkversion)
+    TextView tvMoreCheckversion;
 
     @Override
     protected RequestParams getParams() {
@@ -77,6 +85,8 @@ public class MoreFragment extends BaseFragment {
         shareSoftwareMsg();
         //软件说明
         aboutInspection();
+        //检查版本
+        updateVersion();
     }
 
     public void initTitle() {
@@ -99,6 +109,7 @@ public class MoreFragment extends BaseFragment {
             }
         });
     }
+
     //软件说明
     private void aboutInspection() {
         tvMoreAbout.setOnClickListener(new View.OnClickListener() {
@@ -108,12 +119,13 @@ public class MoreFragment extends BaseFragment {
             }
         });
     }
+
     //分享软件
     private void shareSoftwareMsg() {
         tvMoreShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String s="\"世界上最遥远的距离，是我在if里你在else里，似乎一直相伴又永远分离；\"\n" +
+                String s = "\"世界上最遥远的距离，是我在if里你在else里，似乎一直相伴又永远分离；\"\n" +
                         "\" 世界上最痴心的等待，是我当case你是switch，或许永远都选不上自己；\"\n" +
                         "\" 世界上最真情的相依，是你在try我在catch。无论你发神马脾气，我都默默承受，静静处理。到那时，再来期待我们的finally。\"";
 
@@ -125,6 +137,7 @@ public class MoreFragment extends BaseFragment {
         });
 
     }
+
     //联系客服
     private void contactService() {
         rlMoreContact.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +165,9 @@ public class MoreFragment extends BaseFragment {
             }
         });
     }
+
     private String department = "不明确";
+
     //提交反馈意见
     private void commitFeedback() {
         tvMoreFeedback.setOnClickListener(new View.OnClickListener() {
@@ -203,4 +218,48 @@ public class MoreFragment extends BaseFragment {
             }
         });
     }
+
+    //检查版本
+    private void updateVersion() {
+     tvMoreCheckversion.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             AppUpdater.getsInstance().getmNetManager().get("http://59.110.162.30/app_updater_version.json", new INetCallback() {
+                 @Override
+                 public void success(String response) {
+                     Log.e("tag", "response=" + response);
+                     //1.解析json
+                     DownLoadBean bean=DownLoadBean.parse(response);
+                     if(bean==null){
+                         Toast.makeText(getActivity(),"版本检测接口返回数据异常！",Toast.LENGTH_SHORT).show();
+                         return;
+                     }
+                     //检测：是否需要弹框
+                     try {
+                         long versionCode = Long.parseLong(bean.getVersionCode());
+                         if(versionCode<=DownloadUtils.getVersionCode(getActivity())){
+                             Toast.makeText(getActivity(),"已经时最新版本，无需更新！！",Toast.LENGTH_SHORT).show();
+                             return;}
+                     } catch (NumberFormatException e) {
+                         e.printStackTrace();
+                         Toast.makeText(getActivity(),"版本检测接口返回版本号异常！",Toast.LENGTH_SHORT).show();
+                     }
+                     //3.弹框
+                     UpdateVersionShowDialog.show(getActivity(),bean);
+                     //2.版本匹配
+                     //3.弹框
+                     //4.点击下载
+
+                 }
+
+                 @Override
+                 public void failed(Throwable throwable) {
+                     Toast.makeText(getActivity(),"版本更新接口请求失败！",Toast.LENGTH_SHORT).show();
+                     throwable.printStackTrace();
+                 }
+             },getActivity());
+         }
+     });
+    }
+
 }

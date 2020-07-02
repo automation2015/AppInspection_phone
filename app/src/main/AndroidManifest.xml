@@ -7,7 +7,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"></uses-permission>
     <application
         android:name=".bases.MyApplication"
         android:allowBackup="true"
@@ -15,21 +16,32 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_shangang"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/network_security_config">
         <activity android:name=".atys.MainActivity">
+
+        </activity>
+        <activity android:name=".atys.AtyLogin" />
+        <activity android:name=".atys.AtyWelcome" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".atys.AtyLogin" />
-        <activity android:name=".atys.AtyWelcome" />
         <activity android:name=".atys.AtyPlan" />
         <activity android:name=".atys.AtyUserRegist" />
         <activity android:name=".atys.GestureEditActivity" />
         <activity android:name=".atys.GestureVerifyActivity" />
         <activity android:name=".atys.AtyAbout"></activity>
+        <provider
+            android:authorities="${applicationId}.fileprovider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileproviderpath"></meta-data>
+        </provider>
     </application>
 
 </manifest>

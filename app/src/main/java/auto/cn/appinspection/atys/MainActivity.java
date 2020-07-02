@@ -20,6 +20,7 @@ import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.fregments.HomeFragment;
 import auto.cn.appinspection.fregments.MeFragment;
 import auto.cn.appinspection.fregments.MoreFragment;
+import auto.cn.appinspection.net.AppUpdater;
 import auto.cn.appinspection.utils.UIUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -187,5 +188,6 @@ public class MainActivity extends BaseActivity {
 //将保存在sp中的数据清除
 //        SharedPreferences sp =this.getSharedPreferences("user_info", Context.MODE_PRIVATE);
 //        sp.edit().clear().commit();//清除数据操作必须提交；提交以后，文件仍存在，只是文件中的数据被清除了
+        AppUpdater.getsInstance().getmNetManager().cancel(this);
     }
 }

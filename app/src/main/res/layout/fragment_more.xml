@@ -27,6 +27,7 @@
                 android:layout_height="1dp"
                 android:background="@color/divider_line"></View>
                 <TextView
+                    android:id="@+id/tv_more_checkversion"
                     style="@style/MoreTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_alignParentStart="true"
