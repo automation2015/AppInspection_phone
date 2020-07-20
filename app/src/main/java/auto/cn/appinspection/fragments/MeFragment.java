@@ -1,4 +1,4 @@
-package auto.cn.appinspection.fregments;
+package auto.cn.appinspection.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -17,9 +17,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -49,7 +47,6 @@ import auto.cn.appinspection.utils.BitmapUtils;
 import auto.cn.appinspection.utils.LogUtil;
 import auto.cn.appinspection.utils.UIUtils;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;

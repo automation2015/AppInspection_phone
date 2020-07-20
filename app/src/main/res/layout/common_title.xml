@@ -15,7 +15,7 @@
             android:id="@+id/iv_title_back"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:src="@mipmap/left"
+            android:src="@mipmap/icon_arrow_left"
             android:layout_marginLeft="10dp"
             />
         <TextView

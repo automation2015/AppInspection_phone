@@ -1,8 +1,5 @@
 package auto.cn.appinspection.atys;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentManager;
@@ -17,13 +14,12 @@ import android.widget.Toast;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.bases.BaseActivity;
-import auto.cn.appinspection.fregments.HomeFragment;
-import auto.cn.appinspection.fregments.MeFragment;
-import auto.cn.appinspection.fregments.MoreFragment;
+import auto.cn.appinspection.fragments.HomeFragment;
+import auto.cn.appinspection.fragments.MeFragment;
+import auto.cn.appinspection.fragments.MoreFragment;
 import auto.cn.appinspection.net.AppUpdater;
 import auto.cn.appinspection.utils.UIUtils;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {

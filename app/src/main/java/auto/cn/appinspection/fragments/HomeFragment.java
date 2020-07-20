@@ -1,4 +1,4 @@
-package auto.cn.appinspection.fregments;
+package auto.cn.appinspection.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -36,7 +36,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener {
     ImageView ivTitleSetting;
     @Bind(R.id.gv)
     GridView gv;
-    private int[] icon = {R.mipmap.check, R.mipmap.danger, R.mipmap.maintenance, R.mipmap.other};
+    private int[] icon = {R.mipmap.icon_homefragemtn1, R.mipmap.icon_homefragemtn2, R.mipmap.icon_homefragemtn3, R.mipmap.icon_homefragemtn4};
     private String[] iconName = {"计划管理", "隐患管理", "检修管理", "其他管理"};
     private BadgeViewAdapter adapter;
     private List<Map<String, Object>> dataList;

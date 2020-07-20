@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swiperefresh"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+   >
+
+<ListView  android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:id="@+id/lv_fragment_plan"
+    android:dividerHeight="5dp"
+    android:divider="@null"
+    >
+</ListView>
+</android.support.v4.widget.SwipeRefreshLayout>
+<android.support.design.widget.FloatingActionButton
+android:id="@+id/fab_choosemsg"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_gravity="center"
+android:layout_marginBottom="@dimen/fab_margin"
+android:src="@mipmap/icon_plan_enter"
+app:borderWidth="0dp"
+app:backgroundTint="@color/title_text"
+    >
+</android.support.design.widget.FloatingActionButton>
+</LinearLayout>

@@ -148,8 +148,6 @@ public abstract class LoadingPage extends FrameLayout {
                 });
             }
         }, 2000);
-
-
     }
 
     private void loadImage() {

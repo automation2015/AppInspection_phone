@@ -46,7 +46,6 @@ public abstract class BaseActivity extends FragmentActivity {
     //销毁当前Activity
     public void removeCurrentActivity(){
         ActivityManager.getInstance().removeCurrent();
-
     }
     //销毁所有的Activity
     public void removeAll(){
@@ -62,9 +61,7 @@ public abstract class BaseActivity extends FragmentActivity {
         edit.putString("rolename",user.getRolename());
         edit.putBoolean("isLogin",user.getIsLogin());
         edit.putString("loginTime",user.getLoginTime());
-
         edit.commit();//必须提交，否则保存不成功
-
     }
     //读取用户信息
     public UserBean readUser(){
@@ -74,7 +71,6 @@ public abstract class BaseActivity extends FragmentActivity {
         user.setRolename(sp.getString("rolename",""));
         user.setIsLogin(sp.getBoolean("isLogin",false));
         user.setLoginTime(sp.getString("loginTime",""));
-
         return user;
     }
 }
