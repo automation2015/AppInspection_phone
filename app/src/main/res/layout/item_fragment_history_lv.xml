@@ -74,10 +74,17 @@
             android:orientation="vertical"
             android:layout_gravity="center_vertical|right"
             android:layout_marginRight="8dp">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/icon_arrow_right"/>
+            <auto.cn.appinspection.ui.RoundProgress
+                android:id="@+id/p_progresss"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                app:roundColor="@android:color/darker_gray"
+                app:roundProgressColor="#18B4ED"
+                app:roundWidth="5dp"
+                app:textColor="#18b4ed"
+                app:textSize="12sp"></auto.cn.appinspection.ui.RoundProgress>
+
         </LinearLayout>
     </LinearLayout>
 

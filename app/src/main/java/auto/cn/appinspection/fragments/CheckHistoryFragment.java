@@ -15,19 +15,15 @@ public class CheckHistoryFragment extends BaseFragment {
     protected String getUrl() {
         return null;
     }
-
-    @Override
-    protected void initData(String content) {
-
-    }
-
     @Override
     protected void initTitle() {
-
     }
-
     @Override
     public int getLayoutId() {
         return R.layout.fragment_check_history;
     }
+    @Override
+    protected void initData(String content) {
+    }
+
 }

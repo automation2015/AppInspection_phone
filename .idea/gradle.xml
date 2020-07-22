@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/GestureLock" />
+            <option value="$PROJECT_DIR$/GreenDaoGenerate" />
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>

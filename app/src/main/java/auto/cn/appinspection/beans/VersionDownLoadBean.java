@@ -5,9 +5,9 @@ import com.google.gson.JsonSyntaxException;
 
 import java.io.Serializable;
 
-public class DownLoadBean implements Serializable {
+public class VersionDownLoadBean implements Serializable {
 
-    /**
+    /**版本更新
      * title : 4.5.0更新啦！
      * content : 1. 优化了阅读体验；
      2. 上线了 hyman 的课程；
@@ -23,9 +23,9 @@ public class DownLoadBean implements Serializable {
     private String md5;
     private String versionCode;
 
-    public static DownLoadBean parse(String response) {
+    public static VersionDownLoadBean parse(String response) {
         try {
-            DownLoadBean bean = new Gson().fromJson(response, DownLoadBean.class);
+            VersionDownLoadBean bean = new Gson().fromJson(response, VersionDownLoadBean.class);
             return bean;
         } catch (JsonSyntaxException e) {
             e.printStackTrace();

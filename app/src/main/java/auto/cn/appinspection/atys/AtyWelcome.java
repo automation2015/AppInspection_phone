@@ -2,18 +2,10 @@ package auto.cn.appinspection.atys;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -22,21 +14,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.bases.BaseActivity;
-import auto.cn.appinspection.beans.DownLoadBean;
-import auto.cn.appinspection.commons.ActivityManager;
-import auto.cn.appinspection.commons.AppNetConfig;
+import auto.cn.appinspection.beans.VersionDownLoadBean;
 import auto.cn.appinspection.net.AppUpdater;
 import auto.cn.appinspection.net.INetCallback;
 import auto.cn.appinspection.ui.UpdateVersionShowDialog;
@@ -175,7 +157,7 @@ public class AtyWelcome extends BaseActivity {
                 public void success(String response) {
                     Log.e("tag", "response=" + response);
                     //1.解析json
-                    DownLoadBean bean=DownLoadBean.parse(response);
+                    VersionDownLoadBean bean=VersionDownLoadBean.parse(response);
                     if(bean==null){
                         Toast.makeText(AtyWelcome.this,"版本检测接口返回数据异常！",Toast.LENGTH_SHORT).show();
                         toMain();

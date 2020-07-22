@@ -30,7 +30,8 @@
         <activity android:name=".atys.AtyWelcome">
 
         </activity>
-        <activity android:name=".atys.AtyPlan">
+        <activity android:name=".atys.AtyPlan"
+            android:configChanges="orientation|screenSize|keyboardHidden">
 
         </activity>
         <activity android:name=".atys.AtyUserRegist" />

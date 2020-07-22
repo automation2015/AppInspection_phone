@@ -1,1 +1,1 @@
-include ':app', ':GestureLock'
+include ':app', ':GestureLock', ':GreenDaoGenerate'

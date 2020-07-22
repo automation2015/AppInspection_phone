@@ -4,6 +4,10 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import auto.cn.appinspection.bases.MyApplication;
 /**
  * 专门提供为处理一些UI相关的问题而创建的工具类
@@ -62,6 +66,16 @@ public class UIUtils {
 
     public static void toast(String message,boolean isLengthLong){
         Toast.makeText(UIUtils.getContext(),message,isLengthLong?Toast.LENGTH_LONG:Toast.LENGTH_SHORT).show();
+    }
+    //字符格式转Date-Time
+    public static  void string2Date(String str){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date dateTime = sdf.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

@@ -14,5 +14,11 @@
     <color name="common_red">#CC0000</color>
     <color name="more_text">#5a6e9e</color>
     <color name="round_red_common">#DC143C</color>
+    <color name="drop_down_selected">#ff890c85</color>
+    <color name="drop_down_unselected">#ff111111</color>
+    <color name="gray">#ffcccccc</color>
+    <color name="un_press_selected">#ff890c85</color>
+    <color name="check_bg">#ff8800</color>
+    <color name="mask_color">#88888888</color>
 
 </resources>

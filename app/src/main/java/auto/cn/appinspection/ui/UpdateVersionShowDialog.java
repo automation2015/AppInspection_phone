@@ -20,7 +20,7 @@ import java.io.File;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.atys.AtyWelcome;
-import auto.cn.appinspection.beans.DownLoadBean;
+import auto.cn.appinspection.beans.VersionDownLoadBean;
 import auto.cn.appinspection.net.AppUpdater;
 import auto.cn.appinspection.net.INetDownloadCallback;
 import auto.cn.appinspection.utils.DownloadUtils;
@@ -28,14 +28,14 @@ import butterknife.ButterKnife;
 
 public class UpdateVersionShowDialog extends DialogFragment {
     private static final String KEY_DOWNLOAD_BEAN = "download_bean";
-    private DownLoadBean mDownloadBean;
+    private VersionDownLoadBean mDownloadBean;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         if(arguments!=null){
-            mDownloadBean= (DownLoadBean) arguments.getSerializable(KEY_DOWNLOAD_BEAN);
+            mDownloadBean= (VersionDownLoadBean) arguments.getSerializable(KEY_DOWNLOAD_BEAN);
         }
     }
 
@@ -116,7 +116,7 @@ public class UpdateVersionShowDialog extends DialogFragment {
 });
     }
      //MainActivity满足条件显示dialog时将get获取的信息传递给dialog显示，并给dialog设置一个tag标志
-    public static void show(FragmentActivity activity, DownLoadBean bean) {
+    public static void show(FragmentActivity activity, VersionDownLoadBean bean) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(KEY_DOWNLOAD_BEAN, bean);
         UpdateVersionShowDialog dialog = new UpdateVersionShowDialog();

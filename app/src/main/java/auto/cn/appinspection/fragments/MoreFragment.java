@@ -26,7 +26,7 @@ import auto.cn.appinspection.atys.AtyAbout;
 import auto.cn.appinspection.atys.AtyUserRegist;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.bases.BaseFragment;
-import auto.cn.appinspection.beans.DownLoadBean;
+import auto.cn.appinspection.beans.VersionDownLoadBean;
 import auto.cn.appinspection.net.AppUpdater;
 import auto.cn.appinspection.net.INetCallback;
 import auto.cn.appinspection.ui.UpdateVersionShowDialog;
@@ -225,7 +225,7 @@ public class MoreFragment extends BaseFragment {
                  public void success(String response) {
                      Log.e("tag", "response=" + response);
                      //1.解析json
-                     DownLoadBean bean=DownLoadBean.parse(response);
+                     VersionDownLoadBean bean=VersionDownLoadBean.parse(response);
                      if(bean==null){
                          Toast.makeText(getActivity(),"版本检测接口返回数据异常！",Toast.LENGTH_SHORT).show();
                          return;

@@ -12,4 +12,17 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="aaaaaaaaaaaa"/>
+    <auto.cn.appinspection.ui.DropDownMemu
+        android:id="@+id/dropDownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:dividerColor="@color/gray"
+        app:maskColor="@color/mask_color"
+        app:menuBackgroundColor="@color/white"
+        app:menuSelectedIcon="@mipmap/iv_icon_down"
+        app:menuTextSize="14sp"
+        app:menuUnSelectedIcon="@mipmap/iv_icon_up"
+        app:textSelectdColor="@color/drop_down_selected"
+        app:textUnSelectdColor="@color/drop_down_unselected"
+        app:underlineColor="@color/gray"></auto.cn.appinspection.ui.DropDownMemu>
 </LinearLayout>
