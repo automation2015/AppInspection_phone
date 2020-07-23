@@ -33,8 +33,8 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
         public final static Property ITEM_PART_ID = new Property(2, String.class, "ITEM_PART_ID", false, "ITEM__PART__ID");
         public final static Property ITEM_PL_BZ_ID = new Property(3, String.class, "ITEM_PL_BZ_ID", false, "ITEM__PL__BZ__ID");
         public final static Property ITEM_NAME = new Property(4, String.class, "ITEM_NAME", false, "ITEM__NAME");
-        public final static Property ITEM_CREATE_DATE = new Property(5, java.util.Date.class, "ITEM_CREATE_DATE", false, "ITEM__CREATE__DATE");
-        public final static Property Valid_Flag = new Property(6, Integer.class, "Valid_Flag", false, "VALID__FLAG");
+        public final static Property ITEM_CREATE_DATE = new Property(5, String.class, "ITEM_CREATE_DATE", false, "ITEM__CREATE__DATE");
+        public final static Property Valid_Flag = new Property(6, String.class, "Valid_Flag", false, "VALID__FLAG");
         public final static Property Fk_part = new Property(7, Long.class, "fk_part", false, "FK_PART");
     };
 
@@ -60,8 +60,8 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
                 "\"ITEM__PART__ID\" TEXT," + // 2: ITEM_PART_ID
                 "\"ITEM__PL__BZ__ID\" TEXT," + // 3: ITEM_PL_BZ_ID
                 "\"ITEM__NAME\" TEXT," + // 4: ITEM_NAME
-                "\"ITEM__CREATE__DATE\" INTEGER," + // 5: ITEM_CREATE_DATE
-                "\"VALID__FLAG\" INTEGER," + // 6: Valid_Flag
+                "\"ITEM__CREATE__DATE\" TEXT," + // 5: ITEM_CREATE_DATE
+                "\"VALID__FLAG\" TEXT," + // 6: Valid_Flag
                 "\"FK_PART\" INTEGER);"); // 7: fk_part
     }
 
@@ -101,14 +101,14 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
             stmt.bindString(5, ITEM_NAME);
         }
  
-        java.util.Date ITEM_CREATE_DATE = entity.getITEM_CREATE_DATE();
+        String ITEM_CREATE_DATE = entity.getITEM_CREATE_DATE();
         if (ITEM_CREATE_DATE != null) {
-            stmt.bindLong(6, ITEM_CREATE_DATE.getTime());
+            stmt.bindString(6, ITEM_CREATE_DATE);
         }
  
-        Integer Valid_Flag = entity.getValid_Flag();
+        String Valid_Flag = entity.getValid_Flag();
         if (Valid_Flag != null) {
-            stmt.bindLong(7, Valid_Flag);
+            stmt.bindString(7, Valid_Flag);
         }
  
         Long fk_part = entity.getFk_part();
@@ -138,8 +138,8 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // ITEM_PART_ID
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // ITEM_PL_BZ_ID
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // ITEM_NAME
-            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)), // ITEM_CREATE_DATE
-            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // Valid_Flag
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // ITEM_CREATE_DATE
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // Valid_Flag
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // fk_part
         );
         return entity;
@@ -153,8 +153,8 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
         entity.setITEM_PART_ID(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setITEM_PL_BZ_ID(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setITEM_NAME(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setITEM_CREATE_DATE(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
-        entity.setValid_Flag(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
+        entity.setITEM_CREATE_DATE(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setValid_Flag(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setFk_part(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
      }
     

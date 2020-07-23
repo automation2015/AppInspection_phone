@@ -17,8 +17,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +34,13 @@ import auto.cn.appinspection.utils.UIUtils;
 
 import auto.cn.greendaogenerate.AreaList;
 import auto.cn.greendaogenerate.AreaListDao;
+import auto.cn.greendaogenerate.ContentList;
 import auto.cn.greendaogenerate.ContentListDao;
 import auto.cn.greendaogenerate.DaoMaster;
 import auto.cn.greendaogenerate.DaoSession;
 import auto.cn.greendaogenerate.Equiplist;
 import auto.cn.greendaogenerate.EquiplistDao;
+import auto.cn.greendaogenerate.ItemList;
 import auto.cn.greendaogenerate.ItemListDao;
 import auto.cn.greendaogenerate.PartList;
 import auto.cn.greendaogenerate.PartListDao;
@@ -48,6 +48,7 @@ import auto.cn.greendaogenerate.PlanList;
 import auto.cn.greendaogenerate.PlanListDao;
 import butterknife.Bind;
 import butterknife.OnClick;
+import de.greenrobot.dao.query.QueryBuilder;
 
 public class PlanFragment extends BaseFragment {
     @Bind(R.id.lv_fragment_plan)
@@ -86,10 +87,8 @@ public class PlanFragment extends BaseFragment {
 
     @Override
     protected String getUrl() {
-
-        return url;
+        return url1;
     }
-
     @Override
     protected void initData(String content) {
         //解析获取的数据
@@ -145,11 +144,15 @@ public class PlanFragment extends BaseFragment {
                 //((BaseActivity) getActivity()).removeCurrentActivity();
             }
         });
+        //设置控制台输出sql语句，filter tag：”greenDAO”
+        QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;
         //打开数据库
         openDb();
         //将联网获取的数据存入数据库
-        //saveDb(mDatas);
+        saveDb(mDatas);
     }
+    //打开数据库
     private void openDb() {
         db = new DaoMaster.DevOpenHelper(getActivity(), "plan.db", null)
                 .getReadableDatabase();
@@ -164,20 +167,18 @@ public class PlanFragment extends BaseFragment {
     }
     //将联网获取的数据存入数据库
     private void saveDb(List<PlanBean> mDatas) {
-        if (mDatas==null) {
+        if (mDatas==null&&mDatas.size()>0) {
             return;
         }
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+        //第一层循环，添加计划数据
         for (int i = 0; i < mDatas.size(); i++) {
-
             try {
                 PlanBean planData= mDatas.get(i);
                 List<PlanBean.AreaListBean> areaDatas = mDatas.get(i).getAreaList();
 
                 PlanList planList=new PlanList();
-                planList.setId(Long.valueOf(planData.getId()));
-                planList.setPLAN_PART_ID(planData.getPLAN_ID());
+               //planList.setId(Long.valueOf(planData.getId()));
+                planList.setPLAN_ID(planData.getPLAN_PART_ID());
                 planList.setPLAN_NAME(planData.getPLAN_NAME());
                 planList.setPLAN_ORG_NAME(planData.getPLAN_ORG_NAME());
 
@@ -186,16 +187,16 @@ public class PlanFragment extends BaseFragment {
                 planList.setPLAN_NUM(Integer.valueOf(planData.getPLAN_NUM()));
                 planList.setPLAN_CYCLE_TYPE(Integer.valueOf(planData.getPLAN_CYCLE_TYPE()));
 
-                planList.setPLAN_LAST_DATE(sdf.parse(planData.getPLAN_LAST_DATE()));
+                planList.setPLAN_LAST_DATE(planData.getPLAN_LAST_DATE());
                 planList.setPLAN_LAST_USER_NAME(planData.getPLAN_LAST_USER_NAME());
-                planList.setPLAN_CREATE_DATE(sdf.parse(planData.getPLAN_CREATE_DATE()));
+                planList.setPLAN_CREATE_DATE(planData.getPLAN_CREATE_DATE());
                 planList.setValid_Flag(planData.getValid_Flag());
 
-                planList.setShift(Integer.valueOf(planData.getShift()));
+                planList.setShift(planData.getShift());
                 planList.setCODE_NAME(planData.getCODE_NAME());
 
-                planListDao.insert(planList);
-
+                planListDao.insertOrReplace(planList);
+               //第二层循环，添加area数据
                 for (int j = 0; j <areaDatas.size(); j++) {
                     PlanBean.AreaListBean areaData = areaDatas.get(j);
                     List<PlanBean.AreaListBean.EquipListBean> equipDatas = areaData.getEquipList();
@@ -205,12 +206,13 @@ public class PlanFragment extends BaseFragment {
                     areaList.setPL_AREA_LABEL(areaData.getPL_AREA_LABEL());
                     areaList.setPL_AREA_CREATE_ID(areaData.getPL_AREA_CREATE_ID());
 
-                    areaList.setPL_AREA_CREATE_DATE(sdf.parse(areaData.getPL_AREA_CREATE_DATE()));
+                    areaList.setPL_AREA_CREATE_DATE(areaData.getPL_AREA_CREATE_DATE());
                     areaList.setValid_Flag(areaData.getValid_Flag());
                     areaList.setPlanId(areaData.getPlanId());
 
                     areaList.setPlanList(planList);
-                    areaListDao.insert(areaList);
+                    areaListDao.insertOrReplace(areaList);
+                    //第三层循环，添加equip数据
                     for (int k = 0; k <equipDatas.size() ; k++) {
                         PlanBean.AreaListBean.EquipListBean equipData = equipDatas.get(k);
                         List<PlanBean.AreaListBean.EquipListBean.PartListBean> partDatas = equipData.getPartList();
@@ -226,26 +228,81 @@ public class PlanFragment extends BaseFragment {
                         equipList.setPL_AREA_ID(equipData.getPL_AREA_ID());
 
                         equipList.setAreaList(areaList);
-                        equiplistDao.insert(equipList);
+                        equiplistDao.insertOrReplace(equipList);
+                        //第四层循环，添加part数据
                         for (int l = 0; l < partDatas.size(); l++) {
                             PlanBean.AreaListBean.EquipListBean.PartListBean partData = partDatas.get(l);
+                            List<PlanBean.AreaListBean.EquipListBean.PartListBean.ItemListBean> itemDatas = partData.getItemList();
+
                             PartList partList = new PartList();
-                           // partList.setId();
+                           // partList.setId(Long.valueOf(partData.getId()));
+                            partList.setPART_ID(partData.getPART_ID());
+                            partList.setPART_BZ_ID(partData.getPART_BZ_ID());
+                            partList.setPART_NAME(partData.getPART_NAME());
 
+                            partList.setPART_CREATE_DATE(partData.getPART_CREATE_DATE());
+                            partList.setValid_Flag(partData.getValid_Flag());
+
+                            partList.setEquiplist(equipList);
+                            partListDao.insertOrReplace(partList);
+                            //第五层循环，添加item数据
+                            for (int m = 0; m <itemDatas.size() ; m++) {
+                                PlanBean.AreaListBean.EquipListBean.PartListBean.ItemListBean itemData = itemDatas.get(m);
+                                List<PlanBean.AreaListBean.EquipListBean.PartListBean.ItemListBean.ContentListBean> contentDatas = itemData.getContentList();
+
+                                ItemList itemList=new ItemList();
+                               // itemList.setId(Long.valueOf(itemData.getId()));
+                                itemList.setITEM_ID(itemData.getITEM_ID());
+                                itemList.setITEM_PART_ID(itemData.getITEM_PART_ID());
+                                itemList.setITEM_PL_BZ_ID(itemData.getITEM_PL_BZ_ID());
+
+                                itemList.setITEM_NAME(itemData.getITEM_NAME());
+                                itemList.setITEM_CREATE_DATE(itemData.getITEM_CREATE_DATE());
+                                itemList.setValid_Flag(itemData.getValid_Flag());
+
+                                itemList.setPartList(partList);
+                                itemListDao.insertOrReplace(itemList);
+                                //第六层循环，添加content数据
+                                for (int n = 0; n < contentDatas.size(); n++) {
+                                    PlanBean.AreaListBean.EquipListBean.PartListBean.ItemListBean.ContentListBean contentData = contentDatas.get(n);
+                                    ContentList contentList=new ContentList();
+
+                                  // contentList.setId(Long.valueOf(contentData.getId()));
+                                    contentList.setCONTENT_ID(contentData.getCONTENT_ID());
+                                    contentList.setCONTENT_PL_BZ_ID(contentData.getCONTENT_PL_BZ_ID());
+                                    contentList.setCONTENT_PART_ID(contentData.getCONTENT_PART_ID());
+
+                                    contentList.setCONTENT_ITEM_ID(contentData.getCONTENT_ITEM_ID());
+                                    contentList.setCONTENT_NAME(contentData.getCONTENT_NAME());
+                                    contentList.setCONTENT_CONTENT_TYPE(contentData.getCONTENT_CONTENT_TYPE());
+                                    contentList.setCONTENT_SORT(Integer.valueOf(contentData.getCONTENT_SORT()));
+
+                                    contentList.setCONTENT_WAY(contentData.getCONTENT_WAY());
+                                    contentList.setCONTENT_IS_USE(contentData.getCONTENT_IS_USE());
+                                    contentList.setCONTENT_STANDARD(contentData.getCONTENT_STANDARD());
+                                    contentList.setCONTENT_IS_PHOTO(contentData.getCONTENT_IS_PHOTO());
+
+                                    contentList.setCONTENT_IS_PHOTO_EXCEPTION(contentData.getCONTENT_IS_PHOTO_EXCEPTION());
+                                    contentList.setCONTENT_CREATE_DATE(contentData.getCONTENT_CREATE_DATE());
+                                    contentList.setCONTENT_ALARM_H1(contentData.getCONTENT_ALARM_H1());
+                                    contentList.setCONTENT_ALARM_H2(contentData.getCONTENT_ALARM_H2());
+
+                                    contentList.setCONTENT_ALARM_STYLE(contentData.getCONTENT_ALARM_STYLE());
+                                    contentList.setValid_Flag(contentData.getValid_Flag());
+                                    contentList.setCODE_NAME(contentData.getCODE_NAME());
+
+                                    contentList.setItemList(itemList);
+                                   contentListDao.insertOrReplace(contentList);
+                                }
+                            }
                         }
-
                     }
                 }
-
-
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-
     }
-
     //FloationActionButton点击事件
     @OnClick(R.id.fab_choosemsg)
     public void fabClick(){

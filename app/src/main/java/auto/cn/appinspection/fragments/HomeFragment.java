@@ -36,7 +36,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener {
     ImageView ivTitleSetting;
     @Bind(R.id.gv)
     GridView gv;
-    private int[] icon = {R.mipmap.icon_homefragemtn1, R.mipmap.icon_homefragemtn2, R.mipmap.icon_homefragemtn3, R.mipmap.icon_homefragemtn4};
+    private int[] icon = {R.mipmap.icon_plan_manager, R.mipmap.icon_hidden_manage, R.mipmap.icon_maintainance_manage, R.mipmap.icon_other_manage};
     private String[] iconName = {"计划管理", "隐患管理", "检修管理", "其他管理"};
     private BadgeViewAdapter adapter;
     private List<Map<String, Object>> dataList;

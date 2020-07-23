@@ -11,17 +11,18 @@ import de.greenrobot.dao.DaoException;
 public class PlanList {
 
     private Long id;
+    private String PLAN_ID;
     private String PLAN_NAME;
     private String PLAN_ORG_NAME;
     private String PLAN_PART_NAME;
     private String PLAN_PART_ID;
     private Integer PLAN_NUM;
     private Integer PLAN_CYCLE_TYPE;
-    private java.util.Date PLAN_LAST_DATE;
+    private String PLAN_LAST_DATE;
     private String PLAN_LAST_USER_NAME;
-    private java.util.Date PLAN_CREATE_DATE;
+    private String PLAN_CREATE_DATE;
     private String Valid_Flag;
-    private Integer Shift;
+    private String Shift;
     private String CODE_NAME;
 
     /** Used to resolve relations */
@@ -39,8 +40,9 @@ public class PlanList {
         this.id = id;
     }
 
-    public PlanList(Long id, String PLAN_NAME, String PLAN_ORG_NAME, String PLAN_PART_NAME, String PLAN_PART_ID, Integer PLAN_NUM, Integer PLAN_CYCLE_TYPE, java.util.Date PLAN_LAST_DATE, String PLAN_LAST_USER_NAME, java.util.Date PLAN_CREATE_DATE, String Valid_Flag, Integer Shift, String CODE_NAME) {
+    public PlanList(Long id, String PLAN_ID, String PLAN_NAME, String PLAN_ORG_NAME, String PLAN_PART_NAME, String PLAN_PART_ID, Integer PLAN_NUM, Integer PLAN_CYCLE_TYPE, String PLAN_LAST_DATE, String PLAN_LAST_USER_NAME, String PLAN_CREATE_DATE, String Valid_Flag, String Shift, String CODE_NAME) {
         this.id = id;
+        this.PLAN_ID = PLAN_ID;
         this.PLAN_NAME = PLAN_NAME;
         this.PLAN_ORG_NAME = PLAN_ORG_NAME;
         this.PLAN_PART_NAME = PLAN_PART_NAME;
@@ -67,6 +69,14 @@ public class PlanList {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getPLAN_ID() {
+        return PLAN_ID;
+    }
+
+    public void setPLAN_ID(String PLAN_ID) {
+        this.PLAN_ID = PLAN_ID;
     }
 
     public String getPLAN_NAME() {
@@ -117,11 +127,11 @@ public class PlanList {
         this.PLAN_CYCLE_TYPE = PLAN_CYCLE_TYPE;
     }
 
-    public java.util.Date getPLAN_LAST_DATE() {
+    public String getPLAN_LAST_DATE() {
         return PLAN_LAST_DATE;
     }
 
-    public void setPLAN_LAST_DATE(java.util.Date PLAN_LAST_DATE) {
+    public void setPLAN_LAST_DATE(String PLAN_LAST_DATE) {
         this.PLAN_LAST_DATE = PLAN_LAST_DATE;
     }
 
@@ -133,11 +143,11 @@ public class PlanList {
         this.PLAN_LAST_USER_NAME = PLAN_LAST_USER_NAME;
     }
 
-    public java.util.Date getPLAN_CREATE_DATE() {
+    public String getPLAN_CREATE_DATE() {
         return PLAN_CREATE_DATE;
     }
 
-    public void setPLAN_CREATE_DATE(java.util.Date PLAN_CREATE_DATE) {
+    public void setPLAN_CREATE_DATE(String PLAN_CREATE_DATE) {
         this.PLAN_CREATE_DATE = PLAN_CREATE_DATE;
     }
 
@@ -149,11 +159,11 @@ public class PlanList {
         this.Valid_Flag = Valid_Flag;
     }
 
-    public Integer getShift() {
+    public String getShift() {
         return Shift;
     }
 
-    public void setShift(Integer Shift) {
+    public void setShift(String Shift) {
         this.Shift = Shift;
     }
 

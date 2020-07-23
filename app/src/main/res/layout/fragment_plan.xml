@@ -27,6 +27,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/fab_margin"
         android:src="@mipmap/icon_plan_enter"
+        app:maxImageSize="40dp"
         app:backgroundTint="@color/title_text"
         app:borderWidth="0dp"></android.support.design.widget.FloatingActionButton>
 </LinearLayout>

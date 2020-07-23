@@ -26,7 +26,7 @@ public class ContentList {
     private String CONTENT_ALARM_H1;
     private String CONTENT_ALARM_H2;
     private String CONTENT_ALARM_STYLE;
-    private Integer Valid_Flag;
+    private String Valid_Flag;
     private String CODE_NAME;
     private Long fk_item;
 
@@ -47,7 +47,7 @@ public class ContentList {
         this.id = id;
     }
 
-    public ContentList(Long id, String CONTENT_ID, String CONTENT_PL_BZ_ID, String CONTENT_PART_ID, String CONTENT_ITEM_ID, String CONTENT_NAME, String CONTENT_CONTENT_TYPE, Integer CONTENT_SORT, String CONTENT_WAY, Integer CONTENT_IS_USE, String CONTENT_STANDARD, Integer CONTENT_IS_PHOTO, Integer CONTENT_IS_PHOTO_EXCEPTION, String CONTENT_CREATE_DATE, String CONTENT_ALARM_H1, String CONTENT_ALARM_H2, String CONTENT_ALARM_STYLE, Integer Valid_Flag, String CODE_NAME, Long fk_item) {
+    public ContentList(Long id, String CONTENT_ID, String CONTENT_PL_BZ_ID, String CONTENT_PART_ID, String CONTENT_ITEM_ID, String CONTENT_NAME, String CONTENT_CONTENT_TYPE, Integer CONTENT_SORT, String CONTENT_WAY, Integer CONTENT_IS_USE, String CONTENT_STANDARD, Integer CONTENT_IS_PHOTO, Integer CONTENT_IS_PHOTO_EXCEPTION, String CONTENT_CREATE_DATE, String CONTENT_ALARM_H1, String CONTENT_ALARM_H2, String CONTENT_ALARM_STYLE, String Valid_Flag, String CODE_NAME, Long fk_item) {
         this.id = id;
         this.CONTENT_ID = CONTENT_ID;
         this.CONTENT_PL_BZ_ID = CONTENT_PL_BZ_ID;
@@ -212,11 +212,11 @@ public class ContentList {
         this.CONTENT_ALARM_STYLE = CONTENT_ALARM_STYLE;
     }
 
-    public Integer getValid_Flag() {
+    public String getValid_Flag() {
         return Valid_Flag;
     }
 
-    public void setValid_Flag(Integer Valid_Flag) {
+    public void setValid_Flag(String Valid_Flag) {
         this.Valid_Flag = Valid_Flag;
     }
 

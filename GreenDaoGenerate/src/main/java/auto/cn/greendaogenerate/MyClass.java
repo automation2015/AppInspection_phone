@@ -13,6 +13,7 @@ public class MyClass {
         //添加plan实体
         Entity plan = schema.addEntity("PlanList");
         plan.addIdProperty();
+        plan.addStringProperty("PLAN_ID");
         plan.addStringProperty("PLAN_NAME");
         plan.addStringProperty("PLAN_ORG_NAME");
         plan.addStringProperty("PLAN_PART_NAME");
@@ -20,12 +21,12 @@ public class MyClass {
         plan.addStringProperty("PLAN_PART_ID");
         plan.addIntProperty("PLAN_NUM");
         plan.addIntProperty("PLAN_CYCLE_TYPE");
-        plan.addDateProperty("PLAN_LAST_DATE");
+        plan.addStringProperty("PLAN_LAST_DATE");
 
         plan.addStringProperty("PLAN_LAST_USER_NAME");
-        plan.addDateProperty("PLAN_CREATE_DATE");
+        plan.addStringProperty("PLAN_CREATE_DATE");
         plan.addStringProperty("Valid_Flag");
-        plan.addIntProperty("Shift");
+        plan.addStringProperty("Shift");
 
         plan.addStringProperty("CODE_NAME");
         //添加area实体
@@ -36,7 +37,7 @@ public class MyClass {
         area.addStringProperty("PL_AREA_LABEL");
         area.addStringProperty("PL_AREA_CREATE_ID");
 
-        area.addDateProperty("PL_AREA_CREATE_DATE");
+        area.addStringProperty("PL_AREA_CREATE_DATE");
         area.addIntProperty("Valid_Flag");
          area.addStringProperty("PlanId");
         // area表中增加计划外键
@@ -68,8 +69,8 @@ public class MyClass {
         part.addStringProperty("PART_ID");
         part.addStringProperty("PART_BZ_ID");
         part.addStringProperty("PART_NAME");
-        part.addDateProperty("PART_CREATE_DATE");
-        part.addIntProperty("Valid_Flag");
+        part.addStringProperty("PART_CREATE_DATE");
+        part.addStringProperty("Valid_Flag");
 
         Property equipFk = part.addLongProperty("fk_equip").getProperty();
         part.addToOne(equip, equipFk);
@@ -82,8 +83,8 @@ public class MyClass {
         item.addStringProperty("ITEM_PL_BZ_ID");
         item.addStringProperty("ITEM_NAME");
 
-        item.addDateProperty("ITEM_CREATE_DATE");
-        item.addIntProperty("Valid_Flag");
+        item.addStringProperty("ITEM_CREATE_DATE");
+        item.addStringProperty("Valid_Flag");
 
         Property partFk = item.addLongProperty("fk_part").getProperty();
         item.addToOne(part, partFk);
@@ -111,7 +112,7 @@ public class MyClass {
         content.addStringProperty("CONTENT_ALARM_H2");
         content.addStringProperty("CONTENT_ALARM_STYLE");
 
-        content.addIntProperty("Valid_Flag");
+        content.addStringProperty("Valid_Flag");
         content.addStringProperty("CODE_NAME");
 
         Property itemFk = content.addLongProperty("fk_item").getProperty();

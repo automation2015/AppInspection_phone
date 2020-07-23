@@ -45,7 +45,7 @@ public class ContentListDao extends AbstractDao<ContentList, Long> {
         public final static Property CONTENT_ALARM_H1 = new Property(14, String.class, "CONTENT_ALARM_H1", false, "CONTENT__ALARM__H1");
         public final static Property CONTENT_ALARM_H2 = new Property(15, String.class, "CONTENT_ALARM_H2", false, "CONTENT__ALARM__H2");
         public final static Property CONTENT_ALARM_STYLE = new Property(16, String.class, "CONTENT_ALARM_STYLE", false, "CONTENT__ALARM__STYLE");
-        public final static Property Valid_Flag = new Property(17, Integer.class, "Valid_Flag", false, "VALID__FLAG");
+        public final static Property Valid_Flag = new Property(17, String.class, "Valid_Flag", false, "VALID__FLAG");
         public final static Property CODE_NAME = new Property(18, String.class, "CODE_NAME", false, "CODE__NAME");
         public final static Property Fk_item = new Property(19, Long.class, "fk_item", false, "FK_ITEM");
     };
@@ -84,7 +84,7 @@ public class ContentListDao extends AbstractDao<ContentList, Long> {
                 "\"CONTENT__ALARM__H1\" TEXT," + // 14: CONTENT_ALARM_H1
                 "\"CONTENT__ALARM__H2\" TEXT," + // 15: CONTENT_ALARM_H2
                 "\"CONTENT__ALARM__STYLE\" TEXT," + // 16: CONTENT_ALARM_STYLE
-                "\"VALID__FLAG\" INTEGER," + // 17: Valid_Flag
+                "\"VALID__FLAG\" TEXT," + // 17: Valid_Flag
                 "\"CODE__NAME\" TEXT," + // 18: CODE_NAME
                 "\"FK_ITEM\" INTEGER);"); // 19: fk_item
     }
@@ -185,9 +185,9 @@ public class ContentListDao extends AbstractDao<ContentList, Long> {
             stmt.bindString(17, CONTENT_ALARM_STYLE);
         }
  
-        Integer Valid_Flag = entity.getValid_Flag();
+        String Valid_Flag = entity.getValid_Flag();
         if (Valid_Flag != null) {
-            stmt.bindLong(18, Valid_Flag);
+            stmt.bindString(18, Valid_Flag);
         }
  
         String CODE_NAME = entity.getCODE_NAME();
@@ -234,7 +234,7 @@ public class ContentListDao extends AbstractDao<ContentList, Long> {
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // CONTENT_ALARM_H1
             cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // CONTENT_ALARM_H2
             cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // CONTENT_ALARM_STYLE
-            cursor.isNull(offset + 17) ? null : cursor.getInt(offset + 17), // Valid_Flag
+            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // Valid_Flag
             cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // CODE_NAME
             cursor.isNull(offset + 19) ? null : cursor.getLong(offset + 19) // fk_item
         );
@@ -261,7 +261,7 @@ public class ContentListDao extends AbstractDao<ContentList, Long> {
         entity.setCONTENT_ALARM_H1(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
         entity.setCONTENT_ALARM_H2(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
         entity.setCONTENT_ALARM_STYLE(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
-        entity.setValid_Flag(cursor.isNull(offset + 17) ? null : cursor.getInt(offset + 17));
+        entity.setValid_Flag(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
         entity.setCODE_NAME(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
         entity.setFk_item(cursor.isNull(offset + 19) ? null : cursor.getLong(offset + 19));
      }

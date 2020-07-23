@@ -14,8 +14,8 @@ public class PartList {
     private String PART_ID;
     private String PART_BZ_ID;
     private String PART_NAME;
-    private java.util.Date PART_CREATE_DATE;
-    private Integer Valid_Flag;
+    private String PART_CREATE_DATE;
+    private String Valid_Flag;
     private Long fk_equip;
 
     /** Used to resolve relations */
@@ -36,7 +36,7 @@ public class PartList {
         this.id = id;
     }
 
-    public PartList(Long id, String PART_ID, String PART_BZ_ID, String PART_NAME, java.util.Date PART_CREATE_DATE, Integer Valid_Flag, Long fk_equip) {
+    public PartList(Long id, String PART_ID, String PART_BZ_ID, String PART_NAME, String PART_CREATE_DATE, String Valid_Flag, Long fk_equip) {
         this.id = id;
         this.PART_ID = PART_ID;
         this.PART_BZ_ID = PART_BZ_ID;
@@ -84,19 +84,19 @@ public class PartList {
         this.PART_NAME = PART_NAME;
     }
 
-    public java.util.Date getPART_CREATE_DATE() {
+    public String getPART_CREATE_DATE() {
         return PART_CREATE_DATE;
     }
 
-    public void setPART_CREATE_DATE(java.util.Date PART_CREATE_DATE) {
+    public void setPART_CREATE_DATE(String PART_CREATE_DATE) {
         this.PART_CREATE_DATE = PART_CREATE_DATE;
     }
 
-    public Integer getValid_Flag() {
+    public String getValid_Flag() {
         return Valid_Flag;
     }
 
-    public void setValid_Flag(Integer Valid_Flag) {
+    public void setValid_Flag(String Valid_Flag) {
         this.Valid_Flag = Valid_Flag;
     }
 

@@ -15,8 +15,8 @@ public class ItemList {
     private String ITEM_PART_ID;
     private String ITEM_PL_BZ_ID;
     private String ITEM_NAME;
-    private java.util.Date ITEM_CREATE_DATE;
-    private Integer Valid_Flag;
+    private String ITEM_CREATE_DATE;
+    private String Valid_Flag;
     private Long fk_part;
 
     /** Used to resolve relations */
@@ -37,7 +37,7 @@ public class ItemList {
         this.id = id;
     }
 
-    public ItemList(Long id, String ITEM_ID, String ITEM_PART_ID, String ITEM_PL_BZ_ID, String ITEM_NAME, java.util.Date ITEM_CREATE_DATE, Integer Valid_Flag, Long fk_part) {
+    public ItemList(Long id, String ITEM_ID, String ITEM_PART_ID, String ITEM_PL_BZ_ID, String ITEM_NAME, String ITEM_CREATE_DATE, String Valid_Flag, Long fk_part) {
         this.id = id;
         this.ITEM_ID = ITEM_ID;
         this.ITEM_PART_ID = ITEM_PART_ID;
@@ -94,19 +94,19 @@ public class ItemList {
         this.ITEM_NAME = ITEM_NAME;
     }
 
-    public java.util.Date getITEM_CREATE_DATE() {
+    public String getITEM_CREATE_DATE() {
         return ITEM_CREATE_DATE;
     }
 
-    public void setITEM_CREATE_DATE(java.util.Date ITEM_CREATE_DATE) {
+    public void setITEM_CREATE_DATE(String ITEM_CREATE_DATE) {
         this.ITEM_CREATE_DATE = ITEM_CREATE_DATE;
     }
 
-    public Integer getValid_Flag() {
+    public String getValid_Flag() {
         return Valid_Flag;
     }
 
-    public void setValid_Flag(Integer Valid_Flag) {
+    public void setValid_Flag(String Valid_Flag) {
         this.Valid_Flag = Valid_Flag;
     }
 

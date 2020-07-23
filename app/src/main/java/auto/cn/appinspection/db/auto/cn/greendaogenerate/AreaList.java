@@ -15,7 +15,7 @@ public class AreaList {
     private String PL_AREA_NAME;
     private String PL_AREA_LABEL;
     private String PL_AREA_CREATE_ID;
-    private java.util.Date PL_AREA_CREATE_DATE;
+    private String PL_AREA_CREATE_DATE;
     private Integer Valid_Flag;
     private String PlanId;
     private Long fk_plan;
@@ -38,7 +38,7 @@ public class AreaList {
         this.id = id;
     }
 
-    public AreaList(Long id, Integer PL_AREA_ID, String PL_AREA_NAME, String PL_AREA_LABEL, String PL_AREA_CREATE_ID, java.util.Date PL_AREA_CREATE_DATE, Integer Valid_Flag, String PlanId, Long fk_plan) {
+    public AreaList(Long id, Integer PL_AREA_ID, String PL_AREA_NAME, String PL_AREA_LABEL, String PL_AREA_CREATE_ID, String PL_AREA_CREATE_DATE, Integer Valid_Flag, String PlanId, Long fk_plan) {
         this.id = id;
         this.PL_AREA_ID = PL_AREA_ID;
         this.PL_AREA_NAME = PL_AREA_NAME;
@@ -96,11 +96,11 @@ public class AreaList {
         this.PL_AREA_CREATE_ID = PL_AREA_CREATE_ID;
     }
 
-    public java.util.Date getPL_AREA_CREATE_DATE() {
+    public String getPL_AREA_CREATE_DATE() {
         return PL_AREA_CREATE_DATE;
     }
 
-    public void setPL_AREA_CREATE_DATE(java.util.Date PL_AREA_CREATE_DATE) {
+    public void setPL_AREA_CREATE_DATE(String PL_AREA_CREATE_DATE) {
         this.PL_AREA_CREATE_DATE = PL_AREA_CREATE_DATE;
     }
 

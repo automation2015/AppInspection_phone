@@ -33,7 +33,7 @@ public class AreaListDao extends AbstractDao<AreaList, Long> {
         public final static Property PL_AREA_NAME = new Property(2, String.class, "PL_AREA_NAME", false, "PL__AREA__NAME");
         public final static Property PL_AREA_LABEL = new Property(3, String.class, "PL_AREA_LABEL", false, "PL__AREA__LABEL");
         public final static Property PL_AREA_CREATE_ID = new Property(4, String.class, "PL_AREA_CREATE_ID", false, "PL__AREA__CREATE__ID");
-        public final static Property PL_AREA_CREATE_DATE = new Property(5, java.util.Date.class, "PL_AREA_CREATE_DATE", false, "PL__AREA__CREATE__DATE");
+        public final static Property PL_AREA_CREATE_DATE = new Property(5, String.class, "PL_AREA_CREATE_DATE", false, "PL__AREA__CREATE__DATE");
         public final static Property Valid_Flag = new Property(6, Integer.class, "Valid_Flag", false, "VALID__FLAG");
         public final static Property PlanId = new Property(7, String.class, "PlanId", false, "PLAN_ID");
         public final static Property Fk_plan = new Property(8, Long.class, "fk_plan", false, "FK_PLAN");
@@ -61,7 +61,7 @@ public class AreaListDao extends AbstractDao<AreaList, Long> {
                 "\"PL__AREA__NAME\" TEXT," + // 2: PL_AREA_NAME
                 "\"PL__AREA__LABEL\" TEXT," + // 3: PL_AREA_LABEL
                 "\"PL__AREA__CREATE__ID\" TEXT," + // 4: PL_AREA_CREATE_ID
-                "\"PL__AREA__CREATE__DATE\" INTEGER," + // 5: PL_AREA_CREATE_DATE
+                "\"PL__AREA__CREATE__DATE\" TEXT," + // 5: PL_AREA_CREATE_DATE
                 "\"VALID__FLAG\" INTEGER," + // 6: Valid_Flag
                 "\"PLAN_ID\" TEXT," + // 7: PlanId
                 "\"FK_PLAN\" INTEGER);"); // 8: fk_plan
@@ -103,9 +103,9 @@ public class AreaListDao extends AbstractDao<AreaList, Long> {
             stmt.bindString(5, PL_AREA_CREATE_ID);
         }
  
-        java.util.Date PL_AREA_CREATE_DATE = entity.getPL_AREA_CREATE_DATE();
+        String PL_AREA_CREATE_DATE = entity.getPL_AREA_CREATE_DATE();
         if (PL_AREA_CREATE_DATE != null) {
-            stmt.bindLong(6, PL_AREA_CREATE_DATE.getTime());
+            stmt.bindString(6, PL_AREA_CREATE_DATE);
         }
  
         Integer Valid_Flag = entity.getValid_Flag();
@@ -145,7 +145,7 @@ public class AreaListDao extends AbstractDao<AreaList, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // PL_AREA_NAME
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // PL_AREA_LABEL
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // PL_AREA_CREATE_ID
-            cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)), // PL_AREA_CREATE_DATE
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // PL_AREA_CREATE_DATE
             cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // Valid_Flag
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // PlanId
             cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // fk_plan
@@ -161,7 +161,7 @@ public class AreaListDao extends AbstractDao<AreaList, Long> {
         entity.setPL_AREA_NAME(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setPL_AREA_LABEL(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setPL_AREA_CREATE_ID(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setPL_AREA_CREATE_DATE(cursor.isNull(offset + 5) ? null : new java.util.Date(cursor.getLong(offset + 5)));
+        entity.setPL_AREA_CREATE_DATE(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setValid_Flag(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
         entity.setPlanId(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setFk_plan(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));

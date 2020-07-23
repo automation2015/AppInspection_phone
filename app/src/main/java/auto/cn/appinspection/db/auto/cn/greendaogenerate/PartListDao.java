@@ -32,8 +32,8 @@ public class PartListDao extends AbstractDao<PartList, Long> {
         public final static Property PART_ID = new Property(1, String.class, "PART_ID", false, "PART__ID");
         public final static Property PART_BZ_ID = new Property(2, String.class, "PART_BZ_ID", false, "PART__BZ__ID");
         public final static Property PART_NAME = new Property(3, String.class, "PART_NAME", false, "PART__NAME");
-        public final static Property PART_CREATE_DATE = new Property(4, java.util.Date.class, "PART_CREATE_DATE", false, "PART__CREATE__DATE");
-        public final static Property Valid_Flag = new Property(5, Integer.class, "Valid_Flag", false, "VALID__FLAG");
+        public final static Property PART_CREATE_DATE = new Property(4, String.class, "PART_CREATE_DATE", false, "PART__CREATE__DATE");
+        public final static Property Valid_Flag = new Property(5, String.class, "Valid_Flag", false, "VALID__FLAG");
         public final static Property Fk_equip = new Property(6, Long.class, "fk_equip", false, "FK_EQUIP");
     };
 
@@ -58,8 +58,8 @@ public class PartListDao extends AbstractDao<PartList, Long> {
                 "\"PART__ID\" TEXT," + // 1: PART_ID
                 "\"PART__BZ__ID\" TEXT," + // 2: PART_BZ_ID
                 "\"PART__NAME\" TEXT," + // 3: PART_NAME
-                "\"PART__CREATE__DATE\" INTEGER," + // 4: PART_CREATE_DATE
-                "\"VALID__FLAG\" INTEGER," + // 5: Valid_Flag
+                "\"PART__CREATE__DATE\" TEXT," + // 4: PART_CREATE_DATE
+                "\"VALID__FLAG\" TEXT," + // 5: Valid_Flag
                 "\"FK_EQUIP\" INTEGER);"); // 6: fk_equip
     }
 
@@ -94,14 +94,14 @@ public class PartListDao extends AbstractDao<PartList, Long> {
             stmt.bindString(4, PART_NAME);
         }
  
-        java.util.Date PART_CREATE_DATE = entity.getPART_CREATE_DATE();
+        String PART_CREATE_DATE = entity.getPART_CREATE_DATE();
         if (PART_CREATE_DATE != null) {
-            stmt.bindLong(5, PART_CREATE_DATE.getTime());
+            stmt.bindString(5, PART_CREATE_DATE);
         }
  
-        Integer Valid_Flag = entity.getValid_Flag();
+        String Valid_Flag = entity.getValid_Flag();
         if (Valid_Flag != null) {
-            stmt.bindLong(6, Valid_Flag);
+            stmt.bindString(6, Valid_Flag);
         }
  
         Long fk_equip = entity.getFk_equip();
@@ -130,8 +130,8 @@ public class PartListDao extends AbstractDao<PartList, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // PART_ID
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // PART_BZ_ID
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // PART_NAME
-            cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)), // PART_CREATE_DATE
-            cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5), // Valid_Flag
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // PART_CREATE_DATE
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // Valid_Flag
             cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // fk_equip
         );
         return entity;
@@ -144,8 +144,8 @@ public class PartListDao extends AbstractDao<PartList, Long> {
         entity.setPART_ID(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setPART_BZ_ID(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setPART_NAME(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setPART_CREATE_DATE(cursor.isNull(offset + 4) ? null : new java.util.Date(cursor.getLong(offset + 4)));
-        entity.setValid_Flag(cursor.isNull(offset + 5) ? null : cursor.getInt(offset + 5));
+        entity.setPART_CREATE_DATE(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setValid_Flag(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setFk_equip(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
      }
     
