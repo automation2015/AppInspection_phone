@@ -19,9 +19,8 @@
             android:dividerHeight="5dp"
             android:padding="16dp"></ListView>
     </android.support.v4.widget.SwipeRefreshLayout>
-
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_choosemsg"
+        android:id="@+id/fab_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -30,4 +29,5 @@
         app:maxImageSize="40dp"
         app:backgroundTint="@color/title_text"
         app:borderWidth="0dp"></android.support.design.widget.FloatingActionButton>
+
 </LinearLayout>

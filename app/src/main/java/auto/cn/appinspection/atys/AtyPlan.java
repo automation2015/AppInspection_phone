@@ -1,11 +1,9 @@
 package auto.cn.appinspection.atys;
 
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,8 +30,10 @@ public class AtyPlan extends BaseActivity {
     @Bind(R.id.main_vp)
     ViewPager mainVp;
     private String[] mTitles = new String[]{"计划下载", "计划查询"};
-    private int position;//默认选中的Fragment的位置
+    private int curPosition ;//默认选中的Fragment的位置
     private Fragment mContent;//记录刚刚选中的Fragment
+    private FragmentPagerAdapter mAdapter;
+    private FragmentManager fragmentManager;
 
     @Override
     protected int getLayoutId() {
@@ -44,12 +44,13 @@ public class AtyPlan extends BaseActivity {
     protected void initTitle() {
         tvTitle.setText("计划管理");
         ivTitleBack.setVisibility(View.VISIBLE);
-        ivTitleSetting.setVisibility(View.GONE);
-    }
-
+        ivTitleSetting.setBackgroundResource(R.mipmap.icon_add);
+        ivTitleSetting.setVisibility(View.VISIBLE);
+}
     @Override
     public void initData() {
-        mainVp.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+        fragmentManager = getSupportFragmentManager();
+        mAdapter = new FragmentPagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
                 CheckHistoryFragment checkHistoryFragment = null;
@@ -61,9 +62,9 @@ public class AtyPlan extends BaseActivity {
                         return new CheckHistoryFragment();
                     }
                 } else {
-                    if(planFragment!=null){
+                    if (planFragment != null) {
                         return planFragment;
-                    }else {
+                    } else {
                         return new PlanFragment();
                     }
                 }
@@ -72,13 +73,47 @@ public class AtyPlan extends BaseActivity {
             public int getCount() {
                 return mTitles.length;
             }
-            @Nullable
             @Override
             public CharSequence getPageTitle(int position) {
                 return mTitles[position];
             }
-        });
+        };
+        mainVp.setAdapter(mAdapter);
         mainTablayout.setupWithViewPager(mainVp);
+       mainVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+           @Override
+           public void onPageScrolled(int i, float v, int i1) {
+
+           }
+
+           @Override
+           public void onPageSelected(int i) {
+               switch (i){
+                   case 0:
+                       tvTitle.setText("计划管理");
+                       ivTitleBack.setVisibility(View.VISIBLE);
+                       ivTitleSetting.setVisibility(View.VISIBLE);
+                       ivTitleSetting.setBackgroundResource(R.mipmap.icon_add);
+                       break;
+                   case 1:
+                       tvTitle.setText("巡检记录");
+                       ivTitleBack.setVisibility(View.VISIBLE);
+                       ivTitleSetting.setVisibility(View.GONE);
+                       break ;
+                   default:
+                       tvTitle.setText("计划管理 ");
+                       ivTitleBack.setVisibility(View.VISIBLE);
+                       ivTitleSetting.setVisibility(View.VISIBLE);
+                       ivTitleSetting.setBackgroundResource(R.mipmap.icon_add);
+                       break;
+               }
+           }
+
+           @Override
+           public void onPageScrollStateChanged(int i) {
+
+           }
+       });
     }
 
     @OnClick(R.id.iv_title_back)
@@ -86,7 +121,6 @@ public class AtyPlan extends BaseActivity {
         removeAll();
         goToActivity(MainActivity.class, null);
     }
-
     @Override
     protected void onResume() {
         //TODO 读取数据库的计划列表

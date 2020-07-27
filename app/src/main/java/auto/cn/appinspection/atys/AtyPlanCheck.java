@@ -22,6 +22,7 @@ import auto.cn.appinspection.adapters.ViewHolder;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.beans.PlanBean;
 import auto.cn.appinspection.commons.AppNetConfig;
+import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.ui.DropDownMemu;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,6 +41,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     TextView tv;
     @Bind(R.id.dropDownMenu)
     DropDownMemu dropDownMenu;
+    private DbHelper dbHelper;
 
    // private String headers[] = {"计划名称", "区域", "设备", "部位", "项目", "内容"};
     private String headers[] = {"计划名称"};
@@ -54,7 +56,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
 
     @Override
     protected void initTitle() {
-        tvTitle.setText("设备巡检");
+        tvTitle.setText("设备点巡检");
         ivTitleBack.setVisibility(View.VISIBLE);
         ivTitleSetting.setVisibility(View.GONE);
     }
@@ -64,7 +66,9 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         Intent intent = getIntent();
         String planId = intent.getExtras().getString(AppNetConfig.KEY_PLANID);
         Log.e("TAG", "initData() called" + planId);
+
         tv.setText(planId);
+        dbHelper=DbHelper.getInstance(this,AppNetConfig.DB_NAME);
         //初始化DropDownMenu
         PlanBean planBean = new PlanBean();
         planBean.setPLAN_ID("jh0001");
@@ -88,21 +92,17 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         contentView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         dropDownMenu.setDropDownMenu(Arrays.asList(headers), popViews, contentView);
     }
-
     @OnClick(R.id.iv_title_back)
     public void back() {
         removeAll();
         goToActivity(AtyPlan.class, null);
     }
-
     //启动Activity并传递参数
     public static void toActivity(Context context, String planId) {
         Intent intent = new Intent(context, AtyPlanCheck.class);
         intent.putExtra(AppNetConfig.KEY_PLANID, planId);
         context.startActivity(intent);
     }
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
