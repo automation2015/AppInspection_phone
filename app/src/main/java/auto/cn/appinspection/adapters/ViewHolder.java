@@ -17,7 +17,6 @@ public class ViewHolder {
 	private View mConvertView;
 	private int mPosition;
 	private Context mContext;
-
 	public ViewHolder(Context context, ViewGroup parent, int layoutId, int position) {
 		this.mPosition = position;
 		this.mViews = new SparseArray<View>();
@@ -73,6 +72,12 @@ public class ViewHolder {
 	public ViewHolder setImageUrl(int viewId, Uri uri) {
 		ImageView iv = getView(viewId);
 		Picasso.with(mContext).load(uri).into(iv);
+		return this;
+	}
+
+	public ViewHolder setTextColor(int viewId, int colorRes) {
+		TextView tv = getView(viewId);
+		tv.setTextColor(colorRes);
 		return this;
 	}
 }

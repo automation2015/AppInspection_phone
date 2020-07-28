@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--圆形进度条属性-->
     <declare-styleable name="RoundProgress">
         <attr name="roundColor" format="color"></attr>
         <attr name="roundProgressColor" format="color"></attr>
@@ -9,6 +10,7 @@
         <attr name="progress" format="integer"></attr>
         <attr name="max" format="integer"></attr>
     </declare-styleable>
+    <!--下拉列表属性-->
     <declare-styleable name="dropDownMenu">
         <attr name="underlineColor" format="color"/>
         <attr name="dividerColor" format="color"/>

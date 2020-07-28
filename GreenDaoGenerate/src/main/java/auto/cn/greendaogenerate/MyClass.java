@@ -42,9 +42,9 @@ public class MyClass {
          area.addStringProperty("PlanId");
         // area表中增加计划外键
         Property planFk = area.addLongProperty("fk_plan").getProperty();
-        // 区域一对一
+        // 区域一一
         area.addToOne(plan, planFk);
-        //计划一-对多
+        //计划一多
         plan.addToMany(area, planFk).setName("areas");
         //添加equip实体
 

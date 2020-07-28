@@ -3,16 +3,12 @@ package auto.cn.appinspection.fragments;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -52,7 +48,6 @@ import auto.cn.greendaogenerate.PartListDao;
 import auto.cn.greendaogenerate.PlanList;
 import auto.cn.greendaogenerate.PlanListDao;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.dao.query.QueryBuilder;
 
@@ -68,7 +63,7 @@ public class PlanFragment extends BaseFragment {
     private List<PlanBean> mDatas;
     private CommonBaseAdapter<PlanBean> planAdapter;
     private String urlTest = "http://api.map.baidu.com/telematics/v3/weather?location=%E6%B5%8E%E5%8D%97&output=json&ak=FkPhtMBK0HTIQNh7gG4cNUttSTyr0nzo";
-    private String url = AppNetConfig.GETALLPLAN + "?username=巡检甲班&rolename=电气岗位点检员";
+    private String url = AppNetConfig.GETALLPLAN + "?username=巡检丁班&rolename=电气岗位点检员";
 
     private String url1 = AppNetConfig.GETALLPLAN + "?username=admin&rolename=系统管理员";
     private DaoMaster master;
@@ -162,14 +157,14 @@ public class PlanFragment extends BaseFragment {
         QueryBuilder.LOG_VALUES = true;
 
         //获取添加数据库按钮并设置点击事件
-       ivAddDb = getActivity().findViewById(R.id.iv_title_setting);
+        ivAddDb = getActivity().findViewById(R.id.iv_title_setting);
         ivAddDb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //1.打开数据库
                 openDb();
                 //2.判断数据库是否存在
-                if (db!=null) {
+                if (db != null) {
                     if (db.isOpen()) {
                         //3.dialog弹窗提示用户
                         new AlertDialog.Builder(getActivity()).setTitle("提示")
@@ -178,17 +173,18 @@ public class PlanFragment extends BaseFragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         //4.删除原有数据
-                                        planListDao.deleteAll();
+                                        session.clear();
                                         //5.存入新数据
                                         saveDb(mDatas);
                                     }
-                                }).setNegativeButton("取消",null).create().show();
-
+                                }).setNegativeButton("取消", null).create().show();
+                        UIUtils.toast("数据存储成功！", false);
                     }
                 }
             }
         });
     }
+
     //打开数据库
     private void openDb() {
         db = new DaoMaster.DevOpenHelper(getActivity(), "plan.db", null)
@@ -206,7 +202,7 @@ public class PlanFragment extends BaseFragment {
     //将联网获取的数据存入数据库
     public void saveDb(List<PlanBean> mDatas) {
         if (mDatas == null && mDatas.size() > 0) {
-            UIUtils.toast("您请求的数据有误，请刷新页面后重试！",false);
+            UIUtils.toast("您请求的数据有误，请刷新页面后重试！", false);
             return;
         }
         //第一层循环，添加计划数据
@@ -217,7 +213,7 @@ public class PlanFragment extends BaseFragment {
 
                 PlanList planList = new PlanList();
                 //planList.setId(Long.valueOf(planData.getId()));
-                planList.setPLAN_ID(planData.getPLAN_PART_ID());
+                planList.setPLAN_ID(planData.getPLAN_ID());
                 planList.setPLAN_NAME(planData.getPLAN_NAME());
                 planList.setPLAN_ORG_NAME(planData.getPLAN_ORG_NAME());
 
@@ -349,9 +345,9 @@ public class PlanFragment extends BaseFragment {
     //FloationActionButton点击事件
     @OnClick(R.id.fab_start)
     public void fabClick() {
-        PlanBean planBean = mDatas.get(0);
-        String planId = planBean.getPLAN_ID();
-        AtyPlanCheck.toActivity(getActivity(), planId);
+        // PlanBean planBean = mDatas.get(0);
+        // String planId = planBean.getPLAN_ID();
+        AtyPlanCheck.toActivity(getActivity(), null);
         //((BaseActivity) getActivity()).removeCurrentActivity();
     }
 
