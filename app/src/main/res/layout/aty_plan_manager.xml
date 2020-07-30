@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include layout="@layout/common_title"></include>
+    <auto.cn.appinspection.ui.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_plan_query"
+                android:layout_width="match_parent"
+                android:text="计划查询"
+                android:drawableLeft="@mipmap/icon_add"
+                style="@style/MoreTextStyle"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_line"></View>
+            <TextView
+                android:id="@+id/tv_plan_check"
+                style="@style/MoreTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:drawableLeft="@mipmap/icon_maintainance_manage"
+                android:text="点巡检" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_line"></View>
+
+            <TextView
+                android:id="@+id/tv_plan_history"
+                android:text="巡检历史"
+                android:drawableLeft="@mipmap/icon_hidden_manage"
+                android:layout_width="match_parent"
+                style="@style/MoreTextStyle" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_line"></View>
+
+                <TextView
+                    android:id="@+id/tv_plan_upload"
+                    android:text="计划上传"
+                    android:drawableLeft="@mipmap/icon_upload"
+                    android:layout_width="wrap_content"
+                    style="@style/MoreTextStyle" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_line"></View>
+            <TextView
+                android:id="@+id/tv_plan_delete"
+                android:text="清空数据库"
+                android:drawableLeft="@mipmap/icon_delete"
+                android:layout_width="match_parent"
+                style="@style/MoreTextStyle" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider_line"></View>
+        </LinearLayout>
+    </auto.cn.appinspection.ui.MyScrollView>
+</LinearLayout>

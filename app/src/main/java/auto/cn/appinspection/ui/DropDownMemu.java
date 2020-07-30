@@ -2,6 +2,7 @@ package auto.cn.appinspection.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.design.widget.FloatingActionButton;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -12,9 +13,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.List;
 import auto.cn.appinspection.R;
+import auto.cn.appinspection.adapters.CommonBaseAdapter;
 
 
 public class DropDownMemu extends LinearLayout {
@@ -232,12 +236,28 @@ public class DropDownMemu extends LinearLayout {
             tabMenuView.getChildAt(i).setClickable(clickable);
         }
     }
+public void setListView(CommonBaseAdapter adapter,int tvVisiable,OnClickListener listener){
+    if (currentTabPosition != -1) {
+        RelativeLayout rl = (RelativeLayout) containerView.getChildAt(0);
+        if(rl!=null){
+        ListView lv=rl.findViewById(R.id.lv_drop_view_content);
+        TextView tv=rl.findViewById(R.id.tv_mes);
+        tv.setVisibility(tvVisiable);
+        FloatingActionButton fab=rl.findViewById(R.id.fab_scan);
+        fab.setOnClickListener(listener);
+        lv.setAdapter(adapter);
+        tv.setVisibility(tvVisiable);
+    }
+    }
+}
+    /**
     public void setImageResource(int imagId) {
         if (currentTabPosition != -1) {
             ImageView iv = (ImageView) containerView.getChildAt(0);
             iv.setBackgroundResource(imagId);
         }
     }
+     */
     /**
      * DropDownMenu是否处于可见状态
      * @return

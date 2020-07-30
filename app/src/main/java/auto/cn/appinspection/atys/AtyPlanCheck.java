@@ -2,9 +2,10 @@ package auto.cn.appinspection.atys;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,17 +15,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.cn.appinspection.R;
-import auto.cn.appinspection.adapters.DropDownAreaAdapter;
-import auto.cn.appinspection.adapters.DropDownContentAdapter;
-import auto.cn.appinspection.adapters.DropDownEquipAdapter;
-import auto.cn.appinspection.adapters.DropDownItemAdapter;
-import auto.cn.appinspection.adapters.DropDownPartAdapter;
-import auto.cn.appinspection.adapters.DropDownPlanAdapter;
+import auto.cn.appinspection.adapters.CommonBaseAdapter;
+import auto.cn.appinspection.adapters.DropDownAdapter;
+import auto.cn.appinspection.adapters.ViewHolder;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.commons.AppNetConfig;
 import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.ui.DropDownMemu;
 import auto.cn.appinspection.utils.LogUtil;
+import auto.cn.appinspection.utils.UIUtils;
 import auto.cn.greendaogenerate.AreaList;
 import auto.cn.greendaogenerate.ContentList;
 import auto.cn.greendaogenerate.Equiplist;
@@ -32,17 +31,17 @@ import auto.cn.greendaogenerate.ItemList;
 import auto.cn.greendaogenerate.PartList;
 import auto.cn.greendaogenerate.PlanList;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClickListener {
+
     @Bind(R.id.iv_title_back)
     ImageView ivTitleBack;
     @Bind(R.id.tv_title)
     TextView tvTitle;
     @Bind(R.id.iv_title_setting)
     ImageView ivTitleSetting;
-    @Bind(R.id.tv)
-    TextView tv;
     @Bind(R.id.dropDownMenu)
     DropDownMemu dropDownMenu;
     //操作数据库的类
@@ -57,13 +56,15 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     List<PartList> partLists = new ArrayList<>();
     List<ItemList> itemLists = new ArrayList<>();
     List<ContentList> contentLists = new ArrayList<>();
-    private DropDownPlanAdapter planAdapter;
-    private DropDownAreaAdapter areaAdapter;
-    private DropDownEquipAdapter equipAdapter;
-    private DropDownPartAdapter partAdapter;
-    private DropDownItemAdapter itemAdapter;
-    private DropDownContentAdapter contentAdapter;
+    private DropDownAdapter<PlanList> planAdapter;
+    //private DropDownAreaAdapter areaAdapter;
+    private DropDownAdapter<Equiplist> equipAdapter;
+    private DropDownAdapter<PartList> partAdapter;
+    private DropDownAdapter<ItemList> itemAdapter;
+    private DropDownAdapter<ContentList> contentAdapter;
     private int[] imagIds = {R.mipmap.icon_shangang, R.mipmap.icon_shangang, R.mipmap.icon_other_manage, R.mipmap.icon_shangang, R.mipmap.icon_other_manage};
+    private CommonBaseAdapter<AreaList> adapter;
+    ListView lvArea;
 
     @Override
     protected int getLayoutId() {
@@ -123,7 +124,14 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     private void initViews() {
         //计划列表
         ListView lvPlan = new ListView(this);
-        planAdapter = new DropDownPlanAdapter(this, planLists);
+        //planAdapter = new DropDownPlanAdapter(this, planLists);
+        planAdapter = new DropDownAdapter<PlanList>(this, planLists) {
+            @Override
+            public void fillValue(ViewHolder holder, PlanList planList) {
+                holder.getTvId().setText(planList.getPLAN_ID());
+                holder.getTvName().setText(planList.getPLAN_NAME());
+            }
+        };
         lvPlan.setDividerHeight(0);
         lvPlan.setId(R.id.list1);
         lvPlan.setAdapter(planAdapter);
@@ -131,7 +139,13 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         lvPlan.setOnItemClickListener(this);
         //设备列表
         ListView lvEquip = new ListView(this);
-        equipAdapter = new DropDownEquipAdapter(this, equipLists);
+        equipAdapter = new DropDownAdapter<Equiplist>(this, equipLists) {
+            @Override
+            public void fillValue(ViewHolder holder, Equiplist equiplist) {
+                holder.getTvId().setVisibility(View.GONE);
+                holder.getTvName().setText(equiplist.getEL_NAME());
+            }
+        };
         lvEquip.setDividerHeight(0);
         lvEquip.setId(R.id.list2);
         lvEquip.setAdapter(equipAdapter);
@@ -139,7 +153,13 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         lvEquip.setOnItemClickListener(this);
         //部位列表
         ListView lvPart = new ListView(this);
-        partAdapter = new DropDownPartAdapter(this, partLists);
+        partAdapter = new DropDownAdapter<PartList>(this, partLists) {
+            @Override
+            public void fillValue(ViewHolder holder, PartList partList) {
+                holder.getTvId().setVisibility(View.GONE);
+                holder.getTvName().setText(partList.getPART_NAME());
+            }
+        };
         lvPart.setDividerHeight(0);
         lvPart.setId(R.id.list3);
         lvPart.setAdapter(partAdapter);
@@ -147,7 +167,13 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         lvPart.setOnItemClickListener(this);
         //项目列表
         ListView lvItem = new ListView(this);
-        itemAdapter = new DropDownItemAdapter(this, itemLists);
+        itemAdapter = new DropDownAdapter<ItemList>(this, itemLists) {
+            @Override
+            public void fillValue(ViewHolder holder, ItemList itemList) {
+                holder.getTvId().setVisibility(View.GONE);
+                holder.getTvName().setText(itemList.getITEM_NAME());
+            }
+        };
         lvItem.setDividerHeight(0);
         lvItem.setId(R.id.list4);
         lvItem.setAdapter(itemAdapter);
@@ -155,7 +181,14 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         lvItem.setOnItemClickListener(this);
         //内容列表
         ListView lvContent = new ListView(this);
-        contentAdapter = new DropDownContentAdapter(this, contentLists);
+        contentAdapter = new DropDownAdapter<ContentList>(this, contentLists) {
+            @Override
+            public void fillValue(ViewHolder holder, ContentList contentList) {
+                holder.getTvId().setVisibility(View.GONE);
+                holder.getTvName().setText(contentList.getCONTENT_NAME());
+            }
+        };
+
         lvContent.setDividerHeight(0);
         lvContent.setId(R.id.list5);
         lvContent.setAdapter(contentAdapter);
@@ -166,16 +199,36 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         popViews.add(lvPart);
         popViews.add(lvItem);
         popViews.add(lvContent);
-        ImageView contentView = new ImageView(this);
-        contentView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-        contentView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //添加contentView
+        View contentView = View.inflate(this, R.layout.drop_view_contentview, null);
+        //lvArea= contentView.findViewById(R.id.lv_drop_view_content);
+        adapter = new CommonBaseAdapter<AreaList>(this, areaLists, R.layout.item_drop_down_lv) {
+            @Override
+            public void convert(ViewHolder holder, AreaList areaList) {
+                holder.setText(R.id.tv_drop_down_area, areaList.getPL_AREA_NAME());
+                holder.tvOnClick(R.id.tb_drop_down_area, new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            UIUtils.toast("检修", false);
+                        } else {
+                            UIUtils.toast("正常", false);
+                        }
+                    }
+                });
+            }
+        };
+
+//        ImageView contentView = new ImageView(this);
+//        contentView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+//        contentView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         dropDownMenu.setDropDownMenu(Arrays.asList(headers), popViews, contentView);
     }
 
     @OnClick(R.id.iv_title_back)
     public void back() {
         removeAll();
-        goToActivity(AtyPlan.class, null);
+        goToActivity(AtyPlanManager.class, null);
     }
 
     //启动Activity并传递参数
@@ -191,33 +244,41 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
             case R.id.list1://city
                 planAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == -1 ? headers[0] : planLists.get(position).getPLAN_ID());
-                dropDownMenu.setImageResource(imagIds[0]);
+                //dropDownMenu1.setImageResource(imagIds[0]);
+
+                dropDownMenu.setListView(adapter, (areaLists == null) ? View.VISIBLE : View.GONE, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UIUtils.toast("success", false);
+                    }
+                });
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list2://city
                 equipAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == -1 ? headers[1] : equipLists.get(position).getEL_NAME());
-                dropDownMenu.setImageResource(imagIds[1]);
+                //dropDownMenu1.setImageResource(imagIds[1]);
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list3://city
                 partAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == -1 ? headers[2] : partLists.get(position).getPART_NAME());
-                dropDownMenu.setImageResource(imagIds[2]);
+                //dropDownMenu1.setImageResource(imagIds[2]);
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list4://city
                 itemAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == -1 ? headers[3] : itemLists.get(position).getITEM_NAME());
-                dropDownMenu.setImageResource(imagIds[3]);
+                // dropDownMenu1.setImageResource(imagIds[3]);
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list5://city
                 contentAdapter.setCheckItem(position);
                 dropDownMenu.setTabText(position == -1 ? headers[4] : contentLists.get(position).getCONTENT_NAME());
-                dropDownMenu.setImageResource(imagIds[4]);
+                // dropDownMenu1.setImageResource(imagIds[4]);
                 dropDownMenu.closeMenu();
                 break;
         }
     }
+
 }

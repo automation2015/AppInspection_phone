@@ -345,10 +345,8 @@ public class PlanFragment extends BaseFragment {
     //FloationActionButton点击事件
     @OnClick(R.id.fab_start)
     public void fabClick() {
-        // PlanBean planBean = mDatas.get(0);
-        // String planId = planBean.getPLAN_ID();
         AtyPlanCheck.toActivity(getActivity(), null);
-        //((BaseActivity) getActivity()).removeCurrentActivity();
+
     }
 
     //重新联网获取最新计划数据

@@ -21,6 +21,7 @@ import auto.cn.appinspection.R;
 import auto.cn.appinspection.adapters.BadgeViewAdapter;
 import auto.cn.appinspection.atys.AtyLogin;
 import auto.cn.appinspection.atys.AtyPlan;
+import auto.cn.appinspection.atys.AtyPlanManager;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.bases.BaseFragment;
 import auto.cn.appinspection.beans.UserBean;
@@ -96,7 +97,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener {
                 if(TextUtils.isEmpty(username)){
                   doLogin();}
                 else{
-                ((BaseActivity) this.getActivity()).goToActivity(AtyPlan.class,null);
+                ((BaseActivity) this.getActivity()).goToActivity(AtyPlanManager.class,null);
                 }
                 break;
             case 1:

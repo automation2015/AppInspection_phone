@@ -7,8 +7,10 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 
@@ -78,6 +80,11 @@ public class ViewHolder {
 	public ViewHolder setTextColor(int viewId, int colorRes) {
 		TextView tv = getView(viewId);
 		tv.setTextColor(colorRes);
+		return this;
+	}
+	public ViewHolder tvOnClick(int viewId,CompoundButton.OnCheckedChangeListener listener){
+		ToggleButton tb=getView(viewId);
+		tb.setOnCheckedChangeListener(listener);
 		return this;
 	}
 }

@@ -21,6 +21,7 @@ import auto.cn.greendaogenerate.PartList;
 import auto.cn.greendaogenerate.PartListDao;
 import auto.cn.greendaogenerate.PlanList;
 import auto.cn.greendaogenerate.PlanListDao;
+import de.greenrobot.dao.query.LazyList;
 import de.greenrobot.dao.query.QueryBuilder;
 
 import static auto.cn.appinspection.commons.AppNetConfig.DB_NAME;
@@ -172,6 +173,25 @@ public class DbHelper {
             }
         }
         return planLists;
+    }
+
+    /**
+     * 获取计划  懒加载
+     * @return
+     */
+    public List<PlanList> getAllPlan(){
+        List<PlanList> planLists = planListDao.queryBuilder().list();
+
+        return  planLists;
+    }
+    /**
+     * 获取计划
+     * @return
+     */
+    public List<AreaList> getAreaByPlanId(String planId){
+        PlanList plan = planListDao.queryBuilder().where(PlanListDao.Properties.PLAN_ID.eq(planId)).unique();
+        List<AreaList> areaLists = plan.getAreas();
+        return  areaLists;
     }
 
     /**

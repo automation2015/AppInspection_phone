@@ -10,12 +10,11 @@ import android.widget.TextView;
 import java.util.List;
 
 import auto.cn.appinspection.R;
-import auto.cn.greendaogenerate.PlanList;
 
 
-public class DropDownPlanAdapter extends BaseAdapter {
+public  abstract class DropDownAdapter<T> extends BaseAdapter {
     private Context context;
-    private List<PlanList> list;
+    private List<T> list;
     private int checkItemPosition = -1;
 
     public void setCheckItem(int position) {
@@ -23,7 +22,7 @@ public class DropDownPlanAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public DropDownPlanAdapter(Context context, List<PlanList> datas) {
+    public DropDownAdapter(Context context, List<T> datas) {
         this.context = context;
         this.list = datas;
     }
@@ -53,15 +52,6 @@ public class DropDownPlanAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        fillValue(position, holder);
-        return convertView;
-    }
-
-    private void fillValue(int position, ViewHolder holder) {
-        String plan_id = list.get(position).getPLAN_ID();
-        String plan_name = list.get(position).getPLAN_NAME();
-        holder.tvId.setText(plan_id);
-        holder.tvName.setText(plan_name);
         if (checkItemPosition != -1) {
             if (checkItemPosition == position) {
                 holder.tvId.setTextColor(context.getResources().getColor(R.color.drop_down_selected));
@@ -74,13 +64,34 @@ public class DropDownPlanAdapter extends BaseAdapter {
                 holder.tvName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             }
         }
+        T t = list.get(position);
+        fillValue(holder,t);
+        return convertView;
     }
 
-    class ViewHolder {
+    public abstract void fillValue(ViewHolder holder, T t) ;
+
+    public class ViewHolder {
         TextView tvId, tvName;
         ViewHolder(View view) {
             tvId = view.findViewById(R.id.tv_plan_id);
             tvName = view.findViewById(R.id.tv_plan_name);
+        }
+
+        public TextView getTvId() {
+            return tvId;
+        }
+
+        public void setTvId(TextView tvId) {
+            this.tvId = tvId;
+        }
+
+        public TextView getTvName() {
+            return tvName;
+        }
+
+        public void setTvName(TextView tvName) {
+            this.tvName = tvName;
         }
     }
 }

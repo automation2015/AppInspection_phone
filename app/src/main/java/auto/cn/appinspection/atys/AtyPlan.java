@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.bases.BaseActivity;
-import auto.cn.appinspection.fragments.CheckHistoryFragment;
+import auto.cn.appinspection.fragments.AreaFragment;
 import auto.cn.appinspection.fragments.PlanFragment;
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -29,8 +29,8 @@ public class AtyPlan extends BaseActivity {
     TabLayout mainTablayout;
     @Bind(R.id.main_vp)
     ViewPager mainVp;
-    private String[] mTitles = new String[]{"计划下载", "计划查询"};
-    private int curPosition ;//默认选中的Fragment的位置
+    private String[] mTitles = new String[]{"计划列表", "区域列表"};
+    private int curPosition;//默认选中的Fragment的位置
     private Fragment mContent;//记录刚刚选中的Fragment
     private FragmentPagerAdapter mAdapter;
     private FragmentManager fragmentManager;
@@ -46,20 +46,21 @@ public class AtyPlan extends BaseActivity {
         ivTitleBack.setVisibility(View.VISIBLE);
         ivTitleSetting.setBackgroundResource(R.mipmap.icon_add);
         ivTitleSetting.setVisibility(View.VISIBLE);
-}
+    }
+
     @Override
     public void initData() {
         fragmentManager = getSupportFragmentManager();
         mAdapter = new FragmentPagerAdapter(fragmentManager) {
             @Override
             public Fragment getItem(int position) {
-                CheckHistoryFragment checkHistoryFragment = null;
+                AreaFragment checkHistoryFragment = null;
                 PlanFragment planFragment = null;
                 if (position == 1) {
                     if (checkHistoryFragment != null) {
                         return checkHistoryFragment;
                     } else {
-                        return new CheckHistoryFragment();
+                        return new AreaFragment();
                     }
                 } else {
                     if (planFragment != null) {
@@ -69,10 +70,12 @@ public class AtyPlan extends BaseActivity {
                     }
                 }
             }
+
             @Override
             public int getCount() {
                 return mTitles.length;
             }
+
             @Override
             public CharSequence getPageTitle(int position) {
                 return mTitles[position];
@@ -80,52 +83,48 @@ public class AtyPlan extends BaseActivity {
         };
         mainVp.setAdapter(mAdapter);
         mainTablayout.setupWithViewPager(mainVp);
-       mainVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-           @Override
-           public void onPageScrolled(int i, float v, int i1) {
+        mainVp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
 
-           }
+            }
 
-           @Override
-           public void onPageSelected(int i) {
-               switch (i){
-                   case 0:
-                       tvTitle.setText("计划管理");
-                       ivTitleBack.setVisibility(View.VISIBLE);
-                       ivTitleSetting.setVisibility(View.VISIBLE);
-                       ivTitleSetting.setBackgroundResource(R.mipmap.icon_add);
-                       break;
-                   case 1:
-                       tvTitle.setText("巡检记录");
-                       ivTitleBack.setVisibility(View.VISIBLE);
-                       ivTitleSetting.setVisibility(View.GONE);
-                       break ;
-                   default:
-                       tvTitle.setText("计划管理 ");
-                       ivTitleBack.setVisibility(View.VISIBLE);
-                       ivTitleSetting.setVisibility(View.VISIBLE);
-                       ivTitleSetting.setBackgroundResource(R.mipmap.icon_add);
-                       break;
-               }
-           }
+            @Override
+            public void onPageSelected(int i) {
+                switch (i) {
+                    case 0:
+                        tvTitle.setText("计划管理");
+                        ivTitleBack.setVisibility(View.VISIBLE);
+                        ivTitleSetting.setVisibility(View.VISIBLE);
+                        ivTitleSetting.setBackgroundResource(R.mipmap.icon_add);
+                        break;
+                    case 1:
+                        tvTitle.setText("区域列表");
+                        ivTitleBack.setVisibility(View.VISIBLE);
+                        ivTitleSetting.setVisibility(View.GONE);
+                        break;
+                    default:
+                        tvTitle.setText("计划管理 ");
+                        ivTitleBack.setVisibility(View.VISIBLE);
+                        ivTitleSetting.setVisibility(View.VISIBLE);
+                        ivTitleSetting.setBackgroundResource(R.mipmap.icon_add);
+                        break;
+                }
+            }
 
-           @Override
-           public void onPageScrollStateChanged(int i) {
+            @Override
+            public void onPageScrollStateChanged(int i) {
 
-           }
-       });
+            }
+        });
     }
 
     @OnClick(R.id.iv_title_back)
     public void back() {
         removeAll();
-        goToActivity(MainActivity.class, null);
+        goToActivity(AtyPlanManager.class, null);
     }
-    @Override
-    protected void onResume() {
-        //TODO 读取数据库的计划列表
-        super.onResume();
-    }
+
 }
 
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".atys.AtyPlanCheck">
-    <include layout="@layout/common_title"/>
+
     <auto.cn.appinspection.ui.DropDownMemu
         android:id="@+id/dropDownMenu"
         android:layout_width="match_parent"
