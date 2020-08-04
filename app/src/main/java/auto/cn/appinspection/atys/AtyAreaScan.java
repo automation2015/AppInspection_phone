@@ -1,8 +1,5 @@
 package auto.cn.appinspection.atys;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
@@ -22,7 +19,6 @@ import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.commons.AppNetConfig;
 import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.ui.DropDownMemu;
-import auto.cn.appinspection.utils.LogUtil;
 import auto.cn.appinspection.utils.UIUtils;
 import auto.cn.greendaogenerate.AreaList;
 import auto.cn.greendaogenerate.PlanList;

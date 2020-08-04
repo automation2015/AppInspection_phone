@@ -24,11 +24,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"></activity>
         <activity android:name=".atys.AtyLogin" />
         <activity android:name=".atys.AtyWelcome">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".atys.AtyPlan"
@@ -49,7 +45,13 @@
                 android:resource="@xml/fileproviderpath" />
         </provider>
 
-        <activity android:name=".atys.AtyPlanCheck"></activity>
+        <activity android:name=".atys.AtyPlanCheck">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".atys.AtyAreaScan"></activity>
         <activity android:name=".atys.AtyPlanManager"></activity>
     </application>

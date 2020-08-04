@@ -31,6 +31,7 @@ import auto.cn.appinspection.bases.BaseFragment;
 import auto.cn.appinspection.beans.PlanBean;
 import auto.cn.appinspection.beans.UserBean;
 import auto.cn.appinspection.commons.AppNetConfig;
+import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.utils.LogUtil;
 import auto.cn.appinspection.utils.UIUtils;
 import auto.cn.greendaogenerate.AreaList;
@@ -49,36 +50,24 @@ import auto.cn.greendaogenerate.PlanList;
 import auto.cn.greendaogenerate.PlanListDao;
 import butterknife.Bind;
 import butterknife.OnClick;
-import de.greenrobot.dao.query.QueryBuilder;
 
 public class PlanFragment extends BaseFragment {
     @Bind(R.id.lv_fragment_plan)
     ListView lvFragmentPlan;
     @Bind(R.id.swiperefresh)
     SwipeRefreshLayout swiperefresh;
-    @Bind(R.id.fab_start)
-    FloatingActionButton fabStart;
+
     //Activity 控件 添加数据到数据库
     private ImageView ivAddDb;
     private List<PlanBean> mDatas;
     private CommonBaseAdapter<PlanBean> planAdapter;
     private String urlTest = "http://api.map.baidu.com/telematics/v3/weather?location=%E6%B5%8E%E5%8D%97&output=json&ak=FkPhtMBK0HTIQNh7gG4cNUttSTyr0nzo";
-    private String url = AppNetConfig.GETALLPLAN + "?username=巡检丁班&rolename=电气岗位点检员";
-
+    private String url = AppNetConfig.GETALLPLAN + "?username=巡检甲班&rolename=电气岗位点检员";
     private String url1 = AppNetConfig.GETALLPLAN + "?username=admin&rolename=系统管理员";
-    private DaoMaster master;
-    private DaoSession session;
-    private SQLiteDatabase db;
-    private PlanListDao planListDao;
-    private AreaListDao areaListDao;
-    private EquiplistDao equiplistDao;
-    private PartListDao partListDao;
-    private ItemListDao itemListDao;
-    private ContentListDao contentListDao;
+    private DbHelper dbHelper;
 
     @Override
     protected void initTitle() {
-
     }
 
     @Override
@@ -98,50 +87,44 @@ public class PlanFragment extends BaseFragment {
 
     @Override
     protected void initData(String content) {
-        //解析获取的数据
-        mDatas = parseDatas(content);
-//        Log.e("TAG", "initData() called with: content = [" + content + "]");
-//        Log.e("TAG", "initData() called with: content = [" + mDatas.size() + "]");
-        //mDatas.addAll(datas);
-        if (mDatas == null || mDatas.size() == 0) {
-            UserBean userBean = ((BaseActivity) getActivity()).readUser();
-            UIUtils.toast(userBean.getUsername() + ",您好，本班没有您需要点检的工作计划。", false);
-        }
-        planAdapter = new CommonBaseAdapter<PlanBean>(getActivity(), mDatas, R.layout.item_fragment_plan_lv) {
-            @Override
-            public void convert(ViewHolder holder, PlanBean planBean) {
-                //设置显示不同的计划图片
-                switch (planBean.getPLAN_CYCLE_TYPE()) {
-                    case "1":
-                        holder.setImageResource(R.id.iv_plan_type, R.mipmap.icon_plan_type3);
-                        break;
-                    case "2":
-                        holder.setImageResource(R.id.iv_plan_type, R.mipmap.icon_plan_type2);
-                        break;
-                    case "3":
-                        holder.setImageResource(R.id.iv_plan_type, R.mipmap.icon_plan_type3);
-                        break;
-                    default:
-                        holder.setImageResource(R.id.iv_plan_type, R.mipmap.icon_plan_type1);
-                        break;
+        if (content != null && content.length() != 0) {
+            //解析获取的数据
+            mDatas = parseDatas(content);
+            planAdapter = new CommonBaseAdapter<PlanBean>(getActivity(), mDatas, R.layout.item_fragment_plan_lv) {
+                @Override
+                public void convert(ViewHolder holder, PlanBean planBean) {
+                    //设置显示不同的计划图片
+                    switch (planBean.getPLAN_CYCLE_TYPE()) {
+                        case "1":
+                            holder.setImageResource(R.id.iv_plan_type, R.mipmap.icon_plan_type3);
+                            break;
+                        case "2":
+                            holder.setImageResource(R.id.iv_plan_type, R.mipmap.icon_plan_type2);
+                            break;
+                        case "3":
+                            holder.setImageResource(R.id.iv_plan_type, R.mipmap.icon_plan_type3);
+                            break;
+                        default:
+                            holder.setImageResource(R.id.iv_plan_type, R.mipmap.icon_plan_type1);
+                            break;
+                    }
+                    holder.setText(R.id.tv_plan_id, planBean.getPLAN_ID())
+                            .setText(R.id.tv_plan_name, planBean.getPLAN_NAME());
                 }
-                holder.setText(R.id.tv_plan_id, planBean.getPLAN_ID())
-                        .setText(R.id.tv_plan_name, planBean.getPLAN_NAME());
-            }
-        };
-        //为list设置适配器
-        lvFragmentPlan.setAdapter(planAdapter);
-        //设置下拉刷新控件的颜色
-        swiperefresh.setColorSchemeColors(Color.BLUE);
-        //设置下拉刷新监听
-        swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                reConnect();
-                swiperefresh.setRefreshing(false);
-            }
-        });
-        //设置list item点击事件
+            };
+            //为list设置适配器
+            lvFragmentPlan.setAdapter(planAdapter);
+            //设置下拉刷新控件的颜色
+            swiperefresh.setColorSchemeColors(Color.BLUE);
+            //设置下拉刷新监听
+            swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    reConnect();
+                    swiperefresh.setRefreshing(false);
+                }
+            });
+            //设置list item点击事件
         /*
         lvFragmentPlan.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -152,20 +135,21 @@ public class PlanFragment extends BaseFragment {
                 //((BaseActivity) getActivity()).removeCurrentActivity();
             }
         });*/
-        //设置控制台输出sql语句，filter tag：”greenDAO”
-        QueryBuilder.LOG_SQL = true;
-        QueryBuilder.LOG_VALUES = true;
-
-        //获取添加数据库按钮并设置点击事件
-        ivAddDb = getActivity().findViewById(R.id.iv_title_setting);
-        ivAddDb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //1.打开数据库
-                openDb();
-                //2.判断数据库是否存在
-                if (db != null) {
-                    if (db.isOpen()) {
+            //初始化数据库对象
+            dbHelper = DbHelper.getInstance(getActivity(), AppNetConfig.DB_NAME);
+            //设置控制台输出sql语句，filter tag：”greenDAO”
+            dbHelper.setDebug();
+            //获取添加数据库按钮并设置点击事件
+            ivAddDb = getActivity().findViewById(R.id.iv_title_setting);
+            ivAddDb.setVisibility(View.VISIBLE);
+            ivAddDb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //1.打开数据库
+                    boolean isOpen = dbHelper.openDb();
+                    //openDb();
+                    //2.判断数据库是否存在
+                    if (isOpen) {
                         //3.dialog弹窗提示用户
                         new AlertDialog.Builder(getActivity()).setTitle("提示")
                                 .setMessage("您确定将新数据存入数据库吗？此操作将清除原有数据。")
@@ -173,30 +157,20 @@ public class PlanFragment extends BaseFragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         //4.删除原有数据
-                                        session.clear();
+                                        dbHelper.clearDb();
                                         //5.存入新数据
                                         saveDb(mDatas);
+                                        UIUtils.toast("数据存储成功！", false);
+
                                     }
                                 }).setNegativeButton("取消", null).create().show();
-                        UIUtils.toast("数据存储成功！", false);
                     }
                 }
-            }
-        });
-    }
-
-    //打开数据库
-    private void openDb() {
-        db = new DaoMaster.DevOpenHelper(getActivity(), "plan.db", null)
-                .getReadableDatabase();
-        master = new DaoMaster(db);
-        session = master.newSession();
-        planListDao = session.getPlanListDao();
-        areaListDao = session.getAreaListDao();
-        equiplistDao = session.getEquiplistDao();
-        partListDao = session.getPartListDao();
-        itemListDao = session.getItemListDao();
-        contentListDao = session.getContentListDao();
+            });
+        } else {
+            UserBean userBean = ((BaseActivity) getActivity()).readUser();
+            UIUtils.toast(userBean.getUsername() + ",您好，本班没有您需要点检的工作计划。", false);
+        }
     }
 
     //将联网获取的数据存入数据库
@@ -229,8 +203,8 @@ public class PlanFragment extends BaseFragment {
 
                 planList.setShift(planData.getShift());
                 planList.setCODE_NAME(planData.getCODE_NAME());
-
-                planListDao.insertOrReplaceInTx(planList);
+                long planCount = dbHelper.insertOrReplace(planList);
+                //planListDao.insertOrReplaceInTx(planList);
                 //第二层循环，添加area数据
                 for (int j = 0; j < areaDatas.size(); j++) {
                     PlanBean.AreaListBean areaData = areaDatas.get(j);
@@ -248,11 +222,13 @@ public class PlanFragment extends BaseFragment {
 
                     areaList.setPlanList(planList);
                     //areaListDao.insertOrReplace(areaList);
-                    areaListDao.insertOrReplaceInTx(areaList);
+                    //areaListDao.insertOrReplaceInTx(areaList);
+                    long areaCount = dbHelper.insertOrReplace(areaList);
                     //第三层循环，添加equip数据
                     for (int k = 0; k < equipDatas.size(); k++) {
                         PlanBean.AreaListBean.EquipListBean equipData = equipDatas.get(k);
                         List<PlanBean.AreaListBean.EquipListBean.PartListBean> partDatas = equipData.getPartList();
+                        List<PlanBean.AreaListBean.EquipListBean.ItemListBean> itemDatas = equipData.getItemList();
                         Equiplist equipList = new Equiplist();
                         equipList.setEL_NAME(equipData.getEL_NAME());
                         equipList.setEL_Depart_Name(equipData.getEL_Depart_Name());
@@ -265,13 +241,12 @@ public class PlanFragment extends BaseFragment {
                         equipList.setPL_AREA_ID(equipData.getPL_AREA_ID());
 
                         equipList.setAreaList(areaList);
-                        equiplistDao.insertOrReplaceInTx(equipList);
+                       // equiplistDao.insertOrReplaceInTx(equipList);
+                        dbHelper.insertOrReplace(equipList);
 
                         //第四层循环，添加part数据
                         for (int l = 0; l < partDatas.size(); l++) {
                             PlanBean.AreaListBean.EquipListBean.PartListBean partData = partDatas.get(l);
-                            List<PlanBean.AreaListBean.EquipListBean.PartListBean.ItemListBean> itemDatas = partData.getItemList();
-
                             PartList partList = new PartList();
                             // partList.setId(Long.valueOf(partData.getId()));
                             partList.setPART_ID(partData.getPART_ID());
@@ -282,56 +257,59 @@ public class PlanFragment extends BaseFragment {
                             partList.setValid_Flag(partData.getValid_Flag());
 
                             partList.setEquiplist(equipList);
-                            partListDao.insertOrReplace(partList);
-                            //第五层循环，添加item数据
-                            for (int m = 0; m < itemDatas.size(); m++) {
-                                PlanBean.AreaListBean.EquipListBean.PartListBean.ItemListBean itemData = itemDatas.get(m);
-                                List<PlanBean.AreaListBean.EquipListBean.PartListBean.ItemListBean.ContentListBean> contentDatas = itemData.getContentList();
+                            //partListDao.insertOrReplace(partList);
+                            dbHelper.insertOrReplace(partList);
+                        }
+                        //第五层循环，添加item数据
+                        for (int m = 0; m < itemDatas.size(); m++) {
+                            PlanBean.AreaListBean.EquipListBean.ItemListBean itemData = itemDatas.get(m);
+                            List<PlanBean.AreaListBean.EquipListBean.ItemListBean.ContentListBean> contentDatas = itemData.getContentList();
 
-                                ItemList itemList = new ItemList();
-                                // itemList.setId(Long.valueOf(itemData.getId()));
-                                itemList.setITEM_ID(itemData.getITEM_ID());
-                                itemList.setITEM_PART_ID(itemData.getITEM_PART_ID());
-                                itemList.setITEM_PL_BZ_ID(itemData.getITEM_PL_BZ_ID());
+                            ItemList itemList = new ItemList();
+                            // itemList.setId(Long.valueOf(itemData.getId()));
+                            itemList.setITEM_ID(itemData.getITEM_ID());
+                            itemList.setITEM_PART_ID(itemData.getITEM_PART_ID());
+                            itemList.setITEM_PL_BZ_ID(itemData.getITEM_PL_BZ_ID());
 
-                                itemList.setITEM_NAME(itemData.getITEM_NAME());
-                                itemList.setITEM_CREATE_DATE(itemData.getITEM_CREATE_DATE());
-                                itemList.setValid_Flag(itemData.getValid_Flag());
+                            itemList.setITEM_NAME(itemData.getITEM_NAME());
+                            itemList.setITEM_CREATE_DATE(itemData.getITEM_CREATE_DATE());
+                            itemList.setValid_Flag(itemData.getValid_Flag());
 
-                                itemList.setPartList(partList);
-                                itemListDao.insertOrReplaceInTx(itemList);
-                                //第六层循环，添加content数据
-                                for (int n = 0; n < contentDatas.size(); n++) {
-                                    PlanBean.AreaListBean.EquipListBean.PartListBean.ItemListBean.ContentListBean contentData = contentDatas.get(n);
-                                    ContentList contentList = new ContentList();
+                            //itemList.setPartList(partList);
+                            //itemListDao.insertOrReplaceInTx(itemList);
+                            dbHelper.insertOrReplace(itemList);
+                            //第六层循环，添加content数据
+                            for (int n = 0; n < contentDatas.size(); n++) {
+                                PlanBean.AreaListBean.EquipListBean.ItemListBean.ContentListBean contentData = contentDatas.get(n);
+                                ContentList contentList = new ContentList();
 
-                                    // contentList.setId(Long.valueOf(contentData.getId()));
-                                    contentList.setCONTENT_ID(contentData.getCONTENT_ID());
-                                    contentList.setCONTENT_PL_BZ_ID(contentData.getCONTENT_PL_BZ_ID());
-                                    contentList.setCONTENT_PART_ID(contentData.getCONTENT_PART_ID());
+                                // contentList.setId(Long.valueOf(contentData.getId()));
+                                contentList.setCONTENT_ID(contentData.getCONTENT_ID());
+                                contentList.setCONTENT_PL_BZ_ID(contentData.getCONTENT_PL_BZ_ID());
+                                contentList.setCONTENT_PART_ID(contentData.getCONTENT_PART_ID());
 
-                                    contentList.setCONTENT_ITEM_ID(contentData.getCONTENT_ITEM_ID());
-                                    contentList.setCONTENT_NAME(contentData.getCONTENT_NAME());
-                                    contentList.setCONTENT_CONTENT_TYPE(contentData.getCONTENT_CONTENT_TYPE());
-                                    contentList.setCONTENT_SORT(Integer.valueOf(contentData.getCONTENT_SORT()));
+                                contentList.setCONTENT_ITEM_ID(contentData.getCONTENT_ITEM_ID());
+                                contentList.setCONTENT_NAME(contentData.getCONTENT_NAME());
+                                contentList.setCONTENT_CONTENT_TYPE(contentData.getCONTENT_CONTENT_TYPE());
+                                contentList.setCONTENT_SORT(Integer.valueOf(contentData.getCONTENT_SORT()));
 
-                                    contentList.setCONTENT_WAY(contentData.getCONTENT_WAY());
-                                    contentList.setCONTENT_IS_USE(contentData.getCONTENT_IS_USE());
-                                    contentList.setCONTENT_STANDARD(contentData.getCONTENT_STANDARD());
-                                    contentList.setCONTENT_IS_PHOTO(contentData.getCONTENT_IS_PHOTO());
+                                contentList.setCONTENT_WAY(contentData.getCONTENT_WAY());
+                                contentList.setCONTENT_IS_USE(contentData.getCONTENT_IS_USE());
+                                contentList.setCONTENT_STANDARD(contentData.getCONTENT_STANDARD());
+                                contentList.setCONTENT_IS_PHOTO(contentData.getCONTENT_IS_PHOTO());
 
-                                    contentList.setCONTENT_IS_PHOTO_EXCEPTION(contentData.getCONTENT_IS_PHOTO_EXCEPTION());
-                                    contentList.setCONTENT_CREATE_DATE(contentData.getCONTENT_CREATE_DATE());
-                                    contentList.setCONTENT_ALARM_H1(contentData.getCONTENT_ALARM_H1());
-                                    contentList.setCONTENT_ALARM_H2(contentData.getCONTENT_ALARM_H2());
+                                contentList.setCONTENT_IS_PHOTO_EXCEPTION(contentData.getCONTENT_IS_PHOTO_EXCEPTION());
+                                contentList.setCONTENT_CREATE_DATE(contentData.getCONTENT_CREATE_DATE());
+                                contentList.setCONTENT_ALARM_H1(contentData.getCONTENT_ALARM_H1());
+                                contentList.setCONTENT_ALARM_H2(contentData.getCONTENT_ALARM_H2());
 
-                                    contentList.setCONTENT_ALARM_STYLE(contentData.getCONTENT_ALARM_STYLE());
-                                    contentList.setValid_Flag(contentData.getValid_Flag());
-                                    contentList.setCODE_NAME(contentData.getCODE_NAME());
+                                contentList.setCONTENT_ALARM_STYLE(contentData.getCONTENT_ALARM_STYLE());
+                                contentList.setValid_Flag(contentData.getValid_Flag());
+                                contentList.setCODE_NAME(contentData.getCODE_NAME());
 
-                                    contentList.setItemList(itemList);
-                                    contentListDao.insertOrReplaceInTx(contentList);
-                                }
+                                contentList.setItemList(itemList);
+                                //contentListDao.insertOrReplaceInTx(contentList);
+                                dbHelper.insertOrReplace(contentList);
                             }
                         }
                     }
@@ -342,18 +320,11 @@ public class PlanFragment extends BaseFragment {
         }
     }
 
-    //FloationActionButton点击事件
-    @OnClick(R.id.fab_start)
-    public void fabClick() {
-        AtyPlanCheck.toActivity(getActivity(), null);
-
-    }
 
     //重新联网获取最新计划数据
     private void reConnect() {
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new AsyncHttpResponseHandler() {
-
             @Override
             public void onSuccess(String content) {
                 LogUtil.e("onSuccess() called with: content = [" + content + "]");
@@ -390,6 +361,4 @@ public class PlanFragment extends BaseFragment {
         }
         return new ArrayList<>();
     }
-
-
 }

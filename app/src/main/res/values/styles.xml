@@ -30,11 +30,19 @@
         <item name="android:textColor">@color/more_text</item>
         <item name="android:textSize">18sp</item>
     </style>
+
     <style name="text_item_plan">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">#ffffff</item>
         <item name="android:text">plan name</item>
+    </style>
+    <!--设备点巡检页面AtyAreaCheck TextView Style-->
+    <style name="text_area_check">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/home_back_selected</item>
 
     </style>
 </resources>

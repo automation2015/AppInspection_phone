@@ -40,7 +40,7 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
 
     private DaoSession daoSession;
 
-    private Query<ItemList> partList_ItemsQuery;
+    private Query<ItemList> equiplist_ItemsQuery;
 
     public ItemListDao(DaoConfig config) {
         super(config);
@@ -181,16 +181,16 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
         return true;
     }
     
-    /** Internal query to resolve the "items" to-many relationship of PartList. */
-    public List<ItemList> _queryPartList_Items(Long fk_part) {
+    /** Internal query to resolve the "items" to-many relationship of Equiplist. */
+    public List<ItemList> _queryEquiplist_Items(Long fk_part) {
         synchronized (this) {
-            if (partList_ItemsQuery == null) {
+            if (equiplist_ItemsQuery == null) {
                 QueryBuilder<ItemList> queryBuilder = queryBuilder();
                 queryBuilder.where(Properties.Fk_part.eq(null));
-                partList_ItemsQuery = queryBuilder.build();
+                equiplist_ItemsQuery = queryBuilder.build();
             }
         }
-        Query<ItemList> query = partList_ItemsQuery.forCurrentThread();
+        Query<ItemList> query = equiplist_ItemsQuery.forCurrentThread();
         query.setParameter(0, fk_part);
         return query.list();
     }

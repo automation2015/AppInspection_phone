@@ -1,6 +1,5 @@
 package auto.cn.greendaogenerate;
 
-import java.util.List;
 import auto.cn.greendaogenerate.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -27,7 +26,6 @@ public class PartList {
     private Equiplist equiplist;
     private Long equiplist__resolvedKey;
 
-    private List<ItemList> items;
 
     public PartList() {
     }
@@ -131,28 +129,6 @@ public class PartList {
             fk_equip = equiplist == null ? null : equiplist.getId();
             equiplist__resolvedKey = fk_equip;
         }
-    }
-
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public List<ItemList> getItems() {
-        if (items == null) {
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            ItemListDao targetDao = daoSession.getItemListDao();
-            List<ItemList> itemsNew = targetDao._queryPartList_Items(id);
-            synchronized (this) {
-                if(items == null) {
-                    items = itemsNew;
-                }
-            }
-        }
-        return items;
-    }
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void resetItems() {
-        items = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

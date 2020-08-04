@@ -9,10 +9,11 @@
     android:layout_height="wrap_content"
     android:id="@+id/tv_drop_down_area"
     android:layout_alignParentLeft="true"
+    android:layout_centerVertical="true"
     android:text="area"
     android:textSize="16sp"
 
-    android:textColor="@color/title_text"
+    android:textColor="@color/home_back_selected"
     android:layout_marginLeft="10dp"/>
     <ToggleButton
         android:id="@+id/tb_drop_down_area"

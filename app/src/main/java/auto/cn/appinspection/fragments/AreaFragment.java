@@ -1,9 +1,6 @@
 package auto.cn.appinspection.fragments;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -27,8 +24,6 @@ import auto.cn.appinspection.utils.UIUtils;
 import auto.cn.greendaogenerate.AreaList;
 import auto.cn.greendaogenerate.PlanList;
 import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class AreaFragment extends BaseFragment implements AdapterView.OnItemClickListener {
     @Bind(R.id.dropDownMenu)
@@ -107,6 +102,7 @@ public class AreaFragment extends BaseFragment implements AdapterView.OnItemClic
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             if (isChecked) {
+                                //TODO 为数据库添加一个标识字段
                                 UIUtils.toast("检修", false);
                             } else {
                                 UIUtils.toast("正常", false);

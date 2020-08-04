@@ -31,6 +31,7 @@ public class Equiplist {
     private Long areaList__resolvedKey;
 
     private List<PartList> parts;
+    private List<ItemList> items;
 
     public Equiplist() {
     }
@@ -183,6 +184,28 @@ public class Equiplist {
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     public synchronized void resetParts() {
         parts = null;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public List<ItemList> getItems() {
+        if (items == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            ItemListDao targetDao = daoSession.getItemListDao();
+            List<ItemList> itemsNew = targetDao._queryEquiplist_Items(id);
+            synchronized (this) {
+                if(items == null) {
+                    items = itemsNew;
+                }
+            }
+        }
+        return items;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetItems() {
+        items = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */

@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="plan_name"
                 android:textSize="18sp"
-                android:textColor="@color/title_text"
+                android:textColor="@color/home_back_selected"
                 android:layout_marginLeft="5dp"/>
 
             <TextView
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="plan_id"
-                android:textColor="@color/title_text"
+                android:textColor="@color/home_back_selected"
                 android:layout_margin="5dp"
                 android:textSize="14sp"/>
 
@@ -63,7 +63,7 @@
                 android:layout_below="@id/tv_plan_name"
                 android:layout_centerInParent="true"
                 android:text="每日三班"
-                android:textColor="@color/title_text"
+                android:textColor="@color/home_back_selected"
                 android:layout_marginLeft="5dp"
                 android:textSize="14sp"/>
         </LinearLayout>

@@ -19,6 +19,7 @@ import java.util.Map;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.adapters.BadgeViewAdapter;
+import auto.cn.appinspection.adapters.CommonBaseAdapter;
 import auto.cn.appinspection.atys.AtyLogin;
 import auto.cn.appinspection.atys.AtyPlan;
 import auto.cn.appinspection.atys.AtyPlanManager;
@@ -40,6 +41,7 @@ public class HomeFragment extends BaseFragment implements OnItemClickListener {
     private int[] icon = {R.mipmap.icon_plan_manager, R.mipmap.icon_hidden_manage, R.mipmap.icon_maintainance_manage, R.mipmap.icon_other_manage};
     private String[] iconName = {"计划管理", "隐患管理", "检修管理", "其他管理"};
     private BadgeViewAdapter adapter;
+    //private CommonBaseAdapter<>
     private List<Map<String, Object>> dataList;
     @Override
     protected RequestParams getParams() {

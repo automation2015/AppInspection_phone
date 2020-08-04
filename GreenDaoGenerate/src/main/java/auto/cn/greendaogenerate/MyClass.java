@@ -87,8 +87,9 @@ public class MyClass {
         item.addStringProperty("Valid_Flag");
 
         Property partFk = item.addLongProperty("fk_part").getProperty();
+
         item.addToOne(part, partFk);
-        part.addToMany(item, partFk).setName("items");
+        equip.addToMany(item, partFk).setName("items");
         //content实体
         Entity content = schema.addEntity("ContentList");
         content.addIdProperty();

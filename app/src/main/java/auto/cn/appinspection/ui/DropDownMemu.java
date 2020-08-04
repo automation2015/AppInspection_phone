@@ -11,12 +11,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import java.util.List;
+
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.adapters.CommonBaseAdapter;
 
@@ -59,7 +60,7 @@ public class DropDownMemu extends LinearLayout {
     }
 
     public DropDownMemu(Context context, AttributeSet attrs) {
-            this(context, attrs, 0);
+        this(context, attrs, 0);
     }
 
     public DropDownMemu(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -144,7 +145,7 @@ public class DropDownMemu extends LinearLayout {
         containerView.addView(popupMenuViews, 2);
     }
 
-//添加菜单视图中的子视图
+    //添加菜单视图中的子视图
     public void addTab(List<String> tabTexts, int index) {
         final TextView tab = new TextView(getContext());
         tab.setSingleLine();
@@ -175,6 +176,7 @@ public class DropDownMemu extends LinearLayout {
 
     /**
      * 切换菜单
+     *
      * @param targeView
      */
     private void switchMenu(View targeView) {
@@ -195,12 +197,12 @@ public class DropDownMemu extends LinearLayout {
                     currentTabPosition = i;
                     ((TextView) tabMenuView.getChildAt(i)).setTextColor(textSelectedColor);
                     ((TextView) tabMenuView.getChildAt(i)).setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(menuSelectdIcon), null);
-                   // popupMenuViews.setVisibility(View.GONE);
+                    // popupMenuViews.setVisibility(View.GONE);
                 }
-            }else {
+            } else {
                 ((TextView) tabMenuView.getChildAt(i)).setTextColor(textUnSelectedColor);
                 ((TextView) tabMenuView.getChildAt(i)).setCompoundDrawablesWithIntrinsicBounds(null, null, getResources().getDrawable(menuUnSelectdIcon), null);
-                popupMenuViews.getChildAt(i/2).setVisibility(View.GONE);
+                popupMenuViews.getChildAt(i / 2).setVisibility(View.GONE);
             }
         }
     }
@@ -219,14 +221,16 @@ public class DropDownMemu extends LinearLayout {
             currentTabPosition = -1;
         }
     }
+
     /**
      * 改变tab文字
+     *
      * @param text
      */
     public void setTabText(String text) {
         if (currentTabPosition != -1) {
             //((TextView)((ViewGroup)tabMenuView.getChildAt(currentTabPosition)).getChildAt(0)).setText(text+"  ");
-            TextView tv = (TextView)tabMenuView.getChildAt(currentTabPosition);
+            TextView tv = (TextView) tabMenuView.getChildAt(currentTabPosition);
             tv.setText(text);
         }
     }
@@ -236,33 +240,36 @@ public class DropDownMemu extends LinearLayout {
             tabMenuView.getChildAt(i).setClickable(clickable);
         }
     }
-public void setListView(CommonBaseAdapter adapter,int tvVisiable,OnClickListener listener){
-    if (currentTabPosition != -1) {
-        RelativeLayout rl = (RelativeLayout) containerView.getChildAt(0);
-        if(rl!=null){
-        ListView lv=rl.findViewById(R.id.lv_drop_view_content);
-        TextView tv=rl.findViewById(R.id.tv_mes);
-        tv.setVisibility(tvVisiable);
-        FloatingActionButton fab=rl.findViewById(R.id.fab_scan);
-        fab.setOnClickListener(listener);
-        lv.setAdapter(adapter);
-        tv.setVisibility(tvVisiable);
-    }
-    }
-}
-    /**
-    public void setImageResource(int imagId) {
+
+    public void setListView(CommonBaseAdapter adapter, int tvVisiable, OnClickListener listener) {
         if (currentTabPosition != -1) {
-            ImageView iv = (ImageView) containerView.getChildAt(0);
-            iv.setBackgroundResource(imagId);
+            RelativeLayout rl = (RelativeLayout) containerView.getChildAt(0);
+            if (rl != null) {
+                ListView lv = rl.findViewById(R.id.lv_drop_view_content);
+                TextView tv = rl.findViewById(R.id.tv_mes);
+                tv.setVisibility(tvVisiable);
+                FloatingActionButton fab = rl.findViewById(R.id.fab_scan);
+                fab.setVisibility(VISIBLE);
+                fab.setOnClickListener(listener);
+                lv.setAdapter(adapter);
+                tv.setVisibility(tvVisiable);
+            }
         }
     }
+    /**
+     public void setImageResource(int imagId) {
+     if (currentTabPosition != -1) {
+     ImageView iv = (ImageView) containerView.getChildAt(0);
+     iv.setBackgroundResource(imagId);
+     }
+     }
      */
     /**
      * DropDownMenu是否处于可见状态
+     *
      * @return
      */
     public boolean isShowing() {
-        return currentTabPosition!=-1;
+        return currentTabPosition != -1;
     }
 }

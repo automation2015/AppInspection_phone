@@ -45,7 +45,7 @@ public class AtyPlan extends BaseActivity {
         tvTitle.setText("计划管理");
         ivTitleBack.setVisibility(View.VISIBLE);
         ivTitleSetting.setBackgroundResource(R.mipmap.icon_add);
-        ivTitleSetting.setVisibility(View.VISIBLE);
+        ivTitleSetting.setVisibility(View.GONE);
     }
 
     @Override

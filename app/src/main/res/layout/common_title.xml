@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="首页"
-            android:textColor="@color/title_text"
+            android:textColor="@color/home_back_selected"
             android:textSize="24sp"
             android:gravity="center"
             />
@@ -32,14 +32,13 @@
             android:id="@+id/iv_title_setting"
             android:layout_width="40dp"
             android:layout_height="40dp"
-
             android:layout_marginRight="10dp"
             />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/title_text"
+        android:background="@color/home_back_selected"
         ></View>
 
 </LinearLayout>
