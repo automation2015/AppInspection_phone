@@ -9,7 +9,12 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
+    <!-- <uses-sdk android:minSdkVersion="10" /> -->
+    <uses-permission android:name="android.permission.NFC" />
+    <!-- <uses-feature> ：仅用于google应用商店发布时，需要配置 -->
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
     <application
         android:name=".bases.MyApplication"
         android:allowBackup="true"
@@ -21,14 +26,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".atys.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".atys.AtyLogin" />
-        <activity android:name=".atys.AtyWelcome">
-
-        </activity>
+        <activity android:name=".atys.AtyWelcome"></activity>
         <activity
             android:name=".atys.AtyPlan"
-            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity android:name=".atys.AtyUserRegist" />
         <activity android:name=".atys.GestureEditActivity" />
         <activity android:name=".atys.GestureVerifyActivity" />
@@ -46,14 +49,18 @@
         </provider>
 
         <activity android:name=".atys.AtyPlanCheck">
+
+        </activity>
+        <activity android:name=".atys.AtyAreaScan" />
+        <activity android:name=".atys.AtyPlanManager" />
+        <activity android:name=".atys.AtyNfcFunc">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".atys.AtyAreaScan"></activity>
-        <activity android:name=".atys.AtyPlanManager"></activity>
     </application>
 
 </manifest>

@@ -6,9 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -23,6 +26,7 @@ import com.loopj.android.http.RequestParams;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.atys.AtyAbout;
+import auto.cn.appinspection.atys.AtyNfcFunc;
 import auto.cn.appinspection.atys.AtyUserRegist;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.bases.BaseFragment;
@@ -33,6 +37,8 @@ import auto.cn.appinspection.ui.UpdateVersionShowDialog;
 import auto.cn.appinspection.utils.DownloadUtils;
 import auto.cn.appinspection.utils.UIUtils;
 import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MoreFragment extends BaseFragment {
 
@@ -44,8 +50,6 @@ public class MoreFragment extends BaseFragment {
     ImageView ivTitleSetting;
     @Bind(R.id.tv_more_regist)
     TextView tvMoreRegist;
-    @Bind(R.id.tv_more_reset)
-    TextView tvMoreReset;
     @Bind(R.id.tv_more_phone)
     TextView tvMorePhone;
     @Bind(R.id.rl_more_contact)
@@ -58,6 +62,10 @@ public class MoreFragment extends BaseFragment {
     TextView tvMoreFeedback;
     @Bind(R.id.tv_more_checkversion)
     TextView tvMoreCheckversion;
+    @Bind(R.id.tv_more_nfc)
+    TextView tvMoreNfc;
+    @Bind(R.id.tv_more_contact)
+    TextView tvMoreContact;
 
     @Override
     protected RequestParams getParams() {
@@ -72,18 +80,21 @@ public class MoreFragment extends BaseFragment {
     @Override
     protected void initData(String content) {
         //用户注册
-        userResgist();
+        //userResgist();
         //联系客服
-        contactService();
+        //contactService();
         //提交反馈意见
-        commitFeedback();
+        //commitFeedback();
         //分享软件
-        shareSoftwareMsg();
+        // shareSoftwareMsg();
         //软件说明
-        aboutInspection();
+        // aboutInspection();
         //检查版本
-        updateVersion();
+        //updateVersion();
+        //nfc功能
+        //nfcFunction();
     }
+
 
     public void initTitle() {
         ivTitleBack.setVisibility(View.GONE);
@@ -97,48 +108,40 @@ public class MoreFragment extends BaseFragment {
     }
 
     //用户注册
-    private void userResgist() {
-        tvMoreRegist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((BaseActivity) MoreFragment.this.getActivity()).goToActivity(AtyUserRegist.class, null);
-            }
-        });
+    @OnClick(R.id.tv_more_regist)
+    public void userResgist() {
+        ((BaseActivity) MoreFragment.this.getActivity()).goToActivity(AtyUserRegist.class, null);
+
     }
 
     //软件说明
-    private void aboutInspection() {
-        tvMoreAbout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((BaseActivity) MoreFragment.this.getActivity()).goToActivity(AtyAbout.class, null);
-            }
-        });
+    @OnClick(R.id.tv_more_about)
+    public void aboutInspection() {
+        ((BaseActivity) MoreFragment.this.getActivity()).goToActivity(AtyAbout.class, null);
+    }
+
+    //nfc功能
+    @OnClick(R.id.tv_more_nfc)
+    public void nfcFunction() {
+        ((BaseActivity) MoreFragment.this.getActivity()).goToActivity(AtyNfcFunc.class, null);
     }
 
     //分享软件
-    private void shareSoftwareMsg() {
-        tvMoreShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String s = "\"世界上最遥远的距离，是我在if里你在else里，似乎一直相伴又永远分离；\"\n" +
-                        "\" 世界上最痴心的等待，是我当case你是switch，或许永远都选不上自己；\"\n" +
-                        "\" 世界上最真情的相依，是你在try我在catch。无论你发神马脾气，我都默默承受，静静处理。到那时，再来期待我们的finally。\"";
+    @OnClick(R.id.tv_more_share)
+    public void shareSoftwareMsg() {
+        String s = "\"世界上最遥远的距离，是我在if里你在else里，似乎一直相伴又永远分离；\"\n" +
+                "\" 世界上最痴心的等待，是我当case你是switch，或许永远都选不上自己；\"\n" +
+                "\" 世界上最真情的相依，是你在try我在catch。无论你发神马脾气，我都默默承受，静静处理。到那时，再来期待我们的finally。\"";
 
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, s);
-                startActivity(Intent.createChooser(intent, "设备点巡检"));
-            }
-        });
-
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, s);
+        startActivity(Intent.createChooser(intent, "设备点巡检"));
     }
 
     //联系客服
-    private void contactService() {
-        rlMoreContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @OnClick(R.id.tv_more_contact)
+    public void contactService() {
                 new AlertDialog.Builder(MoreFragment.this.getActivity())
                         .setTitle("联系客服")
                         .setMessage("是否现在联系客服：0531-776920678")
@@ -158,17 +161,13 @@ public class MoreFragment extends BaseFragment {
                         })
                         .setNegativeButton("取消", null)
                         .show();
-            }
-        });
     }
 
     private String department = "不明确";
 
     //提交反馈意见
-    private void commitFeedback() {
-        tvMoreFeedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @OnClick(R.id.tv_more_feedback)
+    public void commitFeedback() {
                 //提供一个View
                 View view = View.inflate(MoreFragment.this.getActivity(), R.layout.view_feedback, null);
                 final RadioGroup rg = (RadioGroup) view.findViewById(R.id.rg_feedback);
@@ -211,51 +210,44 @@ public class MoreFragment extends BaseFragment {
                         })
                         .setNegativeButton("取消", null)
                         .show();
-            }
-        });
     }
-
     //检查版本
-    private void updateVersion() {
-     tvMoreCheckversion.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-             AppUpdater.getsInstance().getmNetManager().get("http://59.110.162.30/app_updater_version.json", new INetCallback() {
-                 @Override
-                 public void success(String response) {
-                     Log.e("tag", "response=" + response);
-                     //1.解析json
-                     VersionDownLoadBean bean=VersionDownLoadBean.parse(response);
-                     if(bean==null){
-                         Toast.makeText(getActivity(),"版本检测接口返回数据异常！",Toast.LENGTH_SHORT).show();
-                         return;
-                     }
-                     //检测：是否需要弹框
-                     try {
-                         long versionCode = Long.parseLong(bean.getVersionCode());
-                         if(versionCode<=DownloadUtils.getVersionCode(getActivity())){
-                             Toast.makeText(getActivity(),"已经时最新版本，无需更新！！",Toast.LENGTH_SHORT).show();
-                             return;}
-                     } catch (NumberFormatException e) {
-                         e.printStackTrace();
-                         Toast.makeText(getActivity(),"版本检测接口返回版本号异常！",Toast.LENGTH_SHORT).show();
-                     }
-                     //3.弹框
-                     UpdateVersionShowDialog.show(getActivity(),bean);
-                     //2.版本匹配
-                     //3.弹框
-                     //4.点击下载
+    //TODO 按下取消按钮，出错
+    @OnClick(R.id.tv_more_checkversion)
+    public void updateVersion() {
+                AppUpdater.getsInstance().getmNetManager().get("http://59.110.162.30/app_updater_version.json", new INetCallback() {
+                    @Override
+                    public void success(String response) {
+                        Log.e("tag", "response=" + response);
+                        //1.解析json
+                        VersionDownLoadBean bean = VersionDownLoadBean.parse(response);
+                        if (bean == null) {
+                            Toast.makeText(getActivity(), "版本检测接口返回数据异常！", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        //检测：是否需要弹框
+                        try {
+                            long versionCode = Long.parseLong(bean.getVersionCode());
+                            if (versionCode <= DownloadUtils.getVersionCode(getActivity())) {
+                                Toast.makeText(getActivity(), "已经时最新版本，无需更新！！", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "版本检测接口返回版本号异常！", Toast.LENGTH_SHORT).show();
+                        }
+                        //3.弹框
+                        UpdateVersionShowDialog.show(getActivity(), bean);
+                        //2.版本匹配
+                        //3.弹框
+                        //4.点击下载
 
-                 }
-
-                 @Override
-                 public void failed(Throwable throwable) {
-                     Toast.makeText(getActivity(),"版本更新接口请求失败！",Toast.LENGTH_SHORT).show();
-                     throwable.printStackTrace();
-                 }
-             },getActivity());
-         }
-     });
+                    }
+                    @Override
+                    public void failed(Throwable throwable) {
+                        Toast.makeText(getActivity(), "版本更新接口请求失败！", Toast.LENGTH_SHORT).show();
+                        throwable.printStackTrace();
+                    }
+                }, getActivity());
     }
-
 }
