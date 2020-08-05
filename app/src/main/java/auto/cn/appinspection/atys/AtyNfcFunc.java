@@ -110,7 +110,6 @@ public class AtyNfcFunc extends BaseActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(AtyNfcFunc.this);
             builder.setTitle("写入NFC数据")
                     .setMessage("请靠近NFC标签！")
-                    .setIcon(R.mipmap.icon_phone)
                     .setPositiveButton("取消", null)
                     .setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
