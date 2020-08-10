@@ -71,7 +71,7 @@ public class MyClass {
         part.addStringProperty("PART_NAME");
         part.addStringProperty("PART_CREATE_DATE");
         part.addStringProperty("Valid_Flag");
-
+//
         Property equipFk = part.addLongProperty("fk_equip").getProperty();
         part.addToOne(equip, equipFk);
         equip.addToMany(part, equipFk).setName("parts");
@@ -87,8 +87,7 @@ public class MyClass {
         item.addStringProperty("Valid_Flag");
 
         Property partFk = item.addLongProperty("fk_part").getProperty();
-
-        item.addToOne(part, partFk);
+        item.addToOne(equip, partFk);
         equip.addToMany(item, partFk).setName("items");
         //content实体
         Entity content = schema.addEntity("ContentList");

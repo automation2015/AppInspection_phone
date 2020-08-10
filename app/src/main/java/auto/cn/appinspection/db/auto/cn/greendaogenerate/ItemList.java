@@ -25,8 +25,8 @@ public class ItemList {
     /** Used for active entity operations. */
     private transient ItemListDao myDao;
 
-    private PartList partList;
-    private Long partList__resolvedKey;
+    private Equiplist equiplist;
+    private Long equiplist__resolvedKey;
 
     private List<ContentList> contents;
 
@@ -119,27 +119,27 @@ public class ItemList {
     }
 
     /** To-one relationship, resolved on first access. */
-    public PartList getPartList() {
+    public Equiplist getEquiplist() {
         Long __key = this.fk_part;
-        if (partList__resolvedKey == null || !partList__resolvedKey.equals(__key)) {
+        if (equiplist__resolvedKey == null || !equiplist__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            PartListDao targetDao = daoSession.getPartListDao();
-            PartList partListNew = targetDao.load(__key);
+            EquiplistDao targetDao = daoSession.getEquiplistDao();
+            Equiplist equiplistNew = targetDao.load(__key);
             synchronized (this) {
-                partList = partListNew;
-            	partList__resolvedKey = __key;
+                equiplist = equiplistNew;
+            	equiplist__resolvedKey = __key;
             }
         }
-        return partList;
+        return equiplist;
     }
 
-    public void setPartList(PartList partList) {
+    public void setEquiplist(Equiplist equiplist) {
         synchronized (this) {
-            this.partList = partList;
-            fk_part = partList == null ? null : partList.getId();
-            partList__resolvedKey = fk_part;
+            this.equiplist = equiplist;
+            fk_part = equiplist == null ? null : equiplist.getId();
+            equiplist__resolvedKey = fk_part;
         }
     }
 

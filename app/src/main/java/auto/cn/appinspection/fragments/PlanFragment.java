@@ -1,9 +1,7 @@
 package auto.cn.appinspection.fragments;
 
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -25,7 +23,6 @@ import java.util.List;
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.adapters.CommonBaseAdapter;
 import auto.cn.appinspection.adapters.ViewHolder;
-import auto.cn.appinspection.atys.AtyPlanCheck;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.bases.BaseFragment;
 import auto.cn.appinspection.beans.PlanBean;
@@ -35,21 +32,12 @@ import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.utils.LogUtil;
 import auto.cn.appinspection.utils.UIUtils;
 import auto.cn.greendaogenerate.AreaList;
-import auto.cn.greendaogenerate.AreaListDao;
 import auto.cn.greendaogenerate.ContentList;
-import auto.cn.greendaogenerate.ContentListDao;
-import auto.cn.greendaogenerate.DaoMaster;
-import auto.cn.greendaogenerate.DaoSession;
 import auto.cn.greendaogenerate.Equiplist;
-import auto.cn.greendaogenerate.EquiplistDao;
 import auto.cn.greendaogenerate.ItemList;
-import auto.cn.greendaogenerate.ItemListDao;
 import auto.cn.greendaogenerate.PartList;
-import auto.cn.greendaogenerate.PartListDao;
 import auto.cn.greendaogenerate.PlanList;
-import auto.cn.greendaogenerate.PlanListDao;
 import butterknife.Bind;
-import butterknife.OnClick;
 
 public class PlanFragment extends BaseFragment {
     @Bind(R.id.lv_fragment_plan)
@@ -62,7 +50,7 @@ public class PlanFragment extends BaseFragment {
     private List<PlanBean> mDatas;
     private CommonBaseAdapter<PlanBean> planAdapter;
     private String urlTest = "http://api.map.baidu.com/telematics/v3/weather?location=%E6%B5%8E%E5%8D%97&output=json&ak=FkPhtMBK0HTIQNh7gG4cNUttSTyr0nzo";
-    private String url = AppNetConfig.GETALLPLAN + "?username=巡检甲班&rolename=电气岗位点检员";
+    private String url = AppNetConfig.GETALLPLAN + "?username=巡检乙班&rolename=电气岗位点检员";
     private String url1 = AppNetConfig.GETALLPLAN + "?username=admin&rolename=系统管理员";
     private DbHelper dbHelper;
 
@@ -275,7 +263,7 @@ public class PlanFragment extends BaseFragment {
                             itemList.setITEM_CREATE_DATE(itemData.getITEM_CREATE_DATE());
                             itemList.setValid_Flag(itemData.getValid_Flag());
 
-                            //itemList.setPartList(partList);
+                            itemList.setEquiplist(equipList);
                             //itemListDao.insertOrReplaceInTx(itemList);
                             dbHelper.insertOrReplace(itemList);
                             //第六层循环，添加content数据

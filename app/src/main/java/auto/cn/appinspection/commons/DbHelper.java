@@ -127,52 +127,64 @@ public class DbHelper {
 
     /**
      * 插入计划，会自动判定是插入还是替换
+     *
      * @param planData
      */
     public long insertOrReplace(PlanList planData) {
         long count = planListDao.insertOrReplace(planData);
         return count;
     }
+
     /**
      * 插入area，会自动判定是插入还是替换
+     *
      * @param areaData
      */
     public long insertOrReplace(AreaList areaData) {
         long count = areaListDao.insertOrReplace(areaData);
         return count;
     }
+
     /**
      * 插入equip，会自动判定是插入还是替换
+     *
      * @param equipData
      */
     public long insertOrReplace(Equiplist equipData) {
         long count = equiplistDao.insertOrReplace(equipData);
         return count;
     }
+
     /**
      * part，会自动判定是插入还是替换
+     *
      * @param partData
      */
     public long insertOrReplace(PartList partData) {
         long count = partListDao.insertOrReplace(partData);
         return count;
     }
+
     /**
      * part，会自动判定是插入还是替换
+     *
      * @param itemData
      */
     public long insertOrReplace(ItemList itemData) {
         long count = itemListDao.insertOrReplace(itemData);
         return count;
     }
+
     /**
      * content，会自动判定是插入还是替换
+     *
      * @param contentData
      */
     public long insertOrReplace(ContentList contentData) {
         long count = contentListDao.insertOrReplace(contentData);
         return count;
     }
+
     /**
      * 插入一条记录，表里面要没有与之相同的记录
      *
@@ -224,15 +236,18 @@ public class DbHelper {
                 List<Equiplist> equiplists = areaList.getEquips();
                 for (Equiplist equiplist : equiplists) {
                     List<PartList> partLists = equiplist.getParts();
-                    List<ItemList> itemLists = equiplist.getItems();
-                    for (ItemList itemList : itemLists) {
-                        List<ContentList> contentLists = itemList.getContents();
-                        for (ContentList contentList : contentLists) {
+//                    for (PartList partlist : partLists) {
+                      List<ItemList> itemLists = equiplist.getItems();
+                        for (ItemList itemList : itemLists) {
+                            List<ContentList> contentLists = itemList.getContents();
+                            for (ContentList contentList : contentLists) {
+                            }
                         }
                     }
                 }
             }
-        }
+        //}
+
         return planLists;
     }
 
@@ -247,7 +262,7 @@ public class DbHelper {
     }
 
     /**
-     * 获取区域
+     * 根据PlanId获取区域
      *
      * @return
      */
@@ -255,6 +270,14 @@ public class DbHelper {
         PlanList plan = planListDao.queryBuilder().where(PlanListDao.Properties.PLAN_ID.eq(planId)).unique();
         List<AreaList> areaLists = plan.getAreas();
         return areaLists;
+    }
+
+    /**
+     * 根据AREA_LABEL查询
+     */
+    public AreaList queryAreaByAreaLable(String areaLable) {
+        AreaList area = areaListDao.queryBuilder().where(AreaListDao.Properties.PL_AREA_LABEL.eq(areaLable)).unique();
+        return area;
     }
 
     /**
@@ -274,21 +297,21 @@ public class DbHelper {
      * @return
      */
     public List<PartList> getPartByEquipId(int equipId) {
-        Equiplist equiplist = equiplistDao.queryBuilder().where(EquiplistDao.Properties.EL_EIS_ID.eq(equipId)).unique();
-        List<PartList> partlists = equiplist.getParts();
-        return partlists;
-    }
+     Equiplist equiplist = equiplistDao.queryBuilder().where(EquiplistDao.Properties.EL_EIS_ID.eq(equipId)).unique();
+    List<PartList> partlists = equiplist.getParts();
+    return partlists;
+     }
 
     /**
      * 获取Item
      *
      * @return
-     */
-    public List<ItemList> getItemByEquipId(int equipId) {
-        Equiplist equiplist = equiplistDao.queryBuilder().where(EquiplistDao.Properties.EL_EIS_ID.eq(equipId)).unique();
-        List<ItemList> itemLists = equiplist.getItems();
-        return itemLists;
-    }
+    */
+//    public List<ItemList> getItemByEquipId(int partId) {
+//       PartList partlist = partListDao.queryBuilder().where(PartListDao.Properties.PART_ID.eq(partId)).unique();
+//        List<ItemList> itemLists = partlist.getItems();
+//        return itemLists;
+//    }
 
     /**
      * 获取Content

@@ -128,7 +128,7 @@ public class AreaFragment extends BaseFragment implements AdapterView.OnItemClic
                 areaLists.addAll(areaByPlanId);
                 adapter.notifyDataSetChanged();
 
-                dropDownMenu.setListView(adapter, (areaLists == null) ? View.VISIBLE : View.GONE, new View.OnClickListener() {
+                dropDownMenu.setAreaContentView(adapter, (areaLists == null) ? View.VISIBLE : View.GONE, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //FloationActionButton点击事件

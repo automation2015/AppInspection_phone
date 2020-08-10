@@ -7,16 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,13 +30,13 @@ import java.io.IOException;
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.nfc.MyNDEFMsgGet;
+import auto.cn.appinspection.nfc.MyNfcRecordParse;
 import auto.cn.appinspection.utils.LogUtil;
 import auto.cn.appinspection.utils.UIUtils;
 import butterknife.Bind;
 import butterknife.OnClick;
 
 public class AtyNfcFunc extends BaseActivity {
-
     @Bind(R.id.iv_title_back)
     ImageView ivTitleBack;
     @Bind(R.id.tv_title)
@@ -50,13 +51,13 @@ public class AtyNfcFunc extends BaseActivity {
     TextView tvNfcType;
     @Bind(R.id.tv_nfc_data)
     TextView tvNfcData;
-    @Bind(R.id.btn_nfc_read)
-    Button btnNfcRead;
+
     private NfcAdapter mAdapter;
     private PendingIntent mPendingIntent;
     private AlertDialog alertDialog;
     private String payload;
     private NdefMessage ndefMessage;
+    private boolean isWrite = false;
 
     @Override
     protected int getLayoutId() {
@@ -98,23 +99,32 @@ public class AtyNfcFunc extends BaseActivity {
             }
         });
 
+
     }
-//Todo 动态权限获取
+
+    //Todo 动态权限获取
     //写入事件监听
     @OnClick({R.id.btn_nfc_write})
-    public void writeData() {
+    public void writeDataClick() {
         if (TextUtils.isEmpty(etNfcText.getText())) {
-            UIUtils.toast("请先输入需要写入NFC中的数据！",false);
+            UIUtils.toast("请先输入需要写入NFC中的数据！", false);
         } else {
-            enableForegroundDispatch();
+            //enableForegroundDispatch();
             AlertDialog.Builder builder = new AlertDialog.Builder(AtyNfcFunc.this);
             builder.setTitle("写入NFC数据")
                     .setMessage("请靠近NFC标签！")
                     .setPositiveButton("取消", null)
+                    .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            isWrite = true;
+                        }
+                    })
                     .setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
                             disableForegroundDispatch();
+                            alertDialog.dismiss();
                         }
                     });
             alertDialog = builder.create();
@@ -122,16 +132,91 @@ public class AtyNfcFunc extends BaseActivity {
             alertDialog.show();
         }
     }
+
     //获取tag
     private void resolveIntent(Intent intent) {
+
+           // writeData(intent);
+
+            readData(intent);
+
+    }
+
+    //写入Tag数据
+    private void writeData(Intent intent) {
         String action = intent.getAction();
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         if (supportedTechs(tag.getTechList())) {
             //ndefMessage = MyNDEFMsgGet.getNdefMsg_RTD_URI(payload, (byte) 0x01, false);
-            ndefMessage = MyNDEFMsgGet.getNdefMsg_RTD_TEXT(payload, false, false);
-            new WriteTask(this, ndefMessage, tag).execute();
+            if (isWrite) {
+                if (payload != null) {
+                    ndefMessage = MyNDEFMsgGet.getNdefMsg_RTD_TEXT(payload, true, false);
+
+                    new WriteTask(this, ndefMessage, tag).execute();
+                    isWrite = false;
+                } else {
+                    UIUtils.toast("请先填写数据！", false);
+                }
+            }
+        } else {
+            UIUtils.toast("不支持的卡片！", false);
         }
     }
+
+    //读取Tag数据
+    private void readData(Intent intent) {
+            String action = intent.getAction();
+            if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+                NdefMessage[] messages = null;
+                //获取标签对象
+                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                if (supportedTechs(tag.getTechList())) {
+                    //获取ndef消息数组
+                    Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+                    if (rawMsgs != null) {
+                        messages = new NdefMessage[rawMsgs.length];
+                        for (int i = 0; i < rawMsgs.length; i++) {
+                            messages[i] = (NdefMessage) rawMsgs[i];
+                        }
+                    } else {
+                        //未知的标签
+                        byte[] empty = new byte[]{};
+                        NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, empty, empty);
+                        NdefMessage msg = new NdefMessage(new NdefRecord[]{record});
+                        messages = new NdefMessage[]{msg};
+                    }
+                    //tvTitle.setText("Scan a TAG!");
+                    //解析
+                    processNDEFMsg(messages);
+                } else {
+                    UIUtils.toast("不支持的卡片！", false);
+                }
+            } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
+
+            } else if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
+
+            } else {
+
+            }
+        }
+
+        private void processNDEFMsg (NdefMessage[]messages){
+            if (messages == null || messages.length == 0) {
+                Toast.makeText(this, "TAG内容为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            for (int i = 0; i < messages.length; i++) {
+                int length = messages[i].getRecords().length;
+                NdefRecord[] records = messages[i].getRecords();
+                for (int j = 0; j < length; j++) {
+                    for (NdefRecord record : records) {
+                        //parseRTDUriRecord(record);
+                        String s = MyNfcRecordParse.parseWellKnowTextRecord(record);
+                        tvNfcData.setText(s);
+                    }
+                }
+            }
+        }
 
     //检测tag的数据类型
     private boolean supportedTechs(String[] techList) {
@@ -173,7 +258,7 @@ public class AtyNfcFunc extends BaseActivity {
                                 startActivity(intent);
                                 return;
                             }
-                        }).setNegativeButton("取消",null)
+                        }).setNegativeButton("取消", null)
                         .show();
             }
         }
@@ -195,6 +280,7 @@ public class AtyNfcFunc extends BaseActivity {
     protected void onPause() {
         super.onPause();
         disableForegroundDispatch();
+        isWrite = false;
     }
 
     //使能前台标签调度系统
@@ -233,12 +319,12 @@ public class AtyNfcFunc extends BaseActivity {
                         formatable.format(msg);
                     } catch (IOException e) {
                         text = "Failed to connect Tag!";
-                        Log.d("tag", "doInBackground() called with: params = [" + params
+                        LogUtil.e("doInBackground() called with: params = [" + params
                                 + "],Failed to connect Tag!");
                         e.printStackTrace();
                     } catch (FormatException e) {
                         text = "Failed to format Tag!";
-                        Log.d("tag", "doInBackground() called with: params = [" + params
+                        LogUtil.e("doInBackground() called with: params = [" + params
                                 + "],Failed to format Tag!");
                         e.printStackTrace();
                     } finally {
@@ -252,7 +338,7 @@ public class AtyNfcFunc extends BaseActivity {
                     }
                 } else {
                     text = "NDEF not support your tag!";
-                    Log.d("tag", "doInBackground() called with: params = [" + params
+                    LogUtil.e("doInBackground() called with: params = [" + params
                             + "],NDEF not support your tag");
                 }
             } else {
@@ -260,23 +346,23 @@ public class AtyNfcFunc extends BaseActivity {
                     ndef.connect();
                     if (!ndef.isWritable()) {
                         text = "Tag read only!";
-                        Log.d("tag", "doInBackground() called with: params = [" + params
+                        LogUtil.e("doInBackground() called with: params = [" + params
                                 + "],Tag read only");
                     } else if (ndef.getMaxSize() < size) {
                         text = "Tag is too small!";
-                        Log.d("tag", "doInBackground() called with: params = [" + params
+                        LogUtil.e("doInBackground() called with: params = [" + params
                                 + "],Tag is too small!");
                     } else {
                         ndef.writeNdefMessage(msg);
                     }
                 } catch (IOException e) {
                     text = "Fail to connect Tag!";
-                    Log.d("tag", "doInBackground() called with: params = [" + params
+                    LogUtil.e("doInBackground() called with: params = [" + params
                             + "],Fail to connect Tag!");
                     e.printStackTrace();
                 } catch (FormatException e) {
                     text = "Fail to write NdefMessage Tag!";
-                    Log.d("tag", "doInBackground() called with: params = [" + params
+                    LogUtil.e("doInBackground() called with: params = [" + params
                             + "],Fail to write NdefMessage Tag!");
                     e.printStackTrace();
                 } finally {
@@ -295,7 +381,7 @@ public class AtyNfcFunc extends BaseActivity {
             if (text != null) {
                 Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
             }
-            activity.finish();
+            //activity.finish();
         }
     }
 }

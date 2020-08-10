@@ -38,7 +38,9 @@ public class MyNfcRecordParse {
         record.getTnf();
     }
 
-    public static void parseWellKnowTextRecord(NdefRecord record) {
+    public static String parseWellKnowTextRecord(NdefRecord record) {
+        byte[] type = record.getType();
+
         //①check，googl框架
         Preconditions.checkArgument(Arrays.equals(record.getType(), NdefRecord.RTD_TEXT));
         //②获取payload内容
@@ -54,11 +56,13 @@ public class MyNfcRecordParse {
         //payload中第二个字节低5为表示的是文本长度
         int langLength = statusByte & 0x3F;
         String langCode = new String(payload, 1, langLength, Charset.forName("UTF-8"));
+        String payloadText="";
         try {
-            String payloadText = new String(payload, langLength + 1, payload.length - langLength - 1, textEncoding);
+            payloadText = new String(payload, langLength + 1, payload.length - langLength - 1, textEncoding);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        return payloadText;
     }
 
     public static void parseMimeRecord(NdefRecord record) {

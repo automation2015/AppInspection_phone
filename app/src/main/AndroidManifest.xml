@@ -26,12 +26,19 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".atys.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboardHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".atys.AtyLogin" />
         <activity android:name=".atys.AtyWelcome"></activity>
         <activity
             android:name=".atys.AtyPlan"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboardHidden" >
+        </activity>
         <activity android:name=".atys.AtyUserRegist" />
         <activity android:name=".atys.GestureEditActivity" />
         <activity android:name=".atys.GestureVerifyActivity" />
@@ -55,11 +62,7 @@
         <activity android:name=".atys.AtyPlanManager" />
         <activity android:name=".atys.AtyNfcFunc">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

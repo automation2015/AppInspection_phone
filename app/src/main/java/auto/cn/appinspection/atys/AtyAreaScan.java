@@ -70,8 +70,6 @@ public class AtyAreaScan extends BaseActivity implements AdapterView.OnItemClick
         //初始化DropDownMenu
         initViews();
     }
-
-
     //初始化DropDownMenu
     private void initViews() {
         //计划列表
@@ -94,7 +92,6 @@ public class AtyAreaScan extends BaseActivity implements AdapterView.OnItemClick
         View contentView = View.inflate(this, R.layout.drop_view_contentview, null);
         //lvArea= contentView.findViewById(R.id.lv_drop_view_content);
         if (planLists != null) {
-
             adapter = new CommonBaseAdapter<AreaList>(this, areaLists, R.layout.item_drop_down_lv) {
                 @Override
                 public void convert(ViewHolder holder, AreaList areaList) {
@@ -133,7 +130,7 @@ public class AtyAreaScan extends BaseActivity implements AdapterView.OnItemClick
                 areaLists.addAll(areaByPlanId);
                 adapter.notifyDataSetChanged();
 
-                dropDownMenu.setListView(adapter, (areaLists == null) ? View.VISIBLE : View.GONE, new View.OnClickListener() {
+                dropDownMenu.setAreaContentView(adapter, (areaLists == null) ? View.VISIBLE : View.GONE, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         UIUtils.toast("success", false);
@@ -141,7 +138,6 @@ public class AtyAreaScan extends BaseActivity implements AdapterView.OnItemClick
                 });
                 dropDownMenu.closeMenu();
                 break;
-
         }
     }
 

@@ -202,9 +202,9 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
             StringBuilder builder = new StringBuilder("SELECT ");
             SqlUtils.appendColumns(builder, "T", getAllColumns());
             builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getPartListDao().getAllColumns());
+            SqlUtils.appendColumns(builder, "T0", daoSession.getEquiplistDao().getAllColumns());
             builder.append(" FROM ITEM_LIST T");
-            builder.append(" LEFT JOIN PART_LIST T0 ON T.\"FK_PART\"=T0.\"_id\"");
+            builder.append(" LEFT JOIN EQUIPLIST T0 ON T.\"FK_PART\"=T0.\"_id\"");
             builder.append(' ');
             selectDeep = builder.toString();
         }
@@ -215,8 +215,8 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
         ItemList entity = loadCurrent(cursor, 0, lock);
         int offset = getAllColumns().length;
 
-        PartList partList = loadCurrentOther(daoSession.getPartListDao(), cursor, offset);
-        entity.setPartList(partList);
+        Equiplist equiplist = loadCurrentOther(daoSession.getEquiplistDao(), cursor, offset);
+        entity.setEquiplist(equiplist);
 
         return entity;    
     }
