@@ -5,18 +5,23 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +43,7 @@ import auto.cn.greendaogenerate.Equiplist;
 import auto.cn.greendaogenerate.ItemList;
 import auto.cn.greendaogenerate.PartList;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClickListener {
@@ -72,6 +78,20 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     private String partSelected;
     private String itemSelected;
     private String contentSelected;
+    private TextView tvCheckArea;
+    private TextView tvCheckEquip;
+    private TextView tvCheckPart;
+    private TextView tvCheckItem;
+    private TextView tvCheckContent;
+    private TextView tvCheckStandard;
+    private TextView tvCheckUnit;
+    private EditText etCheckDesc;
+    private EditText etCheckQuantify;
+    private ToggleButton tbCheckUnuaual;
+    private ToggleButton tbCheckQuantify;
+    private FloatingActionButton fabCheckBack;
+    private FloatingActionButton fabCheckForward;
+    private String contentStandard;
 
     @Override
     protected int getLayoutId() {
@@ -180,6 +200,19 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         popViews.add(lvContent);
         //添加contentView
         View contentView = View.inflate(this, R.layout.drop_view_check_contentview, null);
+        tvCheckArea = contentView.findViewById(R.id.tv_check_area);
+        tvCheckEquip = contentView.findViewById(R.id.tv_check_equip);
+        tvCheckPart = contentView.findViewById(R.id.tv_check_part);
+        tvCheckItem = contentView.findViewById(R.id.tv_check_item);
+        tvCheckContent = contentView.findViewById(R.id.tv_check_content);
+        tvCheckUnit = contentView.findViewById(R.id.tv_check_unit);
+        tvCheckStandard = contentView.findViewById(R.id.tv_check_standard);
+        etCheckDesc = contentView.findViewById(R.id.et_check_desc);
+        etCheckQuantify = contentView.findViewById(R.id.et_check_quantify);
+        fabCheckBack = contentView.findViewById(R.id.fab_check_back);
+        fabCheckForward = contentView.findViewById(R.id.fab_check_forward);
+        tbCheckQuantify= contentView.findViewById(R.id.toggle_check_quantify);
+        tbCheckUnuaual= contentView.findViewById(R.id.toggle_check_status);
         dropDownMenu.setDropDownMenu(Arrays.asList(headers), popViews, contentView);
     }
 
@@ -206,14 +239,18 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 itemLists.clear();
                 itemLists.addAll(equipLists.get(position).getItems());
                 itemAdapter.notifyDataSetChanged();
-                dropDownMenu.setCheckContentView(areaData, equipSelected, "请选择", "请选择", "请选择");
+                tvCheckArea.setText(areaData);
+
+                tvCheckEquip.setText(equipSelected);
+                tvCheckEquip.setTextColor(Color.BLACK);
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list3://part
                 partAdapter.setCheckItem(position);
                 partSelected = partLists.get(position).getPART_NAME();
                 dropDownMenu.setTabText(position == -1 ? headers[2] : partLists.get(position).getPART_NAME());
-                dropDownMenu.setCheckContentView(areaData, equipSelected, partSelected, "请选择", "请选择");
+                tvCheckPart.setText(partSelected);
+                tvCheckPart.setTextColor(Color.BLACK);
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list4://item
@@ -223,14 +260,19 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 contentLists.clear();
                 contentLists.addAll(itemLists.get(position).getContents());
                 contentAdapter.notifyDataSetChanged();
-                dropDownMenu.setCheckContentView(areaData, equipSelected, partSelected, itemSelected, "请选择");
+                tvCheckItem.setText(itemSelected);
+                tvCheckItem.setTextColor(Color.BLACK);
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list5://content
                 contentAdapter.setCheckItem(position);
                 contentSelected = contentLists.get(position).getCONTENT_NAME();
+                contentStandard = contentLists.get(position).getCONTENT_STANDARD();
                 dropDownMenu.setTabText(position == -1 ? headers[4] : contentSelected);
-                dropDownMenu.setCheckContentView(areaData, equipSelected, partSelected, itemSelected, contentSelected);
+                tvCheckContent.setText(contentSelected);
+                tvCheckContent.setTextColor(Color.BLACK);
+                tvCheckStandard.setText(contentStandard);
+                tvCheckStandard.setTextColor(Color.BLACK);
                 dropDownMenu.closeMenu();
                 break;
         }
@@ -380,17 +422,21 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                         area.getEquips();
                         int areaId = area.getPL_AREA_ID();
                         if (area.getPL_AREA_LABEL().equals(areaData)) {
-                            dropDownMenu.setCheckContentView(areaData, "请选择", "请选择", "请选择", "请选择");
+                            tvCheckArea.setText(areaData);
+                            tvCheckArea.setTextColor(Color.BLUE);
+                            // dropDownMenu.setCheckContentView(areaData, "请选择", "请选择", "请选择", "请选择");
                             //6.查询数据库equip
                             equipLists.addAll(area.getEquips());
                             // equipLists.addAll(dbHelper.getEquipByAreaId(areaId)) ;
                             equipAdapter.notifyDataSetChanged();
                         } else {
-                            dropDownMenu.setCheckContentView("无效的区域！", "请选择", "请选择", "请选择", "请选择");
+                            tvCheckArea.setText("无效的区域！");
+                            // dropDownMenu.setCheckContentView("无效的区域！", "请选择", "请选择", "请选择", "请选择");
                             UIUtils.toast("该区域不在本班计划之中，请重新扫描区域标签！", false);
                         }
                     } else {
-                        dropDownMenu.setCheckContentView("无效的标签，数据格式不符合！", "请选择", "请选择", "", "请选择");
+                        tvCheckArea.setText("无效的标签，数据格式不符合！");
+                        //dropDownMenu.setCheckContentView("无效的标签，数据格式不符合！", "请选择", "请选择", "", "请选择");
                         UIUtils.toast("NFC中的数据格式不符合，请重新输入数据！", false);
                     }
                 }
@@ -398,4 +444,11 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         }
     }
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

@@ -256,24 +256,7 @@ public class DropDownMemu extends LinearLayout {
             }
         }
     }
-    //设置AtyPlanCheck 使用的DropDownMenu-ContentView 的部件
-    public void setCheckContentView(String area,String equip,String part,String item,String content){
-        //if (currentTabPosition != -1) {
-            LinearLayout ll = (LinearLayout) containerView.getChildAt(0);
-            if(ll!=null){
-                TextView tvCheckArea = ll.findViewById(R.id.tv_check_area);
-                TextView tvCheckEquip = ll.findViewById(R.id.tv_check_equip);
-                TextView tvCheckPart =ll.findViewById(R.id.tv_check_part);
-                TextView tvCheckItem =ll.findViewById(R.id.tv_check_item);
-                TextView tvCheckContent =ll.findViewById(R.id.tv_check_content);
-                tvCheckArea.setText(area);
-                tvCheckEquip.setText(equip);
-                tvCheckPart.setText(part);
-                tvCheckItem.setText(item);
-                tvCheckContent.setText(content);
-            }
-        }
-  //  }
+
 
     /**
      public void setImageResource(int imagId) {

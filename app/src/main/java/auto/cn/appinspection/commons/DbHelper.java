@@ -75,7 +75,7 @@ public class DbHelper {
     /**
      * 清除数据库中的所有数据
      */
-    public void clearDb() {
+    public boolean clearDb() {
         if (mHelper != null) {
             if (session != null) {
                 session.clear();
@@ -92,7 +92,16 @@ public class DbHelper {
                 if (contentListDao != null)
                     contentListDao.deleteAll();
             }
+
+
+
+                return true;
+
+
         }
+       //if(planListDao.detach())
+         return false;
+
     }
 
     /**
@@ -237,15 +246,15 @@ public class DbHelper {
                 for (Equiplist equiplist : equiplists) {
                     List<PartList> partLists = equiplist.getParts();
 //                    for (PartList partlist : partLists) {
-                      List<ItemList> itemLists = equiplist.getItems();
-                        for (ItemList itemList : itemLists) {
-                            List<ContentList> contentLists = itemList.getContents();
-                            for (ContentList contentList : contentLists) {
-                            }
+                    List<ItemList> itemLists = equiplist.getItems();
+                    for (ItemList itemList : itemLists) {
+                        List<ContentList> contentLists = itemList.getContents();
+                        for (ContentList contentList : contentLists) {
                         }
                     }
                 }
             }
+        }
         //}
 
         return planLists;
@@ -297,16 +306,16 @@ public class DbHelper {
      * @return
      */
     public List<PartList> getPartByEquipId(int equipId) {
-     Equiplist equiplist = equiplistDao.queryBuilder().where(EquiplistDao.Properties.EL_EIS_ID.eq(equipId)).unique();
-    List<PartList> partlists = equiplist.getParts();
-    return partlists;
-     }
+        Equiplist equiplist = equiplistDao.queryBuilder().where(EquiplistDao.Properties.EL_EIS_ID.eq(equipId)).unique();
+        List<PartList> partlists = equiplist.getParts();
+        return partlists;
+    }
 
     /**
      * 获取Item
      *
      * @return
-    */
+     */
 //    public List<ItemList> getItemByEquipId(int partId) {
 //       PartList partlist = partListDao.queryBuilder().where(PartListDao.Properties.PART_ID.eq(partId)).unique();
 //        List<ItemList> itemLists = partlist.getItems();

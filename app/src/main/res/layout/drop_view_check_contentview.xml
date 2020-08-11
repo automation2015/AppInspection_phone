@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    >
     <auto.cn.appinspection.ui.MyScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -103,6 +105,156 @@
                     android:text="请选择"
                     android:textColor="@color/gray" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    style="@style/text_area_check"
+                    android:text="巡检标准：" />
+
+                <TextView
+                    android:id="@+id/tv_check_standard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="巡检标准"
+                    android:textColor="@color/gray" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        style="@style/text_area_check"
+                        android:text="当前状态：" />
+
+                    <ToggleButton
+                        android:id="@+id/toggle_check_status"
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/toggle_selector"
+                        android:textOff=""
+                        android:textOn="" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        style="@style/text_area_check"
+                        android:text="是否量化：" />
+
+                    <ToggleButton
+                        android:id="@+id/toggle_check_quantify"
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/toggle_selector"
+                        android:textOff=""
+                        android:textOn="" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_check_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    style="@style/text_area_check"
+                    android:text="异常描述：" />
+
+                <EditText
+                    android:id="@+id/et_check_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="请输入异常问题描述！"
+                    android:maxLines="3"
+                    android:textColor="#5c5c5c"
+                    android:textSize="14sp" />
+                />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_check_quantify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    style="@style/text_area_check"
+                    android:text="量化数值：" />
+
+                <EditText
+                    android:id="@+id/et_check_quantify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="请输入数值！"
+                    android:maxLines="3"
+                    android:textColor="#5c5c5c"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_check_unit"
+                    style="@style/text_area_check"
+                    android:layout_marginLeft="30dp"
+                    android:text="℃" />
+            </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_check_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="60dp"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/icon_back"
+            app:backgroundTint="@color/title_text"
+            app:borderWidth="0dp"
+            app:maxImageSize="40dp"></android.support.design.widget.FloatingActionButton>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_check_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="60dp"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/icon_forword"
+            app:backgroundTint="@color/title_text"
+            app:borderWidth="0dp"
+            app:maxImageSize="40dp"></android.support.design.widget.FloatingActionButton>
+
+    </RelativeLayout>
         </LinearLayout>
     </auto.cn.appinspection.ui.MyScrollView>
 </LinearLayout>
