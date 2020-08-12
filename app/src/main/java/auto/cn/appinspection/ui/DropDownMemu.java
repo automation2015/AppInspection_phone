@@ -31,6 +31,8 @@ public class DropDownMemu extends LinearLayout {
     private View contentView;
     //遮罩区域
     private View maskView;
+
+
     //菜单弹出区域
     private FrameLayout popupMenuViews;
 

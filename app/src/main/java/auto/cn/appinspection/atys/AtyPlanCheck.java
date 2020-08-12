@@ -10,14 +10,16 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import auto.cn.appinspection.R;
-import auto.cn.appinspection.adapters.CommonBaseAdapter;
 import auto.cn.appinspection.adapters.DropDownAdapter;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.commons.AppNetConfig;
@@ -43,10 +44,9 @@ import auto.cn.greendaogenerate.Equiplist;
 import auto.cn.greendaogenerate.ItemList;
 import auto.cn.greendaogenerate.PartList;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClickListener {
+public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClickListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     @Bind(R.id.iv_title_back)
     ImageView ivTitleBack;
@@ -60,17 +60,16 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     private DbHelper dbHelper;
     private String headers[] = {"设备", "部位", "项目", "内容"};
     private List<View> popViews = new ArrayList<>();
-    List<AreaList> areaLists = new ArrayList<>();
-    List<Equiplist> equipLists = new ArrayList<>();
-    List<PartList> partLists = new ArrayList<>();
-    List<ItemList> itemLists = new ArrayList<>();
-    List<ContentList> contentLists = new ArrayList<>();
+
+    List<Equiplist> equipLists;
+    List<PartList> partLists;
+    List<ItemList> itemLists;
+    List<ContentList> contentLists;
     private DropDownAdapter<Equiplist> equipAdapter;
     private DropDownAdapter<PartList> partAdapter;
     private DropDownAdapter<ItemList> itemAdapter;
     private DropDownAdapter<ContentList> contentAdapter;
-    private int[] imagIds = {R.mipmap.icon_shangang, R.mipmap.icon_shangang, R.mipmap.icon_other_manage, R.mipmap.icon_shangang, R.mipmap.icon_other_manage};
-    private CommonBaseAdapter<AreaList> adapter;
+
     private NfcAdapter mAdapter;
     private PendingIntent mPendingIntent;
     private String areaData;
@@ -78,6 +77,11 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     private String partSelected;
     private String itemSelected;
     private String contentSelected;
+    private int equipPosSelected;
+    private int partPosSelected;
+    private int itemPosSelected;
+    private int contentPosSelected;
+    //ContentView组件
     private TextView tvCheckArea;
     private TextView tvCheckEquip;
     private TextView tvCheckPart;
@@ -87,11 +91,14 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     private TextView tvCheckUnit;
     private EditText etCheckDesc;
     private EditText etCheckQuantify;
-    private ToggleButton tbCheckUnuaual;
+    private ToggleButton tbCheckStatus;
     private ToggleButton tbCheckQuantify;
     private FloatingActionButton fabCheckBack;
     private FloatingActionButton fabCheckForward;
+    private LinearLayout llCheckStatus, llCheckQuantify;
     private String contentStandard;
+    private String currenArea = "";
+    private int position = 0;
 
     @Override
     protected int getLayoutId() {
@@ -103,7 +110,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         tvTitle.setText("设备点巡检");
         ivTitleBack.setVisibility(View.VISIBLE);
         ivTitleSetting.setBackgroundResource(R.mipmap.icon_camera);
-        ivTitleSetting.setVisibility(View.VISIBLE);
+        ivTitleSetting.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.iv_title_back)
@@ -114,10 +121,10 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
 
     @Override
     public void initData() {
-//        Intent intent = getIntent();
-//        String planId = intent.getExtras().getString(AppNetConfig.KEY_PLANID);
-//        Log.e("TAG", "initData() called" + planId);
-//        tv.setText(planId);
+        equipLists = new ArrayList<>();
+        partLists = new ArrayList<>();
+        itemLists = new ArrayList<>();
+        contentLists = new ArrayList<>();
         //获取数据库操作类
         dbHelper = DbHelper.getInstance(this, AppNetConfig.DB_NAME);
         //打开数据库
@@ -211,9 +218,16 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         etCheckQuantify = contentView.findViewById(R.id.et_check_quantify);
         fabCheckBack = contentView.findViewById(R.id.fab_check_back);
         fabCheckForward = contentView.findViewById(R.id.fab_check_forward);
-        tbCheckQuantify= contentView.findViewById(R.id.toggle_check_quantify);
-        tbCheckUnuaual= contentView.findViewById(R.id.toggle_check_status);
+        tbCheckQuantify = contentView.findViewById(R.id.toggle_check_quantify);
+        tbCheckStatus = contentView.findViewById(R.id.toggle_check_status);
+        llCheckStatus = contentView.findViewById(R.id.ll_check_desc);
+        llCheckQuantify = contentView.findViewById(R.id.ll_check_quantify);
+        tbCheckStatus.setOnCheckedChangeListener(this);
+        tbCheckQuantify.setOnCheckedChangeListener(this);
+        fabCheckBack.setOnClickListener(this);
+        fabCheckForward.setOnClickListener(this);
         dropDownMenu.setDropDownMenu(Arrays.asList(headers), popViews, contentView);
+
     }
 
     //启动Activity并传递参数
@@ -225,10 +239,9 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
         switch (parent.getId()) {
             case R.id.list2://equip
+                equipPosSelected = position;
                 equipAdapter.setCheckItem(position);
                 equipSelected = equipLists.get(position).getEL_NAME();
                 dropDownMenu.setTabText(position == -1 ? headers[1] : equipSelected);
@@ -246,6 +259,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list3://part
+                partPosSelected = position;
                 partAdapter.setCheckItem(position);
                 partSelected = partLists.get(position).getPART_NAME();
                 dropDownMenu.setTabText(position == -1 ? headers[2] : partLists.get(position).getPART_NAME());
@@ -254,6 +268,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list4://item
+                itemPosSelected = position;
                 itemAdapter.setCheckItem(position);
                 itemSelected = itemLists.get(position).getITEM_NAME();
                 dropDownMenu.setTabText(position == -1 ? headers[3] : itemSelected);
@@ -265,6 +280,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list5://content
+                contentPosSelected = position;
                 contentAdapter.setCheckItem(position);
                 contentSelected = contentLists.get(position).getCONTENT_NAME();
                 contentStandard = contentLists.get(position).getCONTENT_STANDARD();
@@ -393,7 +409,6 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         } else if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
 
         } else {
-
         }
     }
 
@@ -419,24 +434,38 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                         areaData = MyNfcRecordParse.parseWellKnowTextRecord(record);
                         //5.查询数据库，确认标签数据是否是该班计划区域
                         AreaList area = dbHelper.queryAreaByAreaLable(areaData);
-                        area.getEquips();
-                        int areaId = area.getPL_AREA_ID();
                         if (area.getPL_AREA_LABEL().equals(areaData)) {
                             tvCheckArea.setText(areaData);
                             tvCheckArea.setTextColor(Color.BLUE);
-                            // dropDownMenu.setCheckContentView(areaData, "请选择", "请选择", "请选择", "请选择");
                             //6.查询数据库equip
+                            equipLists.clear();
+                            partLists.clear();
+                            itemLists.clear();
+                            contentLists.clear();
                             equipLists.addAll(area.getEquips());
-                            // equipLists.addAll(dbHelper.getEquipByAreaId(areaId)) ;
                             equipAdapter.notifyDataSetChanged();
+
+                            //7.为数据集合和 UI组件赋值（初值）
+                            partLists.addAll(equipLists.get(0).getParts());
+                            itemLists.addAll(equipLists.get(0).getItems());
+                            contentLists.addAll(itemLists.get(0).getContents());
+                            tvCheckEquip.setText(equipLists.get(0).getEL_NAME());
+                            tvCheckPart.setText(equipLists.get(0).getParts().get(0).getPART_NAME());
+                            ItemList itemList = equipLists.get(0).getItems().get(0);
+                            tvCheckItem.setText(itemList.getITEM_NAME());
+                            tvCheckContent.setText(itemList.getContents().get(0).getCONTENT_NAME());
+                            tvCheckStandard.setText(itemList.getContents().get(0).getCONTENT_STANDARD());
+                            tvCheckEquip.setTextColor(Color.BLACK);
+                            tvCheckItem.setTextColor(Color.BLACK);
+                            tvCheckContent.setTextColor(Color.BLACK);
+                            tvCheckStandard.setTextColor(Color.BLACK);
+                            tvCheckPart.setTextColor(Color.BLACK);
                         } else {
                             tvCheckArea.setText("无效的区域！");
-                            // dropDownMenu.setCheckContentView("无效的区域！", "请选择", "请选择", "请选择", "请选择");
                             UIUtils.toast("该区域不在本班计划之中，请重新扫描区域标签！", false);
                         }
                     } else {
                         tvCheckArea.setText("无效的标签，数据格式不符合！");
-                        //dropDownMenu.setCheckContentView("无效的标签，数据格式不符合！", "请选择", "请选择", "", "请选择");
                         UIUtils.toast("NFC中的数据格式不符合，请重新输入数据！", false);
                     }
                 }
@@ -446,9 +475,145 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_check_back:
+                if(TextUtils.isEmpty(areaData)){
+                    UIUtils.toast("请先扫描区域标签！",false);
+                }else{
+                if (contentPosSelected > 0) {
+                    contentPosSelected--;
+                    setContentData();
+                } else {
+                    contentPosSelected = 0;
+                    itemPosSelected--;
+                    if (itemPosSelected >= 0) {
+                        setItemDatas();
+                        setContentData();
+                    } else {
+                        itemPosSelected = 0;
+                        equipPosSelected--;
+                        if (equipPosSelected >= 0) {
+                            //setEquipDatas();
+                            //setItemDatas();
+                            //setContentData();
+                            equipAdapter.setCheckItem(equipPosSelected);
+                            // equipAdapter.notifyDataSetChanged();
+                            itemLists.clear();
+                            itemLists.addAll(equipLists.get(equipPosSelected).getItems());
+                            itemPosSelected = itemLists.size()-1;
+                            partLists.clear();
+                            partLists.addAll(equipLists.get(equipPosSelected).getParts());
+                            partAdapter.notifyDataSetChanged();
+                            tvCheckEquip.setText(equipLists.get(equipPosSelected).getEL_NAME());
+                            tvCheckPart.setText(partLists.get(0).getPART_NAME());
+
+                            itemAdapter.setCheckItem(itemPosSelected);
+                            // itemAdapter.notifyDataSetChanged();
+                            contentLists.clear();
+                            List<ContentList> contents = itemLists.get(itemPosSelected).getContents();
+                            contentLists.addAll(itemLists.get(itemPosSelected).getContents());
+                            contentPosSelected = contentLists.size()-1;
+                            tvCheckItem.setText(itemLists.get(itemPosSelected).getITEM_NAME());
+                            setContentData();
+
+                        } else {
+                            UIUtils.toast("已经没有数据了！", false);
+                            contentPosSelected=0;
+                            itemPosSelected=0;
+                            equipPosSelected=0;
+                        }
+                    }
+                }}
+                break;
+            case R.id.fab_check_forward:
+                if(TextUtils.isEmpty(areaData)){
+                    UIUtils.toast("请先扫描区域标签！",false);
+                }else{
+                if (contentPosSelected < contentLists.size() - 1) {
+                    contentPosSelected++;
+                    //1.判断当前选中的是否是最后一项，如果不是，当前选中content的位置+1，更新adapter，为tv设置新值；
+                    setContentData();
+                } else if (contentPosSelected >= contentLists.size() - 1) {
+                    //2.判断当前选中的是否是最后一项，如果是，当前选中item的位置+1，更新adapter，更新contentLists，为tv设置新值；
+                    contentPosSelected = contentLists.size() - 1;
+                    itemPosSelected++;
+                    if (itemPosSelected <= itemLists.size() - 1) {
+                        setItemDatas();
+                        setContentData();
+                    } else if (itemPosSelected >= itemLists.size()) {
+                        itemPosSelected = itemLists.size() - 1;
+                        equipPosSelected++;
+                        if (equipPosSelected <= equipLists.size() - 1) {
+                            setEquipDatas();
+                            setItemDatas();
+                            setContentData();
+                        } else {
+                            equipPosSelected = equipLists.size() - 1;
+                            UIUtils.toast("已经是最后一项内容了！", false);
+                        }
+                    }
+                } else {
+
+                }}
+                break;
+        }
+    }
+
+    private void setEquipDatas() {
+        equipAdapter.setCheckItem(equipPosSelected);
+        // equipAdapter.notifyDataSetChanged();
+        itemLists.clear();
+        itemLists.addAll(equipLists.get(equipPosSelected).getItems());
+        itemPosSelected = 0;
+        partLists.clear();
+        partLists.addAll(equipLists.get(equipPosSelected).getParts());
+        partAdapter.notifyDataSetChanged();
+        tvCheckEquip.setText(equipLists.get(equipPosSelected).getEL_NAME());
+        tvCheckPart.setText(partLists.get(0).getPART_NAME());
+    }
+
+    private void setItemDatas() {
+        itemAdapter.setCheckItem(itemPosSelected);
+        // itemAdapter.notifyDataSetChanged();
+        contentLists.clear();
+        contentLists.addAll(itemLists.get(itemPosSelected).getContents());
+        contentPosSelected = 0;
+        tvCheckItem.setText(itemLists.get(itemPosSelected).getITEM_NAME());
+    }
+
+    private void setContentData() {
+        contentAdapter.setCheckItem(contentPosSelected);
+        //contentAdapter.notifyDataSetChanged();
+        tvCheckContent.setText(contentLists.get(contentPosSelected).getCONTENT_NAME());
+        tvCheckStandard.setText(contentLists.get(contentPosSelected).getCONTENT_STANDARD());
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.toggle_check_status:
+                if (isChecked) {
+                    //异常
+                    llCheckStatus.setVisibility(View.VISIBLE);
+                    ivTitleSetting.setVisibility(View.VISIBLE);
+                    UIUtils.toast("请填写异常信息或者拍照上传！", false);
+                    String unusualDesc = etCheckDesc.getText().toString().trim();
+                } else {
+                    //正常
+                    llCheckStatus.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.toggle_check_quantify:
+                if (isChecked) {
+                    //量化
+                    llCheckQuantify.setVisibility(View.VISIBLE);
+                    String quantify = etCheckQuantify.getText().toString().trim();
+                } else {
+                    //定性
+                    llCheckQuantify.setVisibility(View.GONE);
+                }
+                break;
+        }
     }
 }
