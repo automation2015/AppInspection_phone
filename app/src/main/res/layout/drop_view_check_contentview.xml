@@ -28,10 +28,9 @@
 
                 <TextView
                     android:id="@+id/tv_check_area"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="请扫描NFC标签"
-                    android:textColor="@color/gray" />
+                    style="@style/text_check_data"
+                     />
             </LinearLayout>
 
             <LinearLayout
@@ -46,10 +45,9 @@
 
                 <TextView
                     android:id="@+id/tv_check_equip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="请选择"
-                    android:textColor="@color/gray" />
+                    style="@style/text_check_data"
+                     />
             </LinearLayout>
 
             <LinearLayout
@@ -64,10 +62,8 @@
 
                 <TextView
                     android:id="@+id/tv_check_part"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="请选择"
-                    android:textColor="@color/gray" />
+                    style="@style/text_check_data" />
             </LinearLayout>
 
             <LinearLayout
@@ -82,10 +78,8 @@
 
                 <TextView
                     android:id="@+id/tv_check_item"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="请选择"
-                    android:textColor="@color/gray" />
+                    style="@style/text_check_data"/>
             </LinearLayout>
 
             <LinearLayout
@@ -100,10 +94,8 @@
 
                 <TextView
                     android:id="@+id/tv_check_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="请选择"
-                    android:textColor="@color/gray" />
+                    style="@style/text_check_data" />
             </LinearLayout>
 
             <LinearLayout
@@ -118,10 +110,8 @@
 
                 <TextView
                     android:id="@+id/tv_check_standard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="巡检标准"
-                    android:textColor="@color/gray" />
+                    style="@style/text_check_data" />
             </LinearLayout>
 
             <LinearLayout
@@ -146,7 +136,8 @@
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/toggle_selector"
                         android:textOff=""
-                        android:textOn="" />
+                        android:textOn=""
+                        android:clickable="false"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -167,11 +158,41 @@
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/toggle_selector"
                         android:textOff=""
-                        android:textOn="" />
+                        android:textOn=""
+                        android:clickable="false"/>
                 </LinearLayout>
 
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_check_quantify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
 
+                <TextView
+                    style="@style/text_area_check"
+                    android:text="量化数值：" />
+
+                <EditText
+                    android:id="@+id/et_check_quantify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="请输入数值！"
+                    android:maxLines="1"
+                    android:textColor="#5c5c5c"
+                    android:textSize="16sp"
+                    android:inputType="number"/>
+
+                <TextView
+                    android:id="@+id/tv_check_unit"
+                    style="@style/text_area_check"
+                    android:layout_marginLeft="30dp"
+                    android:text="℃" />
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/ll_check_desc"
                 android:layout_width="match_parent"
@@ -193,39 +214,12 @@
                     android:hint="请输入异常问题描述！"
                     android:maxLines="3"
                     android:textColor="#5c5c5c"
-                    android:textSize="14sp" />
+                    android:textSize="16sp"
+                    android:inputType="text"/>
                 />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_check_quantify"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:visibility="gone">
 
-                <TextView
-                    style="@style/text_area_check"
-                    android:text="量化数值：" />
-
-                <EditText
-                    android:id="@+id/et_check_quantify"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:hint="请输入数值！"
-                    android:maxLines="3"
-                    android:textColor="#5c5c5c"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_check_unit"
-                    style="@style/text_area_check"
-                    android:layout_marginLeft="30dp"
-                    android:text="℃" />
-            </LinearLayout>
 
 
     <RelativeLayout

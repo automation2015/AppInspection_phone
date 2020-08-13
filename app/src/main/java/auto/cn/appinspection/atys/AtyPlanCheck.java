@@ -99,6 +99,8 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     private String contentStandard;
     private String currenArea = "";
     private int position = 0;
+    private String contentAlarmH1;
+    private String quantify;
 
     @Override
     protected int getLayoutId() {
@@ -109,7 +111,6 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     protected void initTitle() {
         tvTitle.setText("设备点巡检");
         ivTitleBack.setVisibility(View.VISIBLE);
-        ivTitleSetting.setBackgroundResource(R.mipmap.icon_camera);
         ivTitleSetting.setVisibility(View.GONE);
     }
 
@@ -460,6 +461,8 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                             tvCheckContent.setTextColor(Color.BLACK);
                             tvCheckStandard.setTextColor(Color.BLACK);
                             tvCheckPart.setTextColor(Color.BLACK);
+                            tbCheckStatus.setClickable(true);
+                            tbCheckQuantify.setClickable(true);
                         } else {
                             tvCheckArea.setText("无效的区域！");
                             UIUtils.toast("该区域不在本班计划之中，请重新扫描区域标签！", false);
@@ -478,94 +481,83 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_check_back:
-                if(TextUtils.isEmpty(areaData)){
-                    UIUtils.toast("请先扫描区域标签！",false);
-                }else{
-                if (contentPosSelected > 0) {
-                    contentPosSelected--;
-                    setContentData();
+                if (TextUtils.isEmpty(areaData)) {
+                    UIUtils.toast("请先扫描区域标签！", false);
                 } else {
-                    contentPosSelected = 0;
-                    itemPosSelected--;
-                    if (itemPosSelected >= 0) {
-                        setItemDatas();
-                        setContentData();
+                    if (contentPosSelected > 0) {
+                        contentPosSelected--;
+                        setContentData(v);
                     } else {
-                        itemPosSelected = 0;
-                        equipPosSelected--;
-                        if (equipPosSelected >= 0) {
-                            //setEquipDatas();
-                            //setItemDatas();
-                            //setContentData();
-                            equipAdapter.setCheckItem(equipPosSelected);
-                            // equipAdapter.notifyDataSetChanged();
-                            itemLists.clear();
-                            itemLists.addAll(equipLists.get(equipPosSelected).getItems());
-                            itemPosSelected = itemLists.size()-1;
-                            partLists.clear();
-                            partLists.addAll(equipLists.get(equipPosSelected).getParts());
-                            partAdapter.notifyDataSetChanged();
-                            tvCheckEquip.setText(equipLists.get(equipPosSelected).getEL_NAME());
-                            tvCheckPart.setText(partLists.get(0).getPART_NAME());
-
-                            itemAdapter.setCheckItem(itemPosSelected);
-                            // itemAdapter.notifyDataSetChanged();
-                            contentLists.clear();
-                            List<ContentList> contents = itemLists.get(itemPosSelected).getContents();
-                            contentLists.addAll(itemLists.get(itemPosSelected).getContents());
-                            contentPosSelected = contentLists.size()-1;
-                            tvCheckItem.setText(itemLists.get(itemPosSelected).getITEM_NAME());
-                            setContentData();
-
+                        contentPosSelected = 0;
+                        itemPosSelected--;
+                        if (itemPosSelected >= 0) {
+                            setItemDatas(v);
+                            setContentData(v);
                         } else {
-                            UIUtils.toast("已经没有数据了！", false);
-                            contentPosSelected=0;
-                            itemPosSelected=0;
-                            equipPosSelected=0;
+                            itemPosSelected = 0;
+                            equipPosSelected--;
+                            if (equipPosSelected >= 0) {
+                                setEquipDatas(v);
+                                setItemDatas(v);
+                                setContentData(v);
+                            } else {
+                                UIUtils.toast("已经没有数据了！", false);
+                                contentPosSelected = 0;
+                                itemPosSelected = 0;
+                                equipPosSelected = 0;
+                            }
                         }
                     }
-                }}
+                }
                 break;
             case R.id.fab_check_forward:
-                if(TextUtils.isEmpty(areaData)){
-                    UIUtils.toast("请先扫描区域标签！",false);
-                }else{
-                if (contentPosSelected < contentLists.size() - 1) {
-                    contentPosSelected++;
-                    //1.判断当前选中的是否是最后一项，如果不是，当前选中content的位置+1，更新adapter，为tv设置新值；
-                    setContentData();
-                } else if (contentPosSelected >= contentLists.size() - 1) {
-                    //2.判断当前选中的是否是最后一项，如果是，当前选中item的位置+1，更新adapter，更新contentLists，为tv设置新值；
-                    contentPosSelected = contentLists.size() - 1;
-                    itemPosSelected++;
-                    if (itemPosSelected <= itemLists.size() - 1) {
-                        setItemDatas();
-                        setContentData();
-                    } else if (itemPosSelected >= itemLists.size()) {
-                        itemPosSelected = itemLists.size() - 1;
-                        equipPosSelected++;
-                        if (equipPosSelected <= equipLists.size() - 1) {
-                            setEquipDatas();
-                            setItemDatas();
-                            setContentData();
-                        } else {
-                            equipPosSelected = equipLists.size() - 1;
-                            UIUtils.toast("已经是最后一项内容了！", false);
-                        }
-                    }
+                if (TextUtils.isEmpty(areaData)) {
+                    UIUtils.toast("请先扫描区域标签！", false);
                 } else {
+                    if (contentPosSelected < contentLists.size() - 1) {
+                        contentPosSelected++;
+                        //1.判断当前选中的是否是最后一项，如果不是，当前选中content的位置+1，更新adapter，为tv设置新值；
+                        setContentData(v);
+                    } else if (contentPosSelected >= contentLists.size() - 1) {
+                        //2.判断当前选中的是否是最后一项，如果是，当前选中item的位置+1，更新adapter，更新contentLists，为tv设置新值；
+                        contentPosSelected = contentLists.size() - 1;
+                        itemPosSelected++;
+                        if (itemPosSelected <= itemLists.size() - 1) {
+                            setItemDatas(v);
+                            setContentData(v);
+                        } else if (itemPosSelected >= itemLists.size()) {
+                            itemPosSelected = itemLists.size() - 1;
+                            equipPosSelected++;
+                            if (equipPosSelected <= equipLists.size() - 1) {
+                                setEquipDatas(v);
+                                setItemDatas(v);
+                                setContentData(v);
+                            } else {
+                                equipPosSelected = equipLists.size() - 1;
+                                UIUtils.toast("已经是最后一项内容了！", false);
+                            }
+                        }
+                    } else {
 
-                }}
+                    }
+                }
                 break;
         }
     }
 
-    private void setEquipDatas() {
+    private void setEquipDatas(View v) {
         equipAdapter.setCheckItem(equipPosSelected);
         // equipAdapter.notifyDataSetChanged();
         itemLists.clear();
         itemLists.addAll(equipLists.get(equipPosSelected).getItems());
-        itemPosSelected = 0;
+        switch (v.getId()) {
+            case R.id.fab_check_back:
+                itemPosSelected = itemLists.size() - 1;
+                break;
+            case R.id.fab_check_forward:
+                itemPosSelected = 0;
+                break;
+        }
         partLists.clear();
         partLists.addAll(equipLists.get(equipPosSelected).getParts());
         partAdapter.notifyDataSetChanged();
@@ -573,20 +565,77 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         tvCheckPart.setText(partLists.get(0).getPART_NAME());
     }
 
-    private void setItemDatas() {
+    private void setItemDatas(View v) {
         itemAdapter.setCheckItem(itemPosSelected);
         // itemAdapter.notifyDataSetChanged();
         contentLists.clear();
         contentLists.addAll(itemLists.get(itemPosSelected).getContents());
-        contentPosSelected = 0;
+        switch (v.getId()) {
+            case R.id.fab_check_back:
+                contentPosSelected = contentLists.size() - 1;
+                break;
+            case R.id.fab_check_forward:
+                contentPosSelected = 0;
+                break;
+        }
+        //contentPosSelected = 0;
         tvCheckItem.setText(itemLists.get(itemPosSelected).getITEM_NAME());
     }
 
-    private void setContentData() {
+    private void setContentData(View v) {
         contentAdapter.setCheckItem(contentPosSelected);
-        //contentAdapter.notifyDataSetChanged();
-        tvCheckContent.setText(contentLists.get(contentPosSelected).getCONTENT_NAME());
-        tvCheckStandard.setText(contentLists.get(contentPosSelected).getCONTENT_STANDARD());
+        ContentList curContent = contentLists.get(contentPosSelected);
+        tvCheckContent.setText(curContent.getCONTENT_NAME());
+        tvCheckStandard.setText(curContent.getCONTENT_STANDARD());
+        boolean checkWay = curContent.getCONTENT_ALARM_STYLE().equals("定性");
+        if (checkWay) {
+            tbCheckQuantify.setChecked(false);
+            tbCheckStatus.setChecked(false);
+            llCheckQuantify.setVisibility(View.GONE);
+            llCheckStatus.setVisibility(View.GONE);
+        } else {
+            tbCheckQuantify.setChecked(true);
+            llCheckQuantify.setVisibility(View.VISIBLE);
+            llCheckStatus.setVisibility(View.VISIBLE);
+            quantify = etCheckQuantify.getText().toString().trim();
+            contentAlarmH1 = curContent.getCONTENT_ALARM_H1();
+            if (TextUtils.isEmpty(quantify)) {
+                new AlertDialog.Builder(AtyPlanCheck.this)
+                        .setTitle("提示")
+                        .setMessage("请输入量化值！")
+                        .setCancelable(false)
+                        .setPositiveButton("确定", null)
+                        .create()
+                        .show();
+                contentPosSelected--;
+            } else {
+                if (Integer.valueOf(quantify) > Integer.valueOf(contentAlarmH1)) {
+                    tbCheckStatus.setChecked(true);
+                } else {
+                    tbCheckStatus.setChecked(false);
+                }
+            }
+        }
+        if(tbCheckStatus.isChecked()){
+            ivTitleSetting.setBackgroundResource(R.mipmap.icon_camera);
+            ivTitleSetting.setVisibility(View.VISIBLE);
+            String unusualDesc = etCheckDesc.getText().toString().trim();
+            if (TextUtils.isEmpty(unusualDesc)) {
+                new AlertDialog.Builder(AtyPlanCheck.this)
+                        .setTitle("提示")
+                        .setMessage("请输入异常信息！")
+                        .setCancelable(false)
+                        .setPositiveButton("确定", null)
+                        .create()
+                        .show();
+                contentPosSelected--;
+            } else {
+                etCheckQuantify.setText("");
+                etCheckDesc.setText("");
+                tbCheckQuantify.setChecked(false);
+                tbCheckStatus.setChecked(false);
+            }
+        }
     }
 
     @Override
@@ -596,19 +645,20 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 if (isChecked) {
                     //异常
                     llCheckStatus.setVisibility(View.VISIBLE);
+                    ivTitleSetting.setBackgroundResource(R.mipmap.icon_camera);
                     ivTitleSetting.setVisibility(View.VISIBLE);
                     UIUtils.toast("请填写异常信息或者拍照上传！", false);
                     String unusualDesc = etCheckDesc.getText().toString().trim();
                 } else {
                     //正常
                     llCheckStatus.setVisibility(View.GONE);
+                    ivTitleSetting.setVisibility(View.GONE);
                 }
                 break;
             case R.id.toggle_check_quantify:
                 if (isChecked) {
                     //量化
                     llCheckQuantify.setVisibility(View.VISIBLE);
-                    String quantify = etCheckQuantify.getText().toString().trim();
                 } else {
                     //定性
                     llCheckQuantify.setVisibility(View.GONE);
