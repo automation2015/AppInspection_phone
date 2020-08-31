@@ -1,6 +1,5 @@
 package auto.cn.appinspection.atys;
 
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,11 +12,9 @@ import com.loopj.android.http.RequestParams;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.bases.BaseActivity;
-import auto.cn.appinspection.commons.AppNetConfig;
 import auto.cn.appinspection.utils.MD5Utils;
 import auto.cn.appinspection.utils.UIUtils;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AtyUserRegist extends BaseActivity {

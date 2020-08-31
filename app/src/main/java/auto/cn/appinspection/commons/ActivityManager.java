@@ -54,6 +54,15 @@ public class ActivityManager {
             activityStack.remove(activity);
         }
     }
+    //获取当前的Activity
+    public Activity  getCurActivity() {
+        if(activityStack.size()>0&&activityStack!=null) {
+            Activity activity = activityStack.lastElement();
+            return activity;
+        }else {
+            return null;
+        }
+    }
     //返回栈的大小
     public int getSize() {
         return activityStack.size();

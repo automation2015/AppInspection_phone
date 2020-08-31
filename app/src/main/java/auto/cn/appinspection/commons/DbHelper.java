@@ -24,24 +24,34 @@ import auto.cn.greendaogenerate.PlanListDao;
 import de.greenrobot.dao.query.QueryBuilder;
 
 public class DbHelper {
+    //GreenDao管理类
+    private volatile static DbHelper mInstance;
+    //创建数据库的工具
     private DaoMaster.DevOpenHelper mHelper;
-    private SQLiteDatabase db;
+    //它里边实际上是保存数据库的对象
     private DaoMaster master;
+    //管理gen里生成的所有的Dao对象里边带有基本的增删改查的方法
     private DaoSession session;
+    //上下文对象
     private Context mContext;
+    private SQLiteDatabase db;
     private PlanListDao planListDao;
     private AreaListDao areaListDao;
     private EquiplistDao equiplistDao;
     private PartListDao partListDao;
     private ItemListDao itemListDao;
     private ContentListDao contentListDao;
-    private static DbHelper mInstance;
+
 
     private DbHelper(Context context, String dbName) {
         this.mContext = context;
         mHelper = new DaoMaster.DevOpenHelper(mContext, dbName, null);
     }
 
+    /**
+     * 单例模式获得操作数据库对象
+     * @return
+     */
     public static DbHelper getInstance(Context context, String dbName) {
         if (mInstance == null) {
             synchronized (DbHelper.class) {
@@ -52,7 +62,30 @@ public class DbHelper {
         }
         return mInstance;
     }
-
+    /**
+     * 判断是否有存在数据库，如果没有则创建
+     * @return
+     */
+    public DaoMaster getMaster() {
+        if (master == null) {
+            mHelper = new DaoMaster.DevOpenHelper(mContext, Constant.DB_NAME, null);
+            master = new DaoMaster(mHelper.getWritableDatabase());
+        }
+        return master;
+    }
+    /**
+     * 完成对数据库的添加、删除、修改、查询操作，
+     * @return
+     */
+    public DaoSession getSession() {
+        if (session == null) {
+            if (master == null) {
+                master = getMaster();
+            }
+            session = master.newSession();
+        }
+        return session;
+    }
     //打开数据库
     public boolean openDb() {
         if (mHelper != null) {

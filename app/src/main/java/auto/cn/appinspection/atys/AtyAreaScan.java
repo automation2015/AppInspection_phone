@@ -16,7 +16,7 @@ import auto.cn.appinspection.adapters.CommonBaseAdapter;
 import auto.cn.appinspection.adapters.DropDownAdapter;
 import auto.cn.appinspection.adapters.ViewHolder;
 import auto.cn.appinspection.bases.BaseActivity;
-import auto.cn.appinspection.commons.AppNetConfig;
+import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.ui.DropDownMemu;
 import auto.cn.appinspection.utils.UIUtils;
@@ -60,7 +60,7 @@ public class AtyAreaScan extends BaseActivity implements AdapterView.OnItemClick
     @Override
     public void initData() {
         //获取数据库操作类
-        dbHelper = DbHelper.getInstance(this, AppNetConfig.DB_NAME);
+        dbHelper = DbHelper.getInstance(this, Constant.DB_NAME);
         //打开数据库
         dbHelper.openDb();
         //设置控制台输出sql语句，filter tag：”greenDAO”

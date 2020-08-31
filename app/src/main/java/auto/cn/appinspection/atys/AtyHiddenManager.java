@@ -2,7 +2,7 @@ package auto.cn.appinspection.atys;
 
 import auto.cn.appinspection.bases.BaseActivity;
 
-public class AtyHiddenProblem extends BaseActivity {
+public class AtyHiddenManager extends BaseActivity {
     @Override
     protected int getLayoutId() {
         return 0;

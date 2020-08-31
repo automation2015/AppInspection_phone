@@ -10,7 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -19,7 +18,6 @@ import java.io.IOException;
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.beans.UserBean;
-import auto.cn.appinspection.commons.AppNetConfig;
 import auto.cn.appinspection.utils.UIUtils;
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -90,7 +88,7 @@ public class AtyLogin extends BaseActivity {
 
          */
         //TODO 测试方便，MD5密码校验暂时放在webApi，后期改为客户端校验
-       // String url=AppNetConfig.USERLOGIN+"?username="+username+"&password="+password;
+       // String url=Constant.USERLOGIN+"?username="+username+"&password="+password;
         String url1="http://172.16.36.92:21663/api/user/loginG?username=admin&password=1";
         String url2="http://172.16.36.92:7000/api/user/loginG?username=admin&password=1";
         String url3="http://172.16.36.92:21663/api/user/userLogin?username=admin&password=1";

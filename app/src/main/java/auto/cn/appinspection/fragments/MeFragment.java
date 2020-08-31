@@ -50,8 +50,8 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
-import static auto.cn.appinspection.commons.AppNetConfig.CAMERA;
-import static auto.cn.appinspection.commons.AppNetConfig.PICTURE;
+import static auto.cn.appinspection.commons.Constant.CAMERA;
+import static auto.cn.appinspection.commons.Constant.PICTURE;
 
 public class MeFragment extends BaseFragment {
     @Bind(R.id.iv_title_back)

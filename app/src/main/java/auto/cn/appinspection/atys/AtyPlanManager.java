@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.bases.BaseActivity;
-import auto.cn.appinspection.commons.AppNetConfig;
+import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.utils.UIUtils;
 import butterknife.Bind;
@@ -49,25 +49,29 @@ public class AtyPlanManager extends BaseActivity {
 
     @Override
     public void initData() {
-        dbHelper = DbHelper.getInstance(this, AppNetConfig.DB_NAME);
+        dbHelper = DbHelper.getInstance(this, Constant.DB_NAME);
     }
 
+    //后退按钮事件
     @OnClick(R.id.iv_title_back)
     public void back() {
         removeAll();
         goToActivity(MainActivity.class, null);
     }
 
+    //查询计划
     @OnClick(R.id.tv_plan_query)
     public void addPlan() {
         goToActivity(AtyPlan.class, null);
     }
 
+    //巡检
     @OnClick(R.id.tv_plan_check)
     public void planCheck() {
         goToActivity(AtyPlanCheck.class, null);
     }
 
+    //清除数据库
     @OnClick(R.id.tv_plan_delete)
     public void deleteDb() {
         new AlertDialog.Builder(this)
@@ -94,5 +98,11 @@ public class AtyPlanManager extends BaseActivity {
                 .setNegativeButton("取消", null)
                 .show();
 
+    }
+
+    //查询巡检历史记录
+    @OnClick(R.id.tv_plan_history)
+    public void getPlanHis() {
+        goToActivity(AtyPlanHis.class, null);
     }
 }

@@ -17,7 +17,7 @@
         android:orientation="horizontal"
         android:background="@color/white">
 
-        <LinearLayout
+    <!--    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -28,7 +28,7 @@
        android:layout_width="40dp"
        android:layout_height="40dp"
        android:src="@mipmap/icon_plan_type3"/>
-        </LinearLayout>
+        </LinearLayout>-->
 
         <LinearLayout
             android:layout_width="0dp"
@@ -84,9 +84,6 @@
                 app:roundWidth="5dp"
                 app:textColor="#18b4ed"
                 app:textSize="12sp"></auto.cn.appinspection.ui.RoundProgress>
-
         </LinearLayout>
     </LinearLayout>
-
-
 </android.support.v7.widget.CardView>

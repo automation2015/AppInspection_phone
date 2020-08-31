@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/common_title" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
@@ -12,11 +14,23 @@
         android:layout_weight="1">
 
         <ListView
-            android:id="@+id/lv_fragment_plan"
+            android:id="@+id/lv_plan_his"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@null"
             android:dividerHeight="5dp"
             android:padding="16dp"></ListView>
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_his_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/icon_upload1"
+        app:backgroundTint="@color/title_text"
+        app:borderWidth="0dp"
+        app:maxImageSize="40dp"></android.support.design.widget.FloatingActionButton>
 </LinearLayout>

@@ -32,7 +32,7 @@ import java.util.List;
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.adapters.DropDownAdapter;
 import auto.cn.appinspection.bases.BaseActivity;
-import auto.cn.appinspection.commons.AppNetConfig;
+import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.nfc.MyNfcRecordParse;
 import auto.cn.appinspection.ui.DropDownMemu;
@@ -127,7 +127,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         itemLists = new ArrayList<>();
         contentLists = new ArrayList<>();
         //获取数据库操作类
-        dbHelper = DbHelper.getInstance(this, AppNetConfig.DB_NAME);
+        dbHelper = DbHelper.getInstance(this, Constant.DB_NAME);
         //打开数据库
         dbHelper.openDb();
         //设置控制台输出sql语句，filter tag：”greenDAO”
@@ -234,7 +234,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     //启动Activity并传递参数
     public static void toActivity(Context context, String planId) {
         Intent intent = new Intent(context, AtyPlanCheck.class);
-        intent.putExtra(AppNetConfig.KEY_PLANID, planId);
+        intent.putExtra(Constant.KEY_PLANID, planId);
         context.startActivity(intent);
     }
 

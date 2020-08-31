@@ -27,7 +27,7 @@ import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.bases.BaseFragment;
 import auto.cn.appinspection.beans.PlanBean;
 import auto.cn.appinspection.beans.UserBean;
-import auto.cn.appinspection.commons.AppNetConfig;
+import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.utils.LogUtil;
 import auto.cn.appinspection.utils.UIUtils;
@@ -50,8 +50,8 @@ public class PlanFragment extends BaseFragment {
     private List<PlanBean> mDatas;
     private CommonBaseAdapter<PlanBean> planAdapter;
     private String urlTest = "http://api.map.baidu.com/telematics/v3/weather?location=%E6%B5%8E%E5%8D%97&output=json&ak=FkPhtMBK0HTIQNh7gG4cNUttSTyr0nzo";
-    private String url = AppNetConfig.GETALLPLAN + "?username=巡检甲班&rolename=电气岗位点检员";
-    private String url1 = AppNetConfig.GETALLPLAN + "?username=admin&rolename=系统管理员";
+    private String url = Constant.GETALLPLAN + "?username=巡检丙班&rolename=电气岗位点检员";
+    private String url1 = Constant.GETALLPLAN + "?username=admin&rolename=系统管理员";
     private DbHelper dbHelper;
 
     @Override
@@ -124,7 +124,7 @@ public class PlanFragment extends BaseFragment {
             }
         });*/
             //初始化数据库对象
-            dbHelper = DbHelper.getInstance(getActivity(), AppNetConfig.DB_NAME);
+            dbHelper = DbHelper.getInstance(getActivity(), Constant.DB_NAME);
             //设置控制台输出sql语句，filter tag：”greenDAO”
             dbHelper.setDebug();
             //获取添加数据库按钮并设置点击事件

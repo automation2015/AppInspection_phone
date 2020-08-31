@@ -186,7 +186,7 @@ public class AtyLoginTest extends Activity {
     @OnClick(R.id.btn_doget_asyn)
     public void doGetByAsynLogin(View view) {
         //TODO 测试方便，MD5密码校验暂时放在webApi，后期改为客户端校验
-        // String url=AppNetConfig.USERLOGIN+"?username="+username+"&password="+password;
+        // String url=Constant.USERLOGIN+"?username="+username+"&password="+password;
         // params.put("password",MD5Utils.MD5(password));
         doGetByAsnc(urlGet2);
     }

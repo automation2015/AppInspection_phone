@@ -17,7 +17,7 @@ import auto.cn.appinspection.adapters.DropDownAdapter;
 import auto.cn.appinspection.adapters.ViewHolder;
 import auto.cn.appinspection.atys.AtyPlanCheck;
 import auto.cn.appinspection.bases.BaseFragment;
-import auto.cn.appinspection.commons.AppNetConfig;
+import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.ui.DropDownMemu;
 import auto.cn.appinspection.utils.UIUtils;
@@ -61,7 +61,7 @@ public class AreaFragment extends BaseFragment implements AdapterView.OnItemClic
     @Override
     protected void initData(String content) {
         //获取数据库操作类
-        dbHelper = DbHelper.getInstance(getActivity(), AppNetConfig.DB_NAME);
+        dbHelper = DbHelper.getInstance(getActivity(), Constant.DB_NAME);
         //打开数据库
         dbHelper.openDb();
         //设置控制台输出sql语句，filter tag：”greenDAO”

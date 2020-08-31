@@ -31,6 +31,7 @@ import auto.cn.appinspection.atys.AtyUserRegist;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.bases.BaseFragment;
 import auto.cn.appinspection.beans.VersionDownLoadBean;
+import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.net.AppUpdater;
 import auto.cn.appinspection.net.INetCallback;
 import auto.cn.appinspection.ui.UpdateVersionShowDialog;
@@ -79,20 +80,6 @@ public class MoreFragment extends BaseFragment {
 
     @Override
     protected void initData(String content) {
-        //用户注册
-        //userResgist();
-        //联系客服
-        //contactService();
-        //提交反馈意见
-        //commitFeedback();
-        //分享软件
-        // shareSoftwareMsg();
-        //软件说明
-        // aboutInspection();
-        //检查版本
-        //updateVersion();
-        //nfc功能
-        //nfcFunction();
     }
 
 
@@ -215,7 +202,7 @@ public class MoreFragment extends BaseFragment {
     //TODO 按下取消按钮，出错
     @OnClick(R.id.tv_more_checkversion)
     public void updateVersion() {
-                AppUpdater.getsInstance().getmNetManager().get("http://59.110.162.30/app_updater_version.json", new INetCallback() {
+                AppUpdater.getsInstance().getmNetManager().get(Constant.URL_VERSION_UPDATE, new INetCallback() {
                     @Override
                     public void success(String response) {
                         Log.e("tag", "response=" + response);

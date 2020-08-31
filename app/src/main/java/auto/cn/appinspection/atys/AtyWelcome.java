@@ -19,6 +19,7 @@ import java.io.File;
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.beans.VersionDownLoadBean;
+import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.net.AppUpdater;
 import auto.cn.appinspection.net.INetCallback;
 import auto.cn.appinspection.ui.UpdateVersionShowDialog;
@@ -152,7 +153,7 @@ public class AtyWelcome extends BaseActivity {
             toMain();
         } else {//有移动网络
             //联网获取服务器的最新版本数据
-            AppUpdater.getsInstance().getmNetManager().get("http://59.110.162.30/app_updater_version.json", new INetCallback() {
+            AppUpdater.getsInstance().getmNetManager().get(Constant.URL_VERSION_UPDATE, new INetCallback() {
                 @Override
                 public void success(String response) {
                     Log.e("tag", "response=" + response);
@@ -194,7 +195,7 @@ public class AtyWelcome extends BaseActivity {
             /**
              *
              AsyncHttpClient client = new AsyncHttpClient();
-             String url = AppNetConfig.UPDATE;
+             String url = Constant.UPDATE;
              client.post(url, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String content) {
