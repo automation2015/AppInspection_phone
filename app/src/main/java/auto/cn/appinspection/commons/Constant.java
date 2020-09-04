@@ -1,4 +1,7 @@
 package auto.cn.appinspection.commons;
+
+import auto.cn.appinspection.fragments.HomeFragment;
+
 /**
  * 提供当前应用访问服务器的请求地址
  */
@@ -18,22 +21,26 @@ public class Constant {
     //数据库查询列名
     public static final String DB_COLUMN_PLAN_NAME = "PLAN_NAME";
     public static final String DB_COLUMN_PLAN_ID = "PLAN_ID";
-    public static final String DB_COLUMN_PLAN_SHIFT= "SHIFT";
+    public static final String DB_COLUMN_PLAN_SHIFT = "SHIFT";
     public static final String DB_COLUMN_PLAN_TYPE = "PLAN_CYCLE_TYPE";
     //版本更新url
-    public static final String URL_VERSION_UPDATE="http://172.16.36.92:7000/api/VersionUpdate";
-
-
+    public static final String URL_VERSION_UPDATE = "http://172.16.36.92:7000/api/VersionUpdate";
+    // TODO 上传巡检记录url
+    public static final String URL_UPLOAD_RECORD =HOST+"upload" ;
+    //上传巡检记录key
+    public static final String KEY_UPLOAD_RECORD ="upload" ;
     //    *****************************************************
     //版本更新测试url
-    public static final String TEST_URL_VERSION_UPDATE="http://59.110.162.30/app_updater_version.json";
+    public static final String TEST_URL_VERSION_UPDATE = "http://59.110.162.30/app_updater_version.json";
 
     public static final int PICTURE = 100;
     public static final int CAMERA = 200;
 
-    String url="http://192.168.1.128:7000/api/user/loginG/?username=admin&password=1";
-    String url2="http://api.map.baidu.com/telematics/v3/weather?location=济南&output=json&ak=FkPhtMBK0HTIQNh7gG4cNUttSTyr0nzo";
-    String url3= "http://192.168.1.128:59051/api/SanHengResult/JieJingQi_100T";
+
+
+    String url = "http://192.168.1.128:7000/api/user/loginG/?username=admin&password=1";
+    String url2 = "http://api.map.baidu.com/telematics/v3/weather?location=济南&output=json&ak=FkPhtMBK0HTIQNh7gG4cNUttSTyr0nzo";
+    String url3 = "http://192.168.1.128:59051/api/SanHengResult/JieJingQi_100T";
 
     //外网账号
 //    public static final String IPADDRESS = "182.92.5.3";

@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -28,35 +28,37 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".atys.MainActivity"
-            android:label="主页面"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="主页面"></activity>
+        <activity
+            android:name=".atys.AtyLogin"
+            android:label="用户登录页面" >
 
         </activity>
-        <activity android:name=".atys.AtyLogin"
-            android:label="用户登录页面"/>
-        <activity android:name=".atys.AtyWelcome"
-            android:label="欢迎页面">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity
+            android:name=".atys.AtyWelcome"
+            android:label="欢迎页面"></activity>
         <activity
             android:name=".atys.AtyPlan"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="计划列表"/>
-        <activity android:name=".atys.AtyUserRegist"
-            android:label="用户注册页面"/>
-        <activity android:name=".atys.GestureEditActivity"
-            android:label="手势编辑页面"/>
-        <activity android:name=".atys.GestureVerifyActivity"
-            android:label="手势校验"/>
-        <activity android:name=".atys.AtyAbout"
-            android:label="关于软件"/>
-        <activity android:name=".test.AtyLoginTest"
-            android:label="测试"/>
+            android:label="计划列表" />
+        <activity
+            android:name=".atys.AtyUserRegist"
+            android:label="用户注册页面" />
+        <activity
+            android:name=".atys.GestureEditActivity"
+            android:label="手势编辑页面" />
+        <activity
+            android:name=".atys.GestureVerifyActivity"
+            android:label="手势校验" />
+        <activity
+            android:name=".atys.AtyAbout"
+            android:label="关于软件" />
+        <activity
+            android:name=".test.AtyLoginTest"
+            android:label="测试" >
+
+        </activity>
         <!-- 应用内更新provider -->
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -68,18 +70,35 @@
                 android:resource="@xml/fileproviderpath" />
         </provider>
 
-        <activity android:name=".atys.AtyPlanCheck"
-            android:label="巡检页面"/>
-        <activity android:name=".atys.AtyAreaScan"
-            android:label="区域扫描页面"/>
-        <activity android:name=".atys.AtyPlanManager"
-            android:label="计划管理"/>
-        <activity android:name=".atys.AtyNfcFunc"
-            android:label="NFC功能"/>
-        <activity android:name=".atys.AtyPlanHis"
-            android:label="巡检记录列表"/>
-        <activity android:name=".atys.AtyPlanDesc"
-            android:label="巡检记录详情页"></activity>
+        <activity
+            android:name=".atys.AtyPlanCheck"
+            android:label="巡检页面" >
+
+        </activity>
+        <activity
+            android:name=".atys.AtyAreaScan"
+            android:label="区域扫描页面" />
+        <activity
+            android:name=".atys.AtyPlanManager"
+            android:label="计划管理">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".atys.AtyNfcFunc"
+            android:label="NFC功能" />
+        <activity
+            android:name=".atys.AtyPlanHis"
+            android:label="巡检记录列表" >
+        </activity>
+        <activity
+            android:name=".atys.AtyPlanDesc"
+            android:label="巡检记录详情页" >
+
+        </activity>
     </application>
 
 </manifest>

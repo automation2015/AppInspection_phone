@@ -1,7 +1,9 @@
 package auto.cn.appinspection.fragments;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -29,6 +31,7 @@ import auto.cn.appinspection.beans.PlanBean;
 import auto.cn.appinspection.beans.UserBean;
 import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.commons.DbHelper;
+import auto.cn.appinspection.ui.RoundProgress;
 import auto.cn.appinspection.utils.LogUtil;
 import auto.cn.appinspection.utils.UIUtils;
 import auto.cn.greendaogenerate.AreaList;
@@ -44,7 +47,7 @@ public class PlanFragment extends BaseFragment {
     ListView lvFragmentPlan;
     @Bind(R.id.swiperefresh)
     SwipeRefreshLayout swiperefresh;
-
+    private ProgressDialog pd;
     //Activity 控件 添加数据到数据库
     private ImageView ivAddDb;
     private List<PlanBean> mDatas;
@@ -75,6 +78,9 @@ public class PlanFragment extends BaseFragment {
 
     @Override
     protected void initData(String content) {
+        pd=new ProgressDialog(getActivity());
+        pd.setTitle("提示");
+        pd.setMessage("正在存储数据，请稍候！");
         if (content != null && content.length() != 0) {
             //解析获取的数据
             mDatas = parseDatas(content);
@@ -147,8 +153,9 @@ public class PlanFragment extends BaseFragment {
                                         //4.删除原有数据
                                         dbHelper.clearDb();
                                         //5.存入新数据
-                                        saveDb(mDatas);
-                                        UIUtils.toast("数据存储成功！", false);
+//                                        saveDb(mDatas);
+//                                        UIUtils.toast("数据存储成功！", false);
+                                        new SaveData().execute();
 
                                     }
                                 }).setNegativeButton("取消", null).create().show();
@@ -158,6 +165,27 @@ public class PlanFragment extends BaseFragment {
         } else {
             UserBean userBean = ((BaseActivity) getActivity()).readUser();
             UIUtils.toast(userBean.getUsername() + ",您好，本班没有您需要点检的工作计划。", false);
+        }
+    }
+    //将联网获取的数据存入数据库,异步任务
+    class SaveData extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            saveDb(mDatas);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            pd.dismiss();
+            UIUtils.toast("数据存储成功！", false);
         }
     }
 

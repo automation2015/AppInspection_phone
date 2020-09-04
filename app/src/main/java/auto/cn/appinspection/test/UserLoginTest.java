@@ -3,38 +3,38 @@ package auto.cn.appinspection.test;
 import java.io.Serializable;
 
 public class UserLoginTest implements Serializable {
-    private String username;
-    private String password;
+    private String LoginName;
+    private String LoginPws;
 
     public UserLoginTest() {
     }
 
     public UserLoginTest(String username, String password) {
-        this.username = username;
-        this.password = password;
+        this.LoginName = username;
+        this.LoginPws = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getLoginName() {
+        return LoginName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setLoginName(String loginName) {
+        this.LoginName = loginName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getLoginPws() {
+        return LoginPws;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setLoginPws(String loginPws) {
+        this.LoginPws = loginPws;
     }
 
     @Override
     public String toString() {
         return "UserLoginTest{" +
-                "Username='" + username + '\'' +
-                ", Password='" + password + '\'' +
+                "Username='" + LoginName + '\'' +
+                ", Password='" + LoginPws + '\'' +
                 '}';
     }
 }

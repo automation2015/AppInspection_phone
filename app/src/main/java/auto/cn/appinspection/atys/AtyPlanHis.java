@@ -1,16 +1,23 @@
 package auto.cn.appinspection.atys;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +26,13 @@ import auto.cn.appinspection.R;
 import auto.cn.appinspection.adapters.CommonBaseAdapter;
 import auto.cn.appinspection.adapters.ViewHolder;
 import auto.cn.appinspection.bases.BaseActivity;
+import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.loader.PlanLoader;
+import auto.cn.appinspection.utils.LogUtil;
 import auto.cn.appinspection.utils.UIUtils;
 import auto.cn.greendaogenerate.PlanList;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCallbacks<List<PlanList>>, AdapterView.OnItemClickListener {
@@ -38,6 +48,8 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
     SwipeRefreshLayout swiperefresh;
     @Bind(R.id.fab_his_upload)
     FloatingActionButton fabHisUpload;
+    @Bind(R.id.pb_his)
+    ProgressBar pbHis;
     private CommonBaseAdapter<PlanList> mAdapter;
     private LoaderManager loaderManager;
     private static final int LOAD_ID = 1;
@@ -101,12 +113,12 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
     private void initLoader() {
         loaderManager = getSupportLoaderManager();
         listLoader = loaderManager.initLoader(LOAD_ID, null, this);
-
     }
 
 
     @Override
     public Loader<List<PlanList>> onCreateLoader(int i, Bundle bundle) {
+        pbHis.setVisibility(View.VISIBLE);
         return new PlanLoader(this);
     }
 
@@ -114,6 +126,7 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
     public void onLoadFinished(Loader<List<PlanList>> loader, List<PlanList> planList) {
         mDatas.addAll(planList);
         mAdapter.notifyDataSetChanged();
+        pbHis.setVisibility(View.GONE);
     }
 
     @Override
@@ -137,9 +150,45 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
     //上传计划数据
     @OnClick(R.id.fab_his_upload)
     public void uploadPlanData() {
-        //TODO
-    }
+        if (mDatas != null && mDatas.size() > 0) {
+            String recordJson =new Gson().toJson(mDatas);
+            if (!TextUtils.isEmpty(recordJson)) {
+                //联网上传参数
+                RequestParams params = new RequestParams();
+                params.put("uploadRecord", recordJson);
 
+                client.post(Constant.URL_UPLOAD_RECORD, params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(String content) {
+                        super.onSuccess(content);
+                        if(content!=null){
+                            String substring = content.substring(1, 4);
+                            UIUtils.toast("数据已经成功上传至服务器！",false);
+                        }else{
+                            UIUtils.toast("数据已经成功未成功，请重新上传数据！",false);
+                        }
+                    }
+                    @Override
+                    public void onFailure(Throwable error, String content) {
+                        super.onFailure(error, content);
+                        UIUtils.toast("网络或服务器异常，请检查确认后重试！",false);
+                    }
+
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        pbHis.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        pbHis.setVisibility(View.GONE);
+                    }
+                });
+            }
+        }
+    }
     //点击列表项弹出详情列表
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -149,7 +198,6 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
         String planId = mDatas.get(position).getPLAN_ID();
         String shift = mDatas.get(position).getShift();
         AtyPlanDesc.toActivity(this, planId, planName, shift);
-
         //3.销毁页面
         //removeAll();
     }

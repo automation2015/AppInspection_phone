@@ -23,6 +23,7 @@ import com.loopj.android.http.RequestParams;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import auto.cn.appinspection.R;
@@ -85,6 +86,8 @@ public class AtyLoginTest extends Activity {
     private String urlPost2 = "http://172.16.36.92:21663/api/user/loginbymodel";
     private String urlGetPlan = "http://172.16.36.92:21663/api/GetAllPlan/?username=巡检乙班&rolename=电气岗位点检员";
     private String urlGetPlan1 = "http://172.16.36.92:21663/api/GetAllPlan/?username=巡检甲班&rolename=电气岗位点检员";
+    private String urlPostUserTest = "http://172.16.36.92:21663/api/upload";
+    private String urlGetUserTest = "http://localhost:52681/api/user/get";
     private AsyncHttpClient asyncHttpClient;
     private List<PlanBean> mDatas;
     private CommonBaseAdapter<PlanBean> planAdapter;
@@ -96,7 +99,7 @@ public class AtyLoginTest extends Activity {
         ButterKnife.bind(this);
         initTitle();
         initData();
-        mDatas=new ArrayList<>();
+        mDatas = new ArrayList<>();
         planAdapter = new CommonBaseAdapter<PlanBean>(AtyLoginTest.this, mDatas, R.layout.item_fragment_plan_lv) {
             @Override
             public void convert(ViewHolder holder, PlanBean planBean) {
@@ -114,96 +117,83 @@ public class AtyLoginTest extends Activity {
             }
         });
     }
+    @OnClick(R.id.btn_doget_user)
+    public void doGetLogin() {
 
-    protected void initTitle() {
-        ivTitleBack.setVisibility(View.VISIBLE);
-        tvTitle.setText("用户登录");
-        ivTitleSetting.setVisibility(View.INVISIBLE);
-    }
-
-    public void initData() {
-        okHttpClient = new OkHttpClient();
-        builder = new Request.Builder();
-        asyncHttpClient = new AsyncHttpClient();
-
-    }
-
-    private void connect(String url) {
-        asyncHttpClient.get(url, new AsyncHttpResponseHandler() {
+        asyncHttpClient.get(urlGetUserTest, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String content) {
                 super.onSuccess(content);
-                //解析获取的数据
-                List<PlanBean> beanList = parseDatas(content);
-                mDatas.addAll(beanList);
+                Log.e("TAG", "onSuccess: " + content);
             }
 
             @Override
             public void onFailure(Throwable error, String content) {
                 super.onFailure(error, content);
+                Log.e("TAG", "onFailure: " + error.getMessage());
             }
         });
 
     }
 
-    //重新联网获取最新计划数据
-    private void reConnect() {
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(urlGetPlan, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(String content) {
-                mDatas.clear();
-                List<PlanBean> beanList = parseDatas(content);
-                mDatas.addAll(beanList);
-                Log.e("TAG", "onSuccess() called with: content = [" + content + "]");
-                planAdapter.notifyDataSetChanged();
-                UIUtils.toast("刷新成功,数据已经是最新数据了。", false);
-                swiperefresh.setRefreshing(false);
-            }
+    @OnClick(R.id.btn_dopost_user)
+    public void doPostLogin() {
+        //3.将Request封装为Call
 
-            @Override
-            public void onFailure(Throwable error, String content) {
-                UIUtils.toast("刷新失败,请检查你的网络连接！", false);
-            }
-        });
-    }
-
-    //解析获取的数据
-    private List<PlanBean> parseDatas(String content) {
-        List<PlanBean> data=new ArrayList<>();
-        if (!TextUtils.isEmpty(content)) {
-            Gson gson = new Gson();
-            // PlanBean1 planBean1 = gson.fromJson(content, PlanBean1.class);
-            Type listType = new TypeToken<List<PlanBean>>() {
-            }.getType();
-            data = gson.fromJson(content, listType);
-        } else {
-            UIUtils.toast(",您好，本班没有您需要点检的工作计划。", false);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                "{username:hyman,password:1234567}");
+        Request request = builder.post(requestBody)
+                .url(urlPostUserTest)
+                .build();
+        //4.执行Call
+        try {
+            excuteCall(request);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return  data;
-    }
 
-    @OnClick(R.id.btn_doget_asyn)
-    public void doGetByAsynLogin(View view) {
-        //TODO 测试方便，MD5密码校验暂时放在webApi，后期改为客户端校验
-        // String url=Constant.USERLOGIN+"?username="+username+"&password="+password;
-        // params.put("password",MD5Utils.MD5(password));
-        doGetByAsnc(urlGet2);
     }
 
     @OnClick(R.id.btn_doget_okhttp)
     public void doGetByOkHttpLogin() {
-        doGetByOkHttp(urlGet2);
+        doGetByOkHttp1(urlGetUserTest);
     }
 
     @OnClick(R.id.btn_dopost_asyn)
     public void doPostByAsynLogin() {
-        doPostByAsnc(urlPost2);
+        doPostByAsnc(urlPostUserTest);
     }
 
     @OnClick(R.id.btn_dopost_okhttp)
     public void doPostByOkHttpLogin() {
-        doPostByOkHttp(urlPost2);
+        doPostByOkHttp(urlPostUserTest);
+    }
+
+    private void doPostByOkHttp(String urlPostUserTest) {
+        OkHttpClient okHttpClient1 = new OkHttpClient();
+        okHttpClient1.newBuilder().build();
+
+        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+        Gson gson = new Gson();
+        UserLoginTest user=new UserLoginTest("username","111");
+        HashMap<String,String> map=new HashMap<>();
+        map.put("LoginName","admin");
+        map.put("LoginPwd","111111");
+        String postStr = gson.toJson(map);
+        RequestBody requestBody = RequestBody.create(mediaType, postStr);
+        Request request = new Request.Builder().post(requestBody).url(urlPostUserTest).build();
+        okHttpClient1.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e("TAG", "onFailure: "+e.getLocalizedMessage() );
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.e("TAG", "onResponse: "+response.body().toString() );
+            }
+        });
+
     }
 
     private void doGetByAsnc(String url) {
@@ -268,7 +258,7 @@ public class AtyLoginTest extends Activity {
         });
     }
 
-    private void doGetByOkHttp(String url) {
+    private void doGetByOkHttp1(String url) {
         //2.构造Request
 
         //3.将Request封装为Call
@@ -283,7 +273,7 @@ public class AtyLoginTest extends Activity {
         }
     }
 
-    private void doPostByOkHttp(String url) {
+    private void doPostByOkHttp1(String url) {
         UserLoginTest user = new UserLoginTest("admin", "1");
         String json = new Gson().toJson(user);
         FormBody.Builder formBuilder = new FormBody.Builder();
@@ -303,13 +293,6 @@ public class AtyLoginTest extends Activity {
             e.printStackTrace();
         }
     }
-
-    @OnClick(R.id.iv_title_back)
-    public void back() {
-        //removeAll();
-        //goToActivity(MainActivity.class, null);
-    }
-
     private void excuteCall(Request request) throws IOException {
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -334,5 +317,88 @@ public class AtyLoginTest extends Activity {
             }
         });
     }
+    protected void initTitle() {
+        ivTitleBack.setVisibility(View.VISIBLE);
+        tvTitle.setText("用户登录");
+        ivTitleSetting.setVisibility(View.INVISIBLE);
+    }
+
+    public void initData() {
+        okHttpClient = new OkHttpClient();
+        builder = new Request.Builder();
+        asyncHttpClient = new AsyncHttpClient();
+
+    }
+
+    private void connect(String url) {
+        asyncHttpClient.get(url, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(String content) {
+                super.onSuccess(content);
+                //解析获取的数据
+                List<PlanBean> beanList = parseDatas(content);
+                mDatas.addAll(beanList);
+            }
+
+            @Override
+            public void onFailure(Throwable error, String content) {
+                super.onFailure(error, content);
+            }
+        });
+
+    }
+
+    //重新联网获取最新计划数据
+    private void reConnect() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(urlGetPlan, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(String content) {
+                mDatas.clear();
+                List<PlanBean> beanList = parseDatas(content);
+                mDatas.addAll(beanList);
+                Log.e("TAG", "onSuccess() called with: content = [" + content + "]");
+                planAdapter.notifyDataSetChanged();
+                UIUtils.toast("刷新成功,数据已经是最新数据了。", false);
+                swiperefresh.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Throwable error, String content) {
+                UIUtils.toast("刷新失败,请检查你的网络连接！", false);
+            }
+        });
+    }
+
+    //解析获取的数据
+    private List<PlanBean> parseDatas(String content) {
+        List<PlanBean> data = new ArrayList<>();
+        if (!TextUtils.isEmpty(content)) {
+            Gson gson = new Gson();
+            // PlanBean1 planBean1 = gson.fromJson(content, PlanBean1.class);
+            Type listType = new TypeToken<List<PlanBean>>() {
+            }.getType();
+            data = gson.fromJson(content, listType);
+        } else {
+            UIUtils.toast(",您好，本班没有您需要点检的工作计划。", false);
+        }
+        return data;
+    }
+
+    @OnClick(R.id.btn_doget_asyn)
+    public void doGetByAsynLogin(View view) {
+        //TODO 测试方便，MD5密码校验暂时放在webApi，后期改为客户端校验
+        // String url=Constant.USERLOGIN+"?username="+username+"&password="+password;
+        // params.put("password",MD5Utils.MD5(password));
+        doGetByAsnc(urlGet2);
+    }
+
+    @OnClick(R.id.iv_title_back)
+    public void back() {
+        //removeAll();
+        //goToActivity(MainActivity.class, null);
+    }
+
+
 
 }

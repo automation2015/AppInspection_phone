@@ -27,9 +27,11 @@ public class PlanLoader extends AsyncTaskLoader<List<PlanList>> {
         dbHelper=DbHelper.getInstance(context,Constant.DB_NAME);
         dbHelper.openDb();
         dbHelper.setDebug();
-        List<PlanList> allPlan = dbHelper.getAllPlan();
+        //List<PlanList> allPlan = dbHelper.getAllPlan();
+        List<PlanList> allPlan = dbHelper.queryAllRecord();
         return allPlan;
     }
+
 
     @Override
     protected void onStartLoading() {

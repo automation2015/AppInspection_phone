@@ -47,7 +47,6 @@ public class DbHelper {
         this.mContext = context;
         mHelper = new DaoMaster.DevOpenHelper(mContext, dbName, null);
     }
-
     /**
      * 单例模式获得操作数据库对象
      * @return
@@ -125,16 +124,10 @@ public class DbHelper {
                 if (contentListDao != null)
                     contentListDao.deleteAll();
             }
-
-
-
                 return true;
-
-
         }
        //if(planListDao.detach())
          return false;
-
     }
 
     /**
@@ -144,7 +137,6 @@ public class DbHelper {
         QueryBuilder.LOG_SQL = true;
         QueryBuilder.LOG_VALUES = true;
     }
-
     /**
      * 关闭所有的操作,数据库开启的时候，使用完毕了必须要关闭
      */
@@ -269,43 +261,35 @@ public class DbHelper {
     /**
      * 一对多查询所有数据，未使用懒加载
      */
-    public List<PlanList> queryOneToMany() {
+    public List<PlanList> queryAllRecord() {
         List<PlanList> planLists = planListDao.queryBuilder().list();
         Log.d("TAG", "queryOneToMany() called planLists" + planLists.toString());
-        for (PlanList planList : planLists) {
-            List<AreaList> areaLists = planList.getAreas();
-            for (AreaList areaList : areaLists) {
-                List<Equiplist> equiplists = areaList.getEquips();
-                for (Equiplist equiplist : equiplists) {
-                    List<PartList> partLists = equiplist.getParts();
-//                    for (PartList partlist : partLists) {
-                    List<ItemList> itemLists = equiplist.getItems();
-                    for (ItemList itemList : itemLists) {
-                        List<ContentList> contentLists = itemList.getContents();
-                        for (ContentList contentList : contentLists) {
-                        }
+        for (int i = 0; i < planLists.size(); i++) {
+            List<AreaList> areaLists = planLists.get(i).getAreas();
+            for (int j = 0; j < areaLists.size(); j++) {
+                List<Equiplist> equiplists = areaLists.get(j).getEquips();
+                for (int k = 0; k < equiplists.size(); k++) {
+                    List<ItemList> itemLists = equiplists.get(k).getItems();
+                    List<PartList> partLists = equiplists.get(k).getParts();
+                    for (int l = 0; l < itemLists.size(); l++) {
+                        List<ContentList> contentLists = itemLists.get(l).getContents();
                     }
                 }
             }
         }
-        //}
-
         return planLists;
     }
-
-    /**
-     * 获取计划  懒加载
-     *
-     * @return
-     */
-    public List<PlanList> getAllPlan() {
-        List<PlanList> planLists = planListDao.queryBuilder().list();
-        return planLists;
-    }
+        /**
+         * 获取计划  未使用懒加载
+         * @return
+         */
+        public List<PlanList> getAllPlan() {
+            List<PlanList> planLists = planListDao.queryBuilder().list();
+            return planLists;
+        }
 
     /**
      * 根据PlanId获取区域
-     *
      * @return
      */
     public List<AreaList> getAreaByPlanId(String planId) {

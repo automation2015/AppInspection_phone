@@ -33,25 +33,7 @@ public class DownloadUtils {
         }
         return -1;
     }
-//设置最新版本号
-public static void setVersionCode(Context context, long versionCode) {
-    PackageManager packageManager = context.getPackageManager();
-    try {
-        PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-        //版本适配
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            //版本适配，如果android版本>=android9
-            packageInfo.setLongVersionCode(versionCode);
 
-            //return packageInfo.getLongVersionCode();
-        } else {
-
-        }
-    } catch (PackageManager.NameNotFoundException e) {
-        e.printStackTrace();
-    }
-
-}
     //安装apk文件
     public static void installApk(Activity activity, File apkFile) {
         Intent intent = new Intent();
