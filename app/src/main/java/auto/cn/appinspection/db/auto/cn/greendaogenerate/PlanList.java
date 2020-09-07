@@ -24,6 +24,12 @@ public class PlanList {
     private String Valid_Flag;
     private String Shift;
     private String CODE_NAME;
+    private String ES_CLASS_NAME;
+    private String ES_START_DATE;
+    private String ES_END_DATE;
+    private String ES_USER_NAME;
+    private String upload_time;
+    private Boolean planFinish;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -40,7 +46,7 @@ public class PlanList {
         this.id = id;
     }
 
-    public PlanList(Long id, String PLAN_ID, String PLAN_NAME, String PLAN_ORG_NAME, String PLAN_PART_NAME, String PLAN_PART_ID, Integer PLAN_NUM, Integer PLAN_CYCLE_TYPE, String PLAN_LAST_DATE, String PLAN_LAST_USER_NAME, String PLAN_CREATE_DATE, String Valid_Flag, String Shift, String CODE_NAME) {
+    public PlanList(Long id, String PLAN_ID, String PLAN_NAME, String PLAN_ORG_NAME, String PLAN_PART_NAME, String PLAN_PART_ID, Integer PLAN_NUM, Integer PLAN_CYCLE_TYPE, String PLAN_LAST_DATE, String PLAN_LAST_USER_NAME, String PLAN_CREATE_DATE, String Valid_Flag, String Shift, String CODE_NAME, String ES_CLASS_NAME, String ES_START_DATE, String ES_END_DATE, String ES_USER_NAME, String upload_time, Boolean planFinish) {
         this.id = id;
         this.PLAN_ID = PLAN_ID;
         this.PLAN_NAME = PLAN_NAME;
@@ -55,6 +61,12 @@ public class PlanList {
         this.Valid_Flag = Valid_Flag;
         this.Shift = Shift;
         this.CODE_NAME = CODE_NAME;
+        this.ES_CLASS_NAME = ES_CLASS_NAME;
+        this.ES_START_DATE = ES_START_DATE;
+        this.ES_END_DATE = ES_END_DATE;
+        this.ES_USER_NAME = ES_USER_NAME;
+        this.upload_time = upload_time;
+        this.planFinish = planFinish;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -173,6 +185,54 @@ public class PlanList {
 
     public void setCODE_NAME(String CODE_NAME) {
         this.CODE_NAME = CODE_NAME;
+    }
+
+    public String getES_CLASS_NAME() {
+        return ES_CLASS_NAME;
+    }
+
+    public void setES_CLASS_NAME(String ES_CLASS_NAME) {
+        this.ES_CLASS_NAME = ES_CLASS_NAME;
+    }
+
+    public String getES_START_DATE() {
+        return ES_START_DATE;
+    }
+
+    public void setES_START_DATE(String ES_START_DATE) {
+        this.ES_START_DATE = ES_START_DATE;
+    }
+
+    public String getES_END_DATE() {
+        return ES_END_DATE;
+    }
+
+    public void setES_END_DATE(String ES_END_DATE) {
+        this.ES_END_DATE = ES_END_DATE;
+    }
+
+    public String getES_USER_NAME() {
+        return ES_USER_NAME;
+    }
+
+    public void setES_USER_NAME(String ES_USER_NAME) {
+        this.ES_USER_NAME = ES_USER_NAME;
+    }
+
+    public String getUpload_time() {
+        return upload_time;
+    }
+
+    public void setUpload_time(String upload_time) {
+        this.upload_time = upload_time;
+    }
+
+    public Boolean getPlanFinish() {
+        return planFinish;
+    }
+
+    public void setPlanFinish(Boolean planFinish) {
+        this.planFinish = planFinish;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

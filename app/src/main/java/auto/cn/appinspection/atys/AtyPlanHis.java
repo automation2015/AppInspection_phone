@@ -1,7 +1,6 @@
 package auto.cn.appinspection.atys;
 
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
@@ -28,11 +27,9 @@ import auto.cn.appinspection.adapters.ViewHolder;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.loader.PlanLoader;
-import auto.cn.appinspection.utils.LogUtil;
 import auto.cn.appinspection.utils.UIUtils;
 import auto.cn.greendaogenerate.PlanList;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCallbacks<List<PlanList>>, AdapterView.OnItemClickListener {
@@ -90,6 +87,7 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
                 swiperefresh.setRefreshing(false);
             }
         });
+
     }
 
     //设置adapter
@@ -127,6 +125,11 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
         mDatas.addAll(planList);
         mAdapter.notifyDataSetChanged();
         pbHis.setVisibility(View.GONE);
+        if(mDatas!=null&&mDatas.size()>0){
+            fabHisUpload.setVisibility(View.VISIBLE);
+        }else{
+            fabHisUpload.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -151,7 +154,7 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
     @OnClick(R.id.fab_his_upload)
     public void uploadPlanData() {
         if (mDatas != null && mDatas.size() > 0) {
-            String recordJson =new Gson().toJson(mDatas);
+            String recordJson = new Gson().toJson(mDatas);
             if (!TextUtils.isEmpty(recordJson)) {
                 //联网上传参数
                 RequestParams params = new RequestParams();
@@ -161,17 +164,22 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
                     @Override
                     public void onSuccess(String content) {
                         super.onSuccess(content);
-                        if(content!=null){
-                            String substring = content.substring(1, 4);
-                            UIUtils.toast("数据已经成功上传至服务器！",false);
-                        }else{
-                            UIUtils.toast("数据已经成功未成功，请重新上传数据！",false);
+                        if (content != null) {
+                            String substring = content.substring(1, 2);
+                            if (substring.equals("1")) {
+                                UIUtils.toast("数据已经成功上传至服务器！", false);
+                            }else {
+                                UIUtils.toast("服务器返回数据不正确，请重新上传数据！", false);
+                            }
+                        } else {
+                            UIUtils.toast("数据上传未成功，请重新上传数据！", false);
                         }
                     }
+
                     @Override
                     public void onFailure(Throwable error, String content) {
                         super.onFailure(error, content);
-                        UIUtils.toast("网络或服务器异常，请检查确认后重试！",false);
+                        UIUtils.toast("网络或服务器异常，请检查确认后重试！", false);
                     }
 
                     @Override
@@ -187,8 +195,11 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
                     }
                 });
             }
+        } else {
+            UIUtils.toast("没有需要上传的数据！", false);
         }
     }
+
     //点击列表项弹出详情列表
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

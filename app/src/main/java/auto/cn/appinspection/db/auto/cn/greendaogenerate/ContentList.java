@@ -28,6 +28,9 @@ public class ContentList {
     private String CONTENT_ALARM_STYLE;
     private String Valid_Flag;
     private String CODE_NAME;
+    private String temp_value;
+    private String photo_path;
+    private Boolean content_finish;
     private Long fk_item;
 
     /** Used to resolve relations */
@@ -47,7 +50,7 @@ public class ContentList {
         this.id = id;
     }
 
-    public ContentList(Long id, String CONTENT_ID, String CONTENT_PL_BZ_ID, String CONTENT_PART_ID, String CONTENT_ITEM_ID, String CONTENT_NAME, String CONTENT_CONTENT_TYPE, Integer CONTENT_SORT, String CONTENT_WAY, Integer CONTENT_IS_USE, String CONTENT_STANDARD, Integer CONTENT_IS_PHOTO, Integer CONTENT_IS_PHOTO_EXCEPTION, String CONTENT_CREATE_DATE, String CONTENT_ALARM_H1, String CONTENT_ALARM_H2, String CONTENT_ALARM_STYLE, String Valid_Flag, String CODE_NAME, Long fk_item) {
+    public ContentList(Long id, String CONTENT_ID, String CONTENT_PL_BZ_ID, String CONTENT_PART_ID, String CONTENT_ITEM_ID, String CONTENT_NAME, String CONTENT_CONTENT_TYPE, Integer CONTENT_SORT, String CONTENT_WAY, Integer CONTENT_IS_USE, String CONTENT_STANDARD, Integer CONTENT_IS_PHOTO, Integer CONTENT_IS_PHOTO_EXCEPTION, String CONTENT_CREATE_DATE, String CONTENT_ALARM_H1, String CONTENT_ALARM_H2, String CONTENT_ALARM_STYLE, String Valid_Flag, String CODE_NAME, String temp_value, String photo_path, Boolean content_finish, Long fk_item) {
         this.id = id;
         this.CONTENT_ID = CONTENT_ID;
         this.CONTENT_PL_BZ_ID = CONTENT_PL_BZ_ID;
@@ -67,6 +70,9 @@ public class ContentList {
         this.CONTENT_ALARM_STYLE = CONTENT_ALARM_STYLE;
         this.Valid_Flag = Valid_Flag;
         this.CODE_NAME = CODE_NAME;
+        this.temp_value = temp_value;
+        this.photo_path = photo_path;
+        this.content_finish = content_finish;
         this.fk_item = fk_item;
     }
 
@@ -226,6 +232,30 @@ public class ContentList {
 
     public void setCODE_NAME(String CODE_NAME) {
         this.CODE_NAME = CODE_NAME;
+    }
+
+    public String getTemp_value() {
+        return temp_value;
+    }
+
+    public void setTemp_value(String temp_value) {
+        this.temp_value = temp_value;
+    }
+
+    public String getPhoto_path() {
+        return photo_path;
+    }
+
+    public void setPhoto_path(String photo_path) {
+        this.photo_path = photo_path;
+    }
+
+    public Boolean getContent_finish() {
+        return content_finish;
+    }
+
+    public void setContent_finish(Boolean content_finish) {
+        this.content_finish = content_finish;
     }
 
     public Long getFk_item() {

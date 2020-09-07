@@ -2,30 +2,16 @@ package auto.cn.appinspection.atys;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.gson.Gson;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import java.util.List;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.utils.UIUtils;
-import auto.cn.greendaogenerate.AreaList;
-import auto.cn.greendaogenerate.ContentList;
-import auto.cn.greendaogenerate.Equiplist;
-import auto.cn.greendaogenerate.ItemList;
-import auto.cn.greendaogenerate.PartList;
-import auto.cn.greendaogenerate.PlanList;
 import butterknife.Bind;
 import butterknife.OnClick;
 

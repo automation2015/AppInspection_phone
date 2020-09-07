@@ -37,7 +37,8 @@
             android:src="@mipmap/icon_upload1"
             app:backgroundTint="@color/title_text"
             app:borderWidth="0dp"
-            app:maxImageSize="40dp"></android.support.design.widget.FloatingActionButton>
+            app:maxImageSize="40dp"
+            android:visibility="gone"></android.support.design.widget.FloatingActionButton>
     </LinearLayout>
     <ProgressBar
         android:id="@+id/pb_his"

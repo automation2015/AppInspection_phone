@@ -5,10 +5,10 @@ import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
-
+//1、增加字段，提示找不到：修改Schema version
 public class MyClass {
     public static void main(String[] args) {
-        Schema schema = new Schema(1, "auto.cn.greendaogenerate");
+        Schema schema = new Schema(2, "auto.cn.greendaogenerate");
 
         //添加plan实体
         Entity plan = schema.addEntity("PlanList");
@@ -29,6 +29,13 @@ public class MyClass {
         plan.addStringProperty("Shift");
 
         plan.addStringProperty("CODE_NAME");
+        plan.addStringProperty("ES_CLASS_NAME");//第1班
+        plan.addStringProperty("ES_START_DATE");//计划开始时间
+        plan.addStringProperty("ES_END_DATE");//计划结束时间
+
+        plan.addStringProperty("ES_USER_NAME");//计划施行人，巡检甲班
+        plan.addStringProperty("upload_time");//计划上传时间
+        plan.addBooleanProperty("planFinish");//计划完成
         //添加area实体
         Entity area = schema.addEntity("AreaList");
         area.addIdProperty();
@@ -39,7 +46,11 @@ public class MyClass {
 
         area.addStringProperty("PL_AREA_CREATE_DATE");
         area.addIntProperty("Valid_Flag");
-         area.addStringProperty("PlanId");
+        area.addStringProperty("PlanId");
+        area.addStringProperty("areaNormal");//区域检修或正常
+
+        area.addBooleanProperty("areaFinish");//区域巡检完成
+
         // area表中增加计划外键
         Property planFk = area.addLongProperty("fk_plan").getProperty();
         // 区域一一
@@ -60,6 +71,7 @@ public class MyClass {
         equip.addStringProperty("EL_VALID_FLAG");
         equip.addIntProperty("PL_AREA_ID");
 
+        equip.addBooleanProperty("equipFinish");//设备巡检完成
         Property areaFk = equip.addLongProperty("fk_area").getProperty();
         equip.addToOne(area, areaFk);
         area.addToMany(equip, areaFk).setName("equips");
@@ -71,6 +83,8 @@ public class MyClass {
         part.addStringProperty("PART_NAME");
         part.addStringProperty("PART_CREATE_DATE");
         part.addStringProperty("Valid_Flag");
+
+        part.addBooleanProperty("partFinish");//部位巡检完成
 //
         Property equipFk = part.addLongProperty("fk_equip").getProperty();
         part.addToOne(equip, equipFk);
@@ -85,7 +99,7 @@ public class MyClass {
 
         item.addStringProperty("ITEM_CREATE_DATE");
         item.addStringProperty("Valid_Flag");
-
+        item.addBooleanProperty("itemFinish");//条目巡检完成
         Property partFk = item.addLongProperty("fk_part").getProperty();
         item.addToOne(equip, partFk);
         equip.addToMany(item, partFk).setName("items");
@@ -114,7 +128,10 @@ public class MyClass {
 
         content.addStringProperty("Valid_Flag");
         content.addStringProperty("CODE_NAME");
+        content.addStringProperty("temp_value");//温度测量值
+        content.addStringProperty("photo_path");//异常照片文件路径
 
+        content.addBooleanProperty("content_finish");//内容项目巡检完成
         Property itemFk = content.addLongProperty("fk_item").getProperty();
         content.addToOne(item, itemFk);
         item.addToMany(content, itemFk).setName("contents");

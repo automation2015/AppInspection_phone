@@ -37,7 +37,8 @@ public class EquiplistDao extends AbstractDao<Equiplist, Long> {
         public final static Property EL_EIS_NAME = new Property(6, String.class, "EL_EIS_NAME", false, "EL__EIS__NAME");
         public final static Property EL_VALID_FLAG = new Property(7, String.class, "EL_VALID_FLAG", false, "EL__VALID__FLAG");
         public final static Property PL_AREA_ID = new Property(8, Integer.class, "PL_AREA_ID", false, "PL__AREA__ID");
-        public final static Property Fk_area = new Property(9, Long.class, "fk_area", false, "FK_AREA");
+        public final static Property EquipFinish = new Property(9, Boolean.class, "equipFinish", false, "EQUIP_FINISH");
+        public final static Property Fk_area = new Property(10, Long.class, "fk_area", false, "FK_AREA");
     };
 
     private DaoSession daoSession;
@@ -66,7 +67,8 @@ public class EquiplistDao extends AbstractDao<Equiplist, Long> {
                 "\"EL__EIS__NAME\" TEXT," + // 6: EL_EIS_NAME
                 "\"EL__VALID__FLAG\" TEXT," + // 7: EL_VALID_FLAG
                 "\"PL__AREA__ID\" INTEGER," + // 8: PL_AREA_ID
-                "\"FK_AREA\" INTEGER);"); // 9: fk_area
+                "\"EQUIP_FINISH\" INTEGER," + // 9: equipFinish
+                "\"FK_AREA\" INTEGER);"); // 10: fk_area
     }
 
     /** Drops the underlying database table. */
@@ -125,9 +127,14 @@ public class EquiplistDao extends AbstractDao<Equiplist, Long> {
             stmt.bindLong(9, PL_AREA_ID);
         }
  
+        Boolean equipFinish = entity.getEquipFinish();
+        if (equipFinish != null) {
+            stmt.bindLong(10, equipFinish ? 1L: 0L);
+        }
+ 
         Long fk_area = entity.getFk_area();
         if (fk_area != null) {
-            stmt.bindLong(10, fk_area);
+            stmt.bindLong(11, fk_area);
         }
     }
 
@@ -156,7 +163,8 @@ public class EquiplistDao extends AbstractDao<Equiplist, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // EL_EIS_NAME
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // EL_VALID_FLAG
             cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8), // PL_AREA_ID
-            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9) // fk_area
+            cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0, // equipFinish
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10) // fk_area
         );
         return entity;
     }
@@ -173,7 +181,8 @@ public class EquiplistDao extends AbstractDao<Equiplist, Long> {
         entity.setEL_EIS_NAME(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setEL_VALID_FLAG(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setPL_AREA_ID(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
-        entity.setFk_area(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
+        entity.setEquipFinish(cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0);
+        entity.setFk_area(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
      }
     
     /** @inheritdoc */

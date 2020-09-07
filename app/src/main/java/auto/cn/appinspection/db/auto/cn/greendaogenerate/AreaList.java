@@ -18,6 +18,8 @@ public class AreaList {
     private String PL_AREA_CREATE_DATE;
     private Integer Valid_Flag;
     private String PlanId;
+    private String areaNormal;
+    private Boolean areaFinish;
     private Long fk_plan;
 
     /** Used to resolve relations */
@@ -38,7 +40,7 @@ public class AreaList {
         this.id = id;
     }
 
-    public AreaList(Long id, Integer PL_AREA_ID, String PL_AREA_NAME, String PL_AREA_LABEL, String PL_AREA_CREATE_ID, String PL_AREA_CREATE_DATE, Integer Valid_Flag, String PlanId, Long fk_plan) {
+    public AreaList(Long id, Integer PL_AREA_ID, String PL_AREA_NAME, String PL_AREA_LABEL, String PL_AREA_CREATE_ID, String PL_AREA_CREATE_DATE, Integer Valid_Flag, String PlanId, String areaNormal, Boolean areaFinish, Long fk_plan) {
         this.id = id;
         this.PL_AREA_ID = PL_AREA_ID;
         this.PL_AREA_NAME = PL_AREA_NAME;
@@ -47,6 +49,8 @@ public class AreaList {
         this.PL_AREA_CREATE_DATE = PL_AREA_CREATE_DATE;
         this.Valid_Flag = Valid_Flag;
         this.PlanId = PlanId;
+        this.areaNormal = areaNormal;
+        this.areaFinish = areaFinish;
         this.fk_plan = fk_plan;
     }
 
@@ -118,6 +122,22 @@ public class AreaList {
 
     public void setPlanId(String PlanId) {
         this.PlanId = PlanId;
+    }
+
+    public String getAreaNormal() {
+        return areaNormal;
+    }
+
+    public void setAreaNormal(String areaNormal) {
+        this.areaNormal = areaNormal;
+    }
+
+    public Boolean getAreaFinish() {
+        return areaFinish;
+    }
+
+    public void setAreaFinish(Boolean areaFinish) {
+        this.areaFinish = areaFinish;
     }
 
     public Long getFk_plan() {
