@@ -14,6 +14,8 @@ import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 
+import auto.cn.appinspection.ui.RoundProgress;
+
 public class ViewHolder {
 	private SparseArray<View> mViews;
 	private View mConvertView;
@@ -85,6 +87,11 @@ public class ViewHolder {
 	public ViewHolder tvOnClick(int viewId,CompoundButton.OnCheckedChangeListener listener){
 		ToggleButton tb=getView(viewId);
 		tb.setOnCheckedChangeListener(listener);
+		return this;
+	}
+	public ViewHolder setProgessBarProgress(int viewId,int progress){
+		RoundProgress rp=getView(viewId);
+		rp.setProgress(progress);
 		return this;
 	}
 }

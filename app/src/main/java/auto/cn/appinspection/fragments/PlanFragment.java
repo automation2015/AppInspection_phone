@@ -321,6 +321,8 @@ public class PlanFragment extends BaseFragment {
                                 contentList.setCONTENT_ALARM_STYLE(contentData.getCONTENT_ALARM_STYLE());
                                 contentList.setValid_Flag(contentData.getValid_Flag());
                                 contentList.setCODE_NAME(contentData.getCODE_NAME());
+                                contentList.setContent_finish(false);
+                                contentList.setPhoto_path("未知");
 
                                 contentList.setItemList(itemList);
                                 //contentListDao.insertOrReplaceInTx(contentList);

@@ -6,7 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -15,9 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +27,20 @@ import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.loader.PlanLoader;
 import auto.cn.appinspection.utils.UIUtils;
+import auto.cn.greendaogenerate.AreaList;
+import auto.cn.greendaogenerate.ContentList;
+import auto.cn.greendaogenerate.Equiplist;
+import auto.cn.greendaogenerate.ItemList;
 import auto.cn.greendaogenerate.PlanList;
 import butterknife.Bind;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCallbacks<List<PlanList>>, AdapterView.OnItemClickListener {
     @Bind(R.id.iv_title_back)
@@ -52,6 +62,15 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
     private static final int LOAD_ID = 1;
     private List<PlanList> mDatas = new ArrayList<>();
     private Loader<List<PlanList>> listLoader;
+    private int totalContentFinish = 0;//已经完成巡检的content数量
+    private int totalItemFinish = 0;//已经完成巡检的item数量
+    private int totalEquipFinish = 0;//已经完成巡检的equip数量
+    private int totalAreaFinish = 0;//已经完成巡检的area数量
+    private int totalPlanFinish = 0;//已经完成巡检的plan数量
+    private int i = 0;
+    //1.拿到okHttpClient对象；
+    private OkHttpClient okHttpClient;
+    public static final MediaType USERNAME = MediaType.get("text/plain; charset=utf-8");
 
     @Override
     protected int getLayoutId() {
@@ -73,6 +92,7 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
 
     @Override
     public void initData() {
+        okHttpClient = new OkHttpClient();
         //设置adapter
         setupListAdatper();
         //初始化Loader
@@ -88,6 +108,7 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
             }
         });
 
+
     }
 
     //设置adapter
@@ -99,6 +120,7 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
                 holder.setText(R.id.tv_plan_name, planList.getPLAN_NAME())
                         .setText(R.id.tv_plan_id, planList.getPLAN_ID())
                         .setText(R.id.tv_plan_shift, planList.getShift());
+                holder.setProgessBarProgress(R.id.p_progresss, i);
 
             }
             //TODO 设置计划进度显示
@@ -125,17 +147,57 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
         mDatas.addAll(planList);
         mAdapter.notifyDataSetChanged();
         pbHis.setVisibility(View.GONE);
-        if(mDatas!=null&&mDatas.size()>0){
+        if (mDatas != null && mDatas.size() > 0) {
             fabHisUpload.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             fabHisUpload.setVisibility(View.GONE);
         }
+
+        for (int i = 0; i < mDatas.size(); i++) {
+            List<AreaList> areaLists = mDatas.get(i).getAreas();
+            for (int j = 0; j < areaLists.size(); j++) {
+                List<Equiplist> equiplists = areaLists.get(j).getEquips();
+                for (int k = 0; k < equiplists.size(); k++) {
+                    List<ItemList> itemLists = equiplists.get(k).getItems();
+                    for (int l = 0; l < itemLists.size(); l++) {
+                        List<ContentList> contentLists = itemLists.get(l).getContents();
+                        for (int m = 0; m < contentLists.size(); m++) {
+                            contentLists.get(m).setContent_finish(true);
+                            if (contentLists.get(m).getContent_finish()) {
+                                totalContentFinish++;
+                            }
+                            ;
+                        }
+                        if (totalContentFinish == contentLists.size()) {
+                            itemLists.get(l).setItemFinish(true);
+                            totalItemFinish++;
+                        }
+
+                    }
+                    if (totalItemFinish == itemLists.size()) {
+                        equiplists.get(k).setEquipFinish(true);
+                        totalEquipFinish++;
+                    }
+                }
+                if (totalEquipFinish == equiplists.size()) {
+                    areaLists.get(j).setAreaFinish(true);
+                    totalAreaFinish++;
+                }
+            }
+            if (totalAreaFinish == areaLists.size()) {
+                mDatas.get(i).setPlanFinish(true);
+                totalPlanFinish++;
+            }
+        }
+        i = (int) (((float) totalPlanFinish / (float) mDatas.size()) * 100);
     }
 
     @Override
     public void onLoaderReset(Loader<List<PlanList>> loader) {
 
     }
+
+
 
     //下拉刷新获取最新数据
     private void reLoader() {
@@ -153,53 +215,69 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
     //上传计划数据
     @OnClick(R.id.fab_his_upload)
     public void uploadPlanData() {
+
         if (mDatas != null && mDatas.size() > 0) {
+            pbHis.setVisibility(View.VISIBLE);
             String recordJson = new Gson().toJson(mDatas);
-            if (!TextUtils.isEmpty(recordJson)) {
-                //联网上传参数
-                RequestParams params = new RequestParams();
-                params.put("uploadRecord", recordJson);
-
-                client.post(Constant.URL_UPLOAD_RECORD, params, new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(String content) {
-                        super.onSuccess(content);
-                        if (content != null) {
-                            String substring = content.substring(1, 2);
-                            if (substring.equals("1")) {
-                                UIUtils.toast("数据已经成功上传至服务器！", false);
-                            }else {
-                                UIUtils.toast("服务器返回数据不正确，请重新上传数据！", false);
-                            }
-                        } else {
-                            UIUtils.toast("数据上传未成功，请重新上传数据！", false);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Throwable error, String content) {
-                        super.onFailure(error, content);
-                        UIUtils.toast("网络或服务器异常，请检查确认后重试！", false);
-                    }
-
-                    @Override
-                    public void onStart() {
-                        super.onStart();
-                        pbHis.setVisibility(View.VISIBLE);
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
-                        pbHis.setVisibility(View.GONE);
-                    }
-                });
+            //2.构造Request
+            Request.Builder builder = new Request.Builder();
+            //3.将Request封装为Call
+            //此处一定要注意添加MediaType.parse("application/json")，而不是MediaType.parse("application/json charset=utf-8"),否则报415错误
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), recordJson);
+            Request request = builder.post(requestBody)
+                    .url(Constant.URL_UPLOAD_RECORD)
+                    .build();
+            //4.执行Call
+            try {
+                excuteCall(request);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         } else {
             UIUtils.toast("没有需要上传的数据！", false);
         }
     }
+    //4.执行Call
+    private void excuteCall(Request request) throws IOException {
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pbHis.setVisibility(View.GONE);
+                        UIUtils.toast("连接服务器失败，请确认后重试！",false);
+                    }
+                });
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String res = response.body().string().substring(1,2);
+                if(res.equals("1")){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pbHis.setVisibility(View.GONE);
+                            UIUtils.toast("数据已经成功上传至服务器！",false);
+                        }
+                    });
+
+                }else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            UIUtils.toast("数据上传过程异常，请重新上传！",false);
+                            //tvResult.setText(res);
+                        }
+                    });
+
+                }
+
+            }
+        });
+    }
     //点击列表项弹出详情列表
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
