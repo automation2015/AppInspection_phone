@@ -152,7 +152,12 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
         } else {
             fabHisUpload.setVisibility(View.GONE);
         }
-
+     //获得计划完成情况
+        getPlanFinish();
+        i = (int) (((float) totalPlanFinish / (float) mDatas.size()) * 100);
+    }
+    //获得计划完成情况
+    private void getPlanFinish() {
         for (int i = 0; i < mDatas.size(); i++) {
             List<AreaList> areaLists = mDatas.get(i).getAreas();
             for (int j = 0; j < areaLists.size(); j++) {
@@ -166,7 +171,6 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
                             if (contentLists.get(m).getContent_finish()) {
                                 totalContentFinish++;
                             }
-                            ;
                         }
                         if (totalContentFinish == contentLists.size()) {
                             itemLists.get(l).setItemFinish(true);
@@ -189,16 +193,12 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
                 totalPlanFinish++;
             }
         }
-        i = (int) (((float) totalPlanFinish / (float) mDatas.size()) * 100);
     }
 
     @Override
     public void onLoaderReset(Loader<List<PlanList>> loader) {
 
     }
-
-
-
     //下拉刷新获取最新数据
     private void reLoader() {
         int id = listLoader.getId();
@@ -215,7 +215,6 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
     //上传计划数据
     @OnClick(R.id.fab_his_upload)
     public void uploadPlanData() {
-
         if (mDatas != null && mDatas.size() > 0) {
             pbHis.setVisibility(View.VISIBLE);
             String recordJson = new Gson().toJson(mDatas);

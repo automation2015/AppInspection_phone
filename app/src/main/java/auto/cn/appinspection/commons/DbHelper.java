@@ -245,9 +245,9 @@ public class DbHelper {
     /**
      * 按条件查询数据
      */
-    public List<PlanList> searchByWhere(String wherecluse) {
-        List<PlanList> personInfors = (List<PlanList>) planListDao.queryBuilder().where(PlanListDao.Properties.PLAN_ID.eq(wherecluse)).build().unique();
-        return personInfors;
+    public PlanList queryPlanById(String wherecluse) {
+        PlanList planList =  planListDao.queryBuilder().where(PlanListDao.Properties.PLAN_ID.eq(wherecluse)).build().unique();
+        return planList;
     }
 
     /**

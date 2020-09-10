@@ -7,5 +7,51 @@
     android:orientation="vertical"
     tools:context=".atys.AtyPlanDesc">
     <include layout="@layout/common_title" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:padding="5dp"
+        android:layout_marginLeft="5dp">
+        <TextView
+            style="@style/text_area_check"
+            android:text="计划名称："
+            />
+        <TextView
+            android:id="@+id/tv_desc_plan"
+            style="@style/text_desc_data"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+       android:layout_marginLeft="8dp">
+        <TextView
+            style="@style/text_area_check"
+            android:text="班次："
+            />
+        <TextView
+            android:id="@+id/tv_desc_shift"
+            style="@style/text_desc_data"
+            />
+    </LinearLayout>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ListView
+            android:id="@+id/lv_plan_desc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="5dp"
+            android:padding="16dp"></ListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </LinearLayout>

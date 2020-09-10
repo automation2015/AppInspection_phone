@@ -94,4 +94,9 @@ public class ViewHolder {
 		rp.setProgress(progress);
 		return this;
 	}
+	public ViewHolder setBackground(int viewId,int color){
+		RoundProgress rp=getView(viewId);
+		//rp.setProgress(progress);
+		return this;
+	}
 }
