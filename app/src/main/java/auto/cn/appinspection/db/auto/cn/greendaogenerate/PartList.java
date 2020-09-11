@@ -15,7 +15,7 @@ public class PartList {
     private String PART_NAME;
     private String PART_CREATE_DATE;
     private String Valid_Flag;
-    private Boolean partFinish;
+    private Boolean PART_FINISH;
     private Long fk_equip;
 
     /** Used to resolve relations */
@@ -35,14 +35,14 @@ public class PartList {
         this.id = id;
     }
 
-    public PartList(Long id, String PART_ID, String PART_BZ_ID, String PART_NAME, String PART_CREATE_DATE, String Valid_Flag, Boolean partFinish, Long fk_equip) {
+    public PartList(Long id, String PART_ID, String PART_BZ_ID, String PART_NAME, String PART_CREATE_DATE, String Valid_Flag, Boolean PART_FINISH, Long fk_equip) {
         this.id = id;
         this.PART_ID = PART_ID;
         this.PART_BZ_ID = PART_BZ_ID;
         this.PART_NAME = PART_NAME;
         this.PART_CREATE_DATE = PART_CREATE_DATE;
         this.Valid_Flag = Valid_Flag;
-        this.partFinish = partFinish;
+        this.PART_FINISH = PART_FINISH;
         this.fk_equip = fk_equip;
     }
 
@@ -100,12 +100,12 @@ public class PartList {
         this.Valid_Flag = Valid_Flag;
     }
 
-    public Boolean getPartFinish() {
-        return partFinish;
+    public Boolean getPART_FINISH() {
+        return PART_FINISH;
     }
 
-    public void setPartFinish(Boolean partFinish) {
-        this.partFinish = partFinish;
+    public void setPART_FINISH(Boolean PART_FINISH) {
+        this.PART_FINISH = PART_FINISH;
     }
 
     public Long getFk_equip() {

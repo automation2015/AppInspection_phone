@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="10dp"
-        android:padding="5dp"
-        android:layout_marginLeft="5dp">
+        android:layout_marginLeft="15dp"
+        >
         <TextView
             style="@style/text_area_check"
             android:text="计划名称："
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="10dp"
-       android:layout_marginLeft="8dp">
+       android:layout_marginLeft="15dp">
         <TextView
             style="@style/text_area_check"
             android:text="班次："

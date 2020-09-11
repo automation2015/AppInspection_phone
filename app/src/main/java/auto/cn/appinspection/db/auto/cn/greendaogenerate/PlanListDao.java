@@ -41,8 +41,8 @@ public class PlanListDao extends AbstractDao<PlanList, Long> {
         public final static Property ES_START_DATE = new Property(15, String.class, "ES_START_DATE", false, "ES__START__DATE");
         public final static Property ES_END_DATE = new Property(16, String.class, "ES_END_DATE", false, "ES__END__DATE");
         public final static Property ES_USER_NAME = new Property(17, String.class, "ES_USER_NAME", false, "ES__USER__NAME");
-        public final static Property Upload_time = new Property(18, String.class, "upload_time", false, "UPLOAD_TIME");
-        public final static Property PlanFinish = new Property(19, Boolean.class, "planFinish", false, "PLAN_FINISH");
+        public final static Property UPLOAD_TIME = new Property(18, String.class, "UPLOAD_TIME", false, "UPLOAD__TIME");
+        public final static Property PLAN_FINISH = new Property(19, Boolean.class, "PLAN_FINISH", false, "PLAN__FINISH");
     };
 
     private DaoSession daoSession;
@@ -79,8 +79,8 @@ public class PlanListDao extends AbstractDao<PlanList, Long> {
                 "\"ES__START__DATE\" TEXT," + // 15: ES_START_DATE
                 "\"ES__END__DATE\" TEXT," + // 16: ES_END_DATE
                 "\"ES__USER__NAME\" TEXT," + // 17: ES_USER_NAME
-                "\"UPLOAD_TIME\" TEXT," + // 18: upload_time
-                "\"PLAN_FINISH\" INTEGER);"); // 19: planFinish
+                "\"UPLOAD__TIME\" TEXT," + // 18: UPLOAD_TIME
+                "\"PLAN__FINISH\" INTEGER);"); // 19: PLAN_FINISH
     }
 
     /** Drops the underlying database table. */
@@ -184,14 +184,14 @@ public class PlanListDao extends AbstractDao<PlanList, Long> {
             stmt.bindString(18, ES_USER_NAME);
         }
  
-        String upload_time = entity.getUpload_time();
-        if (upload_time != null) {
-            stmt.bindString(19, upload_time);
+        String UPLOAD_TIME = entity.getUPLOAD_TIME();
+        if (UPLOAD_TIME != null) {
+            stmt.bindString(19, UPLOAD_TIME);
         }
  
-        Boolean planFinish = entity.getPlanFinish();
-        if (planFinish != null) {
-            stmt.bindLong(20, planFinish ? 1L: 0L);
+        Boolean PLAN_FINISH = entity.getPLAN_FINISH();
+        if (PLAN_FINISH != null) {
+            stmt.bindLong(20, PLAN_FINISH ? 1L: 0L);
         }
     }
 
@@ -229,8 +229,8 @@ public class PlanListDao extends AbstractDao<PlanList, Long> {
             cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // ES_START_DATE
             cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // ES_END_DATE
             cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // ES_USER_NAME
-            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // upload_time
-            cursor.isNull(offset + 19) ? null : cursor.getShort(offset + 19) != 0 // planFinish
+            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // UPLOAD_TIME
+            cursor.isNull(offset + 19) ? null : cursor.getShort(offset + 19) != 0 // PLAN_FINISH
         );
         return entity;
     }
@@ -256,8 +256,8 @@ public class PlanListDao extends AbstractDao<PlanList, Long> {
         entity.setES_START_DATE(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
         entity.setES_END_DATE(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
         entity.setES_USER_NAME(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
-        entity.setUpload_time(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setPlanFinish(cursor.isNull(offset + 19) ? null : cursor.getShort(offset + 19) != 0);
+        entity.setUPLOAD_TIME(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
+        entity.setPLAN_FINISH(cursor.isNull(offset + 19) ? null : cursor.getShort(offset + 19) != 0);
      }
     
     /** @inheritdoc */

@@ -18,8 +18,8 @@ public class AreaList {
     private String PL_AREA_CREATE_DATE;
     private Integer Valid_Flag;
     private String PlanId;
-    private String areaNormal;
-    private Boolean areaFinish;
+    private String AREA_NORNAL;
+    private Boolean AREA_FINISH;
     private Long fk_plan;
 
     /** Used to resolve relations */
@@ -40,7 +40,7 @@ public class AreaList {
         this.id = id;
     }
 
-    public AreaList(Long id, Integer PL_AREA_ID, String PL_AREA_NAME, String PL_AREA_LABEL, String PL_AREA_CREATE_ID, String PL_AREA_CREATE_DATE, Integer Valid_Flag, String PlanId, String areaNormal, Boolean areaFinish, Long fk_plan) {
+    public AreaList(Long id, Integer PL_AREA_ID, String PL_AREA_NAME, String PL_AREA_LABEL, String PL_AREA_CREATE_ID, String PL_AREA_CREATE_DATE, Integer Valid_Flag, String PlanId, String AREA_NORNAL, Boolean AREA_FINISH, Long fk_plan) {
         this.id = id;
         this.PL_AREA_ID = PL_AREA_ID;
         this.PL_AREA_NAME = PL_AREA_NAME;
@@ -49,8 +49,8 @@ public class AreaList {
         this.PL_AREA_CREATE_DATE = PL_AREA_CREATE_DATE;
         this.Valid_Flag = Valid_Flag;
         this.PlanId = PlanId;
-        this.areaNormal = areaNormal;
-        this.areaFinish = areaFinish;
+        this.AREA_NORNAL = AREA_NORNAL;
+        this.AREA_FINISH = AREA_FINISH;
         this.fk_plan = fk_plan;
     }
 
@@ -124,20 +124,20 @@ public class AreaList {
         this.PlanId = PlanId;
     }
 
-    public String getAreaNormal() {
-        return areaNormal;
+    public String getAREA_NORNAL() {
+        return AREA_NORNAL;
     }
 
-    public void setAreaNormal(String areaNormal) {
-        this.areaNormal = areaNormal;
+    public void setAREA_NORNAL(String AREA_NORNAL) {
+        this.AREA_NORNAL = AREA_NORNAL;
     }
 
-    public Boolean getAreaFinish() {
-        return areaFinish;
+    public Boolean getAREA_FINISH() {
+        return AREA_FINISH;
     }
 
-    public void setAreaFinish(Boolean areaFinish) {
-        this.areaFinish = areaFinish;
+    public void setAREA_FINISH(Boolean AREA_FINISH) {
+        this.AREA_FINISH = AREA_FINISH;
     }
 
     public Long getFk_plan() {

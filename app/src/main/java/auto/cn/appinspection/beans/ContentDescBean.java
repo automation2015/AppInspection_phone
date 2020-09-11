@@ -20,8 +20,29 @@ public class ContentDescBean {
     private String temperature;
     private String photoPath;
     private boolean isPhoto;
-    private boolean isNormal;
+    private String contentStatus;
+    private String checkWay;
 
+    public String getContentStatus() {
+        return contentStatus;
+    }
+
+    public void setContentStatus(String contentStatus) {
+        this.contentStatus = contentStatus;
+    }
+
+
+    public boolean isAreaIsMaintenance() {
+        return areaIsMaintenance;
+    }
+
+    public String getCheckWay() {
+        return checkWay;
+    }
+
+    public void setCheckWay(String checkWay) {
+        this.checkWay = checkWay;
+    }
 
     public String getAreaName() {
         return areaName;
@@ -47,7 +68,7 @@ public class ContentDescBean {
         this.partName = partName;
     }
 
-    public boolean isAreaIsMaintenance() {
+    public boolean areaIsMaintenance() {
         return areaIsMaintenance;
     }
 
@@ -95,11 +116,5 @@ public class ContentDescBean {
         isPhoto = photo;
     }
 
-    public boolean isNormal() {
-        return isNormal;
-    }
 
-    public void setNormal(boolean normal) {
-        isNormal = normal;
-    }
 }

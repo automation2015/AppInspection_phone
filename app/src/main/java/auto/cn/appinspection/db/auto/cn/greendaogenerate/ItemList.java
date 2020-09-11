@@ -17,7 +17,7 @@ public class ItemList {
     private String ITEM_NAME;
     private String ITEM_CREATE_DATE;
     private String Valid_Flag;
-    private Boolean itemFinish;
+    private Boolean ITEM_FINISH;
     private Long fk_part;
 
     /** Used to resolve relations */
@@ -38,7 +38,7 @@ public class ItemList {
         this.id = id;
     }
 
-    public ItemList(Long id, String ITEM_ID, String ITEM_PART_ID, String ITEM_PL_BZ_ID, String ITEM_NAME, String ITEM_CREATE_DATE, String Valid_Flag, Boolean itemFinish, Long fk_part) {
+    public ItemList(Long id, String ITEM_ID, String ITEM_PART_ID, String ITEM_PL_BZ_ID, String ITEM_NAME, String ITEM_CREATE_DATE, String Valid_Flag, Boolean ITEM_FINISH, Long fk_part) {
         this.id = id;
         this.ITEM_ID = ITEM_ID;
         this.ITEM_PART_ID = ITEM_PART_ID;
@@ -46,7 +46,7 @@ public class ItemList {
         this.ITEM_NAME = ITEM_NAME;
         this.ITEM_CREATE_DATE = ITEM_CREATE_DATE;
         this.Valid_Flag = Valid_Flag;
-        this.itemFinish = itemFinish;
+        this.ITEM_FINISH = ITEM_FINISH;
         this.fk_part = fk_part;
     }
 
@@ -112,12 +112,12 @@ public class ItemList {
         this.Valid_Flag = Valid_Flag;
     }
 
-    public Boolean getItemFinish() {
-        return itemFinish;
+    public Boolean getITEM_FINISH() {
+        return ITEM_FINISH;
     }
 
-    public void setItemFinish(Boolean itemFinish) {
-        this.itemFinish = itemFinish;
+    public void setITEM_FINISH(Boolean ITEM_FINISH) {
+        this.ITEM_FINISH = ITEM_FINISH;
     }
 
     public Long getFk_part() {

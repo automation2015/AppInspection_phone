@@ -34,7 +34,7 @@ public class PartListDao extends AbstractDao<PartList, Long> {
         public final static Property PART_NAME = new Property(3, String.class, "PART_NAME", false, "PART__NAME");
         public final static Property PART_CREATE_DATE = new Property(4, String.class, "PART_CREATE_DATE", false, "PART__CREATE__DATE");
         public final static Property Valid_Flag = new Property(5, String.class, "Valid_Flag", false, "VALID__FLAG");
-        public final static Property PartFinish = new Property(6, Boolean.class, "partFinish", false, "PART_FINISH");
+        public final static Property PART_FINISH = new Property(6, Boolean.class, "PART_FINISH", false, "PART__FINISH");
         public final static Property Fk_equip = new Property(7, Long.class, "fk_equip", false, "FK_EQUIP");
     };
 
@@ -61,7 +61,7 @@ public class PartListDao extends AbstractDao<PartList, Long> {
                 "\"PART__NAME\" TEXT," + // 3: PART_NAME
                 "\"PART__CREATE__DATE\" TEXT," + // 4: PART_CREATE_DATE
                 "\"VALID__FLAG\" TEXT," + // 5: Valid_Flag
-                "\"PART_FINISH\" INTEGER," + // 6: partFinish
+                "\"PART__FINISH\" INTEGER," + // 6: PART_FINISH
                 "\"FK_EQUIP\" INTEGER);"); // 7: fk_equip
     }
 
@@ -106,9 +106,9 @@ public class PartListDao extends AbstractDao<PartList, Long> {
             stmt.bindString(6, Valid_Flag);
         }
  
-        Boolean partFinish = entity.getPartFinish();
-        if (partFinish != null) {
-            stmt.bindLong(7, partFinish ? 1L: 0L);
+        Boolean PART_FINISH = entity.getPART_FINISH();
+        if (PART_FINISH != null) {
+            stmt.bindLong(7, PART_FINISH ? 1L: 0L);
         }
  
         Long fk_equip = entity.getFk_equip();
@@ -139,7 +139,7 @@ public class PartListDao extends AbstractDao<PartList, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // PART_NAME
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // PART_CREATE_DATE
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // Valid_Flag
-            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // partFinish
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // PART_FINISH
             cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // fk_equip
         );
         return entity;
@@ -154,7 +154,7 @@ public class PartListDao extends AbstractDao<PartList, Long> {
         entity.setPART_NAME(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setPART_CREATE_DATE(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setValid_Flag(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setPartFinish(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setPART_FINISH(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
         entity.setFk_equip(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
      }
     

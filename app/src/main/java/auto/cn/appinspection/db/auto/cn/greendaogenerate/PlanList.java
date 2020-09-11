@@ -28,8 +28,8 @@ public class PlanList {
     private String ES_START_DATE;
     private String ES_END_DATE;
     private String ES_USER_NAME;
-    private String upload_time;
-    private Boolean planFinish;
+    private String UPLOAD_TIME;
+    private Boolean PLAN_FINISH;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -46,7 +46,7 @@ public class PlanList {
         this.id = id;
     }
 
-    public PlanList(Long id, String PLAN_ID, String PLAN_NAME, String PLAN_ORG_NAME, String PLAN_PART_NAME, String PLAN_PART_ID, Integer PLAN_NUM, Integer PLAN_CYCLE_TYPE, String PLAN_LAST_DATE, String PLAN_LAST_USER_NAME, String PLAN_CREATE_DATE, String Valid_Flag, String Shift, String CODE_NAME, String ES_CLASS_NAME, String ES_START_DATE, String ES_END_DATE, String ES_USER_NAME, String upload_time, Boolean planFinish) {
+    public PlanList(Long id, String PLAN_ID, String PLAN_NAME, String PLAN_ORG_NAME, String PLAN_PART_NAME, String PLAN_PART_ID, Integer PLAN_NUM, Integer PLAN_CYCLE_TYPE, String PLAN_LAST_DATE, String PLAN_LAST_USER_NAME, String PLAN_CREATE_DATE, String Valid_Flag, String Shift, String CODE_NAME, String ES_CLASS_NAME, String ES_START_DATE, String ES_END_DATE, String ES_USER_NAME, String UPLOAD_TIME, Boolean PLAN_FINISH) {
         this.id = id;
         this.PLAN_ID = PLAN_ID;
         this.PLAN_NAME = PLAN_NAME;
@@ -65,8 +65,8 @@ public class PlanList {
         this.ES_START_DATE = ES_START_DATE;
         this.ES_END_DATE = ES_END_DATE;
         this.ES_USER_NAME = ES_USER_NAME;
-        this.upload_time = upload_time;
-        this.planFinish = planFinish;
+        this.UPLOAD_TIME = UPLOAD_TIME;
+        this.PLAN_FINISH = PLAN_FINISH;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -219,20 +219,20 @@ public class PlanList {
         this.ES_USER_NAME = ES_USER_NAME;
     }
 
-    public String getUpload_time() {
-        return upload_time;
+    public String getUPLOAD_TIME() {
+        return UPLOAD_TIME;
     }
 
-    public void setUpload_time(String upload_time) {
-        this.upload_time = upload_time;
+    public void setUPLOAD_TIME(String UPLOAD_TIME) {
+        this.UPLOAD_TIME = UPLOAD_TIME;
     }
 
-    public Boolean getPlanFinish() {
-        return planFinish;
+    public Boolean getPLAN_FINISH() {
+        return PLAN_FINISH;
     }
 
-    public void setPlanFinish(Boolean planFinish) {
-        this.planFinish = planFinish;
+    public void setPLAN_FINISH(Boolean PLAN_FINISH) {
+        this.PLAN_FINISH = PLAN_FINISH;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

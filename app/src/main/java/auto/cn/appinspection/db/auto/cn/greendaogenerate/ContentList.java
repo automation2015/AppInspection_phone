@@ -28,9 +28,10 @@ public class ContentList {
     private String CONTENT_ALARM_STYLE;
     private String Valid_Flag;
     private String CODE_NAME;
-    private String temp_value;
-    private String photo_path;
-    private Boolean content_finish;
+    private String TEMP_VALUE;
+    private String PHOTO_PATH;
+    private Boolean CONTENT_FINISH;
+    private String CONTENT_STATUS;
     private Long fk_item;
 
     /** Used to resolve relations */
@@ -50,7 +51,7 @@ public class ContentList {
         this.id = id;
     }
 
-    public ContentList(Long id, String CONTENT_ID, String CONTENT_PL_BZ_ID, String CONTENT_PART_ID, String CONTENT_ITEM_ID, String CONTENT_NAME, String CONTENT_CONTENT_TYPE, Integer CONTENT_SORT, String CONTENT_WAY, Integer CONTENT_IS_USE, String CONTENT_STANDARD, Integer CONTENT_IS_PHOTO, Integer CONTENT_IS_PHOTO_EXCEPTION, String CONTENT_CREATE_DATE, String CONTENT_ALARM_H1, String CONTENT_ALARM_H2, String CONTENT_ALARM_STYLE, String Valid_Flag, String CODE_NAME, String temp_value, String photo_path, Boolean content_finish, Long fk_item) {
+    public ContentList(Long id, String CONTENT_ID, String CONTENT_PL_BZ_ID, String CONTENT_PART_ID, String CONTENT_ITEM_ID, String CONTENT_NAME, String CONTENT_CONTENT_TYPE, Integer CONTENT_SORT, String CONTENT_WAY, Integer CONTENT_IS_USE, String CONTENT_STANDARD, Integer CONTENT_IS_PHOTO, Integer CONTENT_IS_PHOTO_EXCEPTION, String CONTENT_CREATE_DATE, String CONTENT_ALARM_H1, String CONTENT_ALARM_H2, String CONTENT_ALARM_STYLE, String Valid_Flag, String CODE_NAME, String TEMP_VALUE, String PHOTO_PATH, Boolean CONTENT_FINISH, String CONTENT_STATUS, Long fk_item) {
         this.id = id;
         this.CONTENT_ID = CONTENT_ID;
         this.CONTENT_PL_BZ_ID = CONTENT_PL_BZ_ID;
@@ -70,9 +71,10 @@ public class ContentList {
         this.CONTENT_ALARM_STYLE = CONTENT_ALARM_STYLE;
         this.Valid_Flag = Valid_Flag;
         this.CODE_NAME = CODE_NAME;
-        this.temp_value = temp_value;
-        this.photo_path = photo_path;
-        this.content_finish = content_finish;
+        this.TEMP_VALUE = TEMP_VALUE;
+        this.PHOTO_PATH = PHOTO_PATH;
+        this.CONTENT_FINISH = CONTENT_FINISH;
+        this.CONTENT_STATUS = CONTENT_STATUS;
         this.fk_item = fk_item;
     }
 
@@ -234,28 +236,36 @@ public class ContentList {
         this.CODE_NAME = CODE_NAME;
     }
 
-    public String getTemp_value() {
-        return temp_value;
+    public String getTEMP_VALUE() {
+        return TEMP_VALUE;
     }
 
-    public void setTemp_value(String temp_value) {
-        this.temp_value = temp_value;
+    public void setTEMP_VALUE(String TEMP_VALUE) {
+        this.TEMP_VALUE = TEMP_VALUE;
     }
 
-    public String getPhoto_path() {
-        return photo_path;
+    public String getPHOTO_PATH() {
+        return PHOTO_PATH;
     }
 
-    public void setPhoto_path(String photo_path) {
-        this.photo_path = photo_path;
+    public void setPHOTO_PATH(String PHOTO_PATH) {
+        this.PHOTO_PATH = PHOTO_PATH;
     }
 
-    public Boolean getContent_finish() {
-        return content_finish;
+    public Boolean getCONTENT_FINISH() {
+        return CONTENT_FINISH;
     }
 
-    public void setContent_finish(Boolean content_finish) {
-        this.content_finish = content_finish;
+    public void setCONTENT_FINISH(Boolean CONTENT_FINISH) {
+        this.CONTENT_FINISH = CONTENT_FINISH;
+    }
+
+    public String getCONTENT_STATUS() {
+        return CONTENT_STATUS;
+    }
+
+    public void setCONTENT_STATUS(String CONTENT_STATUS) {
+        this.CONTENT_STATUS = CONTENT_STATUS;
     }
 
     public Long getFk_item() {

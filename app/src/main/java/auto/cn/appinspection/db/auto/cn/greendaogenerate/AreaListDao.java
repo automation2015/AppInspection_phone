@@ -36,8 +36,8 @@ public class AreaListDao extends AbstractDao<AreaList, Long> {
         public final static Property PL_AREA_CREATE_DATE = new Property(5, String.class, "PL_AREA_CREATE_DATE", false, "PL__AREA__CREATE__DATE");
         public final static Property Valid_Flag = new Property(6, Integer.class, "Valid_Flag", false, "VALID__FLAG");
         public final static Property PlanId = new Property(7, String.class, "PlanId", false, "PLAN_ID");
-        public final static Property AreaNormal = new Property(8, String.class, "areaNormal", false, "AREA_NORMAL");
-        public final static Property AreaFinish = new Property(9, Boolean.class, "areaFinish", false, "AREA_FINISH");
+        public final static Property AREA_NORNAL = new Property(8, String.class, "AREA_NORNAL", false, "AREA__NORNAL");
+        public final static Property AREA_FINISH = new Property(9, Boolean.class, "AREA_FINISH", false, "AREA__FINISH");
         public final static Property Fk_plan = new Property(10, Long.class, "fk_plan", false, "FK_PLAN");
     };
 
@@ -66,8 +66,8 @@ public class AreaListDao extends AbstractDao<AreaList, Long> {
                 "\"PL__AREA__CREATE__DATE\" TEXT," + // 5: PL_AREA_CREATE_DATE
                 "\"VALID__FLAG\" INTEGER," + // 6: Valid_Flag
                 "\"PLAN_ID\" TEXT," + // 7: PlanId
-                "\"AREA_NORMAL\" TEXT," + // 8: areaNormal
-                "\"AREA_FINISH\" INTEGER," + // 9: areaFinish
+                "\"AREA__NORNAL\" TEXT," + // 8: AREA_NORNAL
+                "\"AREA__FINISH\" INTEGER," + // 9: AREA_FINISH
                 "\"FK_PLAN\" INTEGER);"); // 10: fk_plan
     }
 
@@ -122,14 +122,14 @@ public class AreaListDao extends AbstractDao<AreaList, Long> {
             stmt.bindString(8, PlanId);
         }
  
-        String areaNormal = entity.getAreaNormal();
-        if (areaNormal != null) {
-            stmt.bindString(9, areaNormal);
+        String AREA_NORNAL = entity.getAREA_NORNAL();
+        if (AREA_NORNAL != null) {
+            stmt.bindString(9, AREA_NORNAL);
         }
  
-        Boolean areaFinish = entity.getAreaFinish();
-        if (areaFinish != null) {
-            stmt.bindLong(10, areaFinish ? 1L: 0L);
+        Boolean AREA_FINISH = entity.getAREA_FINISH();
+        if (AREA_FINISH != null) {
+            stmt.bindLong(10, AREA_FINISH ? 1L: 0L);
         }
  
         Long fk_plan = entity.getFk_plan();
@@ -162,8 +162,8 @@ public class AreaListDao extends AbstractDao<AreaList, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // PL_AREA_CREATE_DATE
             cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // Valid_Flag
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // PlanId
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // areaNormal
-            cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0, // areaFinish
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // AREA_NORNAL
+            cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0, // AREA_FINISH
             cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10) // fk_plan
         );
         return entity;
@@ -180,8 +180,8 @@ public class AreaListDao extends AbstractDao<AreaList, Long> {
         entity.setPL_AREA_CREATE_DATE(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setValid_Flag(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
         entity.setPlanId(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setAreaNormal(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setAreaFinish(cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0);
+        entity.setAREA_NORNAL(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setAREA_FINISH(cursor.isNull(offset + 9) ? null : cursor.getShort(offset + 9) != 0);
         entity.setFk_plan(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
      }
     

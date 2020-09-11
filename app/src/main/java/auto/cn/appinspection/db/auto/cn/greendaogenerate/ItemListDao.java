@@ -35,7 +35,7 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
         public final static Property ITEM_NAME = new Property(4, String.class, "ITEM_NAME", false, "ITEM__NAME");
         public final static Property ITEM_CREATE_DATE = new Property(5, String.class, "ITEM_CREATE_DATE", false, "ITEM__CREATE__DATE");
         public final static Property Valid_Flag = new Property(6, String.class, "Valid_Flag", false, "VALID__FLAG");
-        public final static Property ItemFinish = new Property(7, Boolean.class, "itemFinish", false, "ITEM_FINISH");
+        public final static Property ITEM_FINISH = new Property(7, Boolean.class, "ITEM_FINISH", false, "ITEM__FINISH");
         public final static Property Fk_part = new Property(8, Long.class, "fk_part", false, "FK_PART");
     };
 
@@ -63,7 +63,7 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
                 "\"ITEM__NAME\" TEXT," + // 4: ITEM_NAME
                 "\"ITEM__CREATE__DATE\" TEXT," + // 5: ITEM_CREATE_DATE
                 "\"VALID__FLAG\" TEXT," + // 6: Valid_Flag
-                "\"ITEM_FINISH\" INTEGER," + // 7: itemFinish
+                "\"ITEM__FINISH\" INTEGER," + // 7: ITEM_FINISH
                 "\"FK_PART\" INTEGER);"); // 8: fk_part
     }
 
@@ -113,9 +113,9 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
             stmt.bindString(7, Valid_Flag);
         }
  
-        Boolean itemFinish = entity.getItemFinish();
-        if (itemFinish != null) {
-            stmt.bindLong(8, itemFinish ? 1L: 0L);
+        Boolean ITEM_FINISH = entity.getITEM_FINISH();
+        if (ITEM_FINISH != null) {
+            stmt.bindLong(8, ITEM_FINISH ? 1L: 0L);
         }
  
         Long fk_part = entity.getFk_part();
@@ -147,7 +147,7 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // ITEM_NAME
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // ITEM_CREATE_DATE
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // Valid_Flag
-            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // itemFinish
+            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // ITEM_FINISH
             cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8) // fk_part
         );
         return entity;
@@ -163,7 +163,7 @@ public class ItemListDao extends AbstractDao<ItemList, Long> {
         entity.setITEM_NAME(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setITEM_CREATE_DATE(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setValid_Flag(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setItemFinish(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
+        entity.setITEM_FINISH(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
         entity.setFk_part(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
      }
     

@@ -108,7 +108,6 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
             }
         });
 
-
     }
 
     //设置adapter
@@ -167,29 +166,29 @@ public class AtyPlanHis extends BaseActivity implements LoaderManager.LoaderCall
                     for (int l = 0; l < itemLists.size(); l++) {
                         List<ContentList> contentLists = itemLists.get(l).getContents();
                         for (int m = 0; m < contentLists.size(); m++) {
-                            contentLists.get(m).setContent_finish(true);
-                            if (contentLists.get(m).getContent_finish()) {
+                            contentLists.get(m).setCONTENT_FINISH(true);
+                            if (contentLists.get(m).getCONTENT_FINISH()) {
                                 totalContentFinish++;
                             }
                         }
                         if (totalContentFinish == contentLists.size()) {
-                            itemLists.get(l).setItemFinish(true);
+                            itemLists.get(l).setITEM_FINISH(true);
                             totalItemFinish++;
                         }
 
                     }
                     if (totalItemFinish == itemLists.size()) {
-                        equiplists.get(k).setEquipFinish(true);
+                        equiplists.get(k).setEQUIP_FINISH(true);
                         totalEquipFinish++;
                     }
                 }
                 if (totalEquipFinish == equiplists.size()) {
-                    areaLists.get(j).setAreaFinish(true);
+                    areaLists.get(j).setAREA_FINISH(true);
                     totalAreaFinish++;
                 }
             }
             if (totalAreaFinish == areaLists.size()) {
-                mDatas.get(i).setPlanFinish(true);
+                mDatas.get(i).setPLAN_FINISH(true);
                 totalPlanFinish++;
             }
         }

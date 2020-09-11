@@ -10,13 +10,15 @@
     app:contentPadding="3dp"
     >
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/rl_desc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+
         android:padding="10dp">
 
     <LinearLayout
+        android:id="@+id/ll_desc_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -30,11 +32,29 @@
             style="@style/text_desc_data"
             />
     </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_desc_area_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/ll_desc_area">
+            <TextView
+                style="@style/text_area_check"
+                android:text="区域状态："
+                />
+            <TextView
+                android:id="@+id/tv_desc_area_status"
+                style="@style/text_desc_data"
+                />
+        </LinearLayout>
     <LinearLayout
+        android:id="@+id/ll_desc_equip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/ll_desc_area_status">
         <TextView
             style="@style/text_area_check"
             android:text="设备名称："
@@ -45,10 +65,12 @@
             />
     </LinearLayout>
         <LinearLayout
+            android:id="@+id/ll_desc_part"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/ll_desc_equip">
             <TextView
                 style="@style/text_area_check"
                 android:text="部位名称："
@@ -59,10 +81,12 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/ll_desc_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/ll_desc_part">
             <TextView
                 style="@style/text_area_check"
                 android:text="项目名称："
@@ -73,13 +97,15 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/ll_desc_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/ll_desc_item">
             <TextView
                 style="@style/text_area_check"
-                android:text="内容："
+                android:text="巡检内容："
                 />
             <TextView
                 android:id="@+id/tv_desc_content"
@@ -87,13 +113,15 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/ll_desc_standard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/ll_desc_content">
             <TextView
                 style="@style/text_area_check"
-                android:text="基准："
+                android:text="巡检基准："
                 />
             <TextView
                 android:id="@+id/tv_desc_standard"
@@ -101,13 +129,15 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/ll_desc_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/ll_desc_standard">
             <TextView
                 style="@style/text_area_check"
-                android:text="状态："
+                android:text="设备状态："
                 />
             <TextView
                 android:id="@+id/tv_desc_status"
@@ -115,18 +145,42 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/ll_desc_temprature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/ll_desc_status">
             <TextView
+
                 style="@style/text_area_check"
-                android:text="温度："
+                android:text="温  度  值："
                 />
             <TextView
                 android:id="@+id/tv_desc_temprature"
                 style="@style/text_desc_data"
                 />
         </LinearLayout>
-    </LinearLayout>
+        <Button
+            android:id="@+id/btn_desc_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/btn_selector"
+            android:text="查看异常照片"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:layout_below="@id/ll_desc_temprature"/>
+        <ImageView
+            android:id="@+id/iv_desc_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/icon_upload"
+            android:scaleType="centerCrop"
+            android:visibility="gone"/>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

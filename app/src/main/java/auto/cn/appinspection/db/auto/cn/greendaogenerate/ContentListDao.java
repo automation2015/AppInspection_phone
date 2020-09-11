@@ -47,10 +47,11 @@ public class ContentListDao extends AbstractDao<ContentList, Long> {
         public final static Property CONTENT_ALARM_STYLE = new Property(16, String.class, "CONTENT_ALARM_STYLE", false, "CONTENT__ALARM__STYLE");
         public final static Property Valid_Flag = new Property(17, String.class, "Valid_Flag", false, "VALID__FLAG");
         public final static Property CODE_NAME = new Property(18, String.class, "CODE_NAME", false, "CODE__NAME");
-        public final static Property Temp_value = new Property(19, String.class, "temp_value", false, "TEMP_VALUE");
-        public final static Property Photo_path = new Property(20, String.class, "photo_path", false, "PHOTO_PATH");
-        public final static Property Content_finish = new Property(21, Boolean.class, "content_finish", false, "CONTENT_FINISH");
-        public final static Property Fk_item = new Property(22, Long.class, "fk_item", false, "FK_ITEM");
+        public final static Property TEMP_VALUE = new Property(19, String.class, "TEMP_VALUE", false, "TEMP__VALUE");
+        public final static Property PHOTO_PATH = new Property(20, String.class, "PHOTO_PATH", false, "PHOTO__PATH");
+        public final static Property CONTENT_FINISH = new Property(21, Boolean.class, "CONTENT_FINISH", false, "CONTENT__FINISH");
+        public final static Property CONTENT_STATUS = new Property(22, String.class, "CONTENT_STATUS", false, "CONTENT__STATUS");
+        public final static Property Fk_item = new Property(23, Long.class, "fk_item", false, "FK_ITEM");
     };
 
     private DaoSession daoSession;
@@ -89,10 +90,11 @@ public class ContentListDao extends AbstractDao<ContentList, Long> {
                 "\"CONTENT__ALARM__STYLE\" TEXT," + // 16: CONTENT_ALARM_STYLE
                 "\"VALID__FLAG\" TEXT," + // 17: Valid_Flag
                 "\"CODE__NAME\" TEXT," + // 18: CODE_NAME
-                "\"TEMP_VALUE\" TEXT," + // 19: temp_value
-                "\"PHOTO_PATH\" TEXT," + // 20: photo_path
-                "\"CONTENT_FINISH\" INTEGER," + // 21: content_finish
-                "\"FK_ITEM\" INTEGER);"); // 22: fk_item
+                "\"TEMP__VALUE\" TEXT," + // 19: TEMP_VALUE
+                "\"PHOTO__PATH\" TEXT," + // 20: PHOTO_PATH
+                "\"CONTENT__FINISH\" INTEGER," + // 21: CONTENT_FINISH
+                "\"CONTENT__STATUS\" TEXT," + // 22: CONTENT_STATUS
+                "\"FK_ITEM\" INTEGER);"); // 23: fk_item
     }
 
     /** Drops the underlying database table. */
@@ -201,24 +203,29 @@ public class ContentListDao extends AbstractDao<ContentList, Long> {
             stmt.bindString(19, CODE_NAME);
         }
  
-        String temp_value = entity.getTemp_value();
-        if (temp_value != null) {
-            stmt.bindString(20, temp_value);
+        String TEMP_VALUE = entity.getTEMP_VALUE();
+        if (TEMP_VALUE != null) {
+            stmt.bindString(20, TEMP_VALUE);
         }
  
-        String photo_path = entity.getPhoto_path();
-        if (photo_path != null) {
-            stmt.bindString(21, photo_path);
+        String PHOTO_PATH = entity.getPHOTO_PATH();
+        if (PHOTO_PATH != null) {
+            stmt.bindString(21, PHOTO_PATH);
         }
  
-        Boolean content_finish = entity.getContent_finish();
-        if (content_finish != null) {
-            stmt.bindLong(22, content_finish ? 1L: 0L);
+        Boolean CONTENT_FINISH = entity.getCONTENT_FINISH();
+        if (CONTENT_FINISH != null) {
+            stmt.bindLong(22, CONTENT_FINISH ? 1L: 0L);
+        }
+ 
+        String CONTENT_STATUS = entity.getCONTENT_STATUS();
+        if (CONTENT_STATUS != null) {
+            stmt.bindString(23, CONTENT_STATUS);
         }
  
         Long fk_item = entity.getFk_item();
         if (fk_item != null) {
-            stmt.bindLong(23, fk_item);
+            stmt.bindLong(24, fk_item);
         }
     }
 
@@ -257,10 +264,11 @@ public class ContentListDao extends AbstractDao<ContentList, Long> {
             cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // CONTENT_ALARM_STYLE
             cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // Valid_Flag
             cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // CODE_NAME
-            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // temp_value
-            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // photo_path
-            cursor.isNull(offset + 21) ? null : cursor.getShort(offset + 21) != 0, // content_finish
-            cursor.isNull(offset + 22) ? null : cursor.getLong(offset + 22) // fk_item
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // TEMP_VALUE
+            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // PHOTO_PATH
+            cursor.isNull(offset + 21) ? null : cursor.getShort(offset + 21) != 0, // CONTENT_FINISH
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // CONTENT_STATUS
+            cursor.isNull(offset + 23) ? null : cursor.getLong(offset + 23) // fk_item
         );
         return entity;
     }
@@ -287,10 +295,11 @@ public class ContentListDao extends AbstractDao<ContentList, Long> {
         entity.setCONTENT_ALARM_STYLE(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
         entity.setValid_Flag(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
         entity.setCODE_NAME(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setTemp_value(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
-        entity.setPhoto_path(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
-        entity.setContent_finish(cursor.isNull(offset + 21) ? null : cursor.getShort(offset + 21) != 0);
-        entity.setFk_item(cursor.isNull(offset + 22) ? null : cursor.getLong(offset + 22));
+        entity.setTEMP_VALUE(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setPHOTO_PATH(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
+        entity.setCONTENT_FINISH(cursor.isNull(offset + 21) ? null : cursor.getShort(offset + 21) != 0);
+        entity.setCONTENT_STATUS(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
+        entity.setFk_item(cursor.isNull(offset + 23) ? null : cursor.getLong(offset + 23));
      }
     
     /** @inheritdoc */

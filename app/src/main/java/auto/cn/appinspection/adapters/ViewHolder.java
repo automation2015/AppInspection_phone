@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -95,7 +96,14 @@ public class ViewHolder {
 		return this;
 	}
 	public ViewHolder setBackground(int viewId,int color){
-		RoundProgress rp=getView(viewId);
+		View view=getView(viewId);
+		view.setBackgroundColor(color);
+		//rp.setProgress(progress);
+		return this;
+	}
+	public ViewHolder setVisiable(int viewId,int visiable){
+		View view=getView(viewId);
+		view.setVisibility(visiable);
 		//rp.setProgress(progress);
 		return this;
 	}

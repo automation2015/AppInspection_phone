@@ -19,7 +19,7 @@ public class Equiplist {
     private String EL_EIS_NAME;
     private String EL_VALID_FLAG;
     private Integer PL_AREA_ID;
-    private Boolean equipFinish;
+    private Boolean EQUIP_FINISH;
     private Long fk_area;
 
     /** Used to resolve relations */
@@ -41,7 +41,7 @@ public class Equiplist {
         this.id = id;
     }
 
-    public Equiplist(Long id, String EL_NAME, String EL_Depart_Name, String EL_ID, String EL_Type_Name, String EL_EIS_ID, String EL_EIS_NAME, String EL_VALID_FLAG, Integer PL_AREA_ID, Boolean equipFinish, Long fk_area) {
+    public Equiplist(Long id, String EL_NAME, String EL_Depart_Name, String EL_ID, String EL_Type_Name, String EL_EIS_ID, String EL_EIS_NAME, String EL_VALID_FLAG, Integer PL_AREA_ID, Boolean EQUIP_FINISH, Long fk_area) {
         this.id = id;
         this.EL_NAME = EL_NAME;
         this.EL_Depart_Name = EL_Depart_Name;
@@ -51,7 +51,7 @@ public class Equiplist {
         this.EL_EIS_NAME = EL_EIS_NAME;
         this.EL_VALID_FLAG = EL_VALID_FLAG;
         this.PL_AREA_ID = PL_AREA_ID;
-        this.equipFinish = equipFinish;
+        this.EQUIP_FINISH = EQUIP_FINISH;
         this.fk_area = fk_area;
     }
 
@@ -133,12 +133,12 @@ public class Equiplist {
         this.PL_AREA_ID = PL_AREA_ID;
     }
 
-    public Boolean getEquipFinish() {
-        return equipFinish;
+    public Boolean getEQUIP_FINISH() {
+        return EQUIP_FINISH;
     }
 
-    public void setEquipFinish(Boolean equipFinish) {
-        this.equipFinish = equipFinish;
+    public void setEQUIP_FINISH(Boolean EQUIP_FINISH) {
+        this.EQUIP_FINISH = EQUIP_FINISH;
     }
 
     public Long getFk_area() {
