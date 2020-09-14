@@ -52,7 +52,7 @@ public class PlanFragment extends BaseFragment {
     private List<PlanBean> mDatas;
     private CommonBaseAdapter<PlanBean> planAdapter;
     private String urlTest = "http://api.map.baidu.com/telematics/v3/weather?location=%E6%B5%8E%E5%8D%97&output=json&ak=FkPhtMBK0HTIQNh7gG4cNUttSTyr0nzo";
-    private String url = Constant.GETALLPLAN + "?username=巡检乙班&rolename=电气岗位点检员";
+    private String url = Constant.GETALLPLAN + "?username=巡检丁班&rolename=电气岗位点检员";
     private String url1 = Constant.GETALLPLAN + "?username=admin&rolename=系统管理员";
     private DbHelper dbHelper;
 

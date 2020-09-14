@@ -164,6 +164,31 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/ll_check_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/text_area_check"
+                    android:text="异常描述：" />
+
+                <EditText
+                    android:id="@+id/et_check_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="请输入异常问题描述！"
+                    android:maxLines="3"
+                    android:textColor="#5c5c5c"
+                    android:textSize="16sp"
+                    android:inputType="text"/>
+                />
+            </LinearLayout>
+            <LinearLayout
                 android:id="@+id/ll_check_quantify"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -193,31 +218,7 @@
                     android:layout_marginLeft="30dp"
                     android:text="℃" />
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/ll_check_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:visibility="gone">
 
-                <TextView
-                    style="@style/text_area_check"
-                    android:text="异常描述：" />
-
-                <EditText
-                    android:id="@+id/et_check_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:gravity="center_vertical"
-                    android:hint="请输入异常问题描述！"
-                    android:maxLines="3"
-                    android:textColor="#5c5c5c"
-                    android:textSize="16sp"
-                    android:inputType="text"/>
-                />
-            </LinearLayout>
 
 
 
@@ -226,7 +227,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
-        <android.support.design.widget.FloatingActionButton
+        <Button
+            android:id="@+id/btn_check_back"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/btn_selector"
+            android:text="上一条"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@mipmap/icon_back"
+            android:textColor="#ffffff"
+            android:textSize="16sp"/>
+        <Button
+            android:id="@+id/btn_check_forward"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_selector"
+            android:text="下一条"
+            android:drawableRight="@mipmap/icon_forword"
+            android:textColor="#ffffff"
+            android:textSize="16sp"/>
+      <!--  <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_check_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -251,7 +278,7 @@
             android:src="@mipmap/icon_forword"
             app:backgroundTint="@color/title_text"
             app:borderWidth="0dp"
-            app:maxImageSize="40dp"></android.support.design.widget.FloatingActionButton>
+            app:maxImageSize="40dp"></android.support.design.widget.FloatingActionButton>-->
 
     </RelativeLayout>
         </LinearLayout>

@@ -1,16 +1,23 @@
 package auto.cn.appinspection.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
+
 import java.util.List;
 import java.util.Map;
 
 import auto.cn.appinspection.R;
+import auto.cn.appinspection.utils.BitmapUtils;
+import auto.cn.appinspection.utils.UIUtils;
 
 public class BadgeViewAdapter extends BaseAdapter {
     private Context context;
@@ -48,9 +55,34 @@ public class BadgeViewAdapter extends BaseAdapter {
         String iconTitle = (String)dataMap.get("iconTitle");
         int iconId =(int) dataMap.get("iconId");
         holder.tvTitle.setText(iconTitle);
-        holder.ivIcon.setImageResource(iconId);
+
+        Picasso.with(context).load(iconId).transform(new Transformation() {
+            @Override
+            public Bitmap transform(Bitmap source) {//下载以后的内存中的bitmap对象
+                Bitmap bitmap =makeIcon(source);
+                return bitmap;
+            }
+
+            @Override
+            public String key() {
+                //此方法没有什么作用，但是要保证返回值不为null，否则报错
+                return "";
+            }
+        }).into( holder.ivIcon);
+       // holder.ivIcon.setImageResource(iconId);
         //holder.badge.setBadgeNumber(position+1);
         return convertView;
+    }
+    //处理图片的方法：压缩、圆形
+    private Bitmap makeIcon(Bitmap source) {
+        //压缩处理
+        Bitmap bitmap = BitmapUtils.zoom(source, UIUtils.dp2px(62),
+                UIUtils.dp2px(62));
+        //圆形处理
+        bitmap = BitmapUtils.circleBitmap(bitmap);
+        //回收bitmap资源
+        source.recycle();
+        return bitmap;
     }
     class ViewHolder{
         TextView tvTitle,tvBadge;
@@ -59,6 +91,7 @@ public class BadgeViewAdapter extends BaseAdapter {
         public ViewHolder(View view){
             tvTitle=view.findViewById(R.id.tv_title);
             ivIcon=view.findViewById(R.id.iv_icon);
+            tvBadge=view.findViewById(R.id.tv_badge);
            // badge=new QBadgeView(context).bindTarget(view.findViewById(R.id.tv_badge));
         }
 

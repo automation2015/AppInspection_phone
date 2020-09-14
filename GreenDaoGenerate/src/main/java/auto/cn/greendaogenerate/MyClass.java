@@ -8,7 +8,7 @@ import de.greenrobot.daogenerator.Schema;
 //1、增加字段，提示找不到：修改Schema version
 public class MyClass {
     public static void main(String[] args) {
-        Schema schema = new Schema(3, "auto.cn.greendaogenerate");
+        Schema schema = new Schema(4, "auto.cn.greendaogenerate");
 
         //添加plan实体
         Entity plan = schema.addEntity("PlanList");

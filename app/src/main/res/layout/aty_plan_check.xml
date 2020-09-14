@@ -14,9 +14,9 @@
         app:dividerColor="@color/gray"
         app:maskColor="@color/mask_color"
         app:menuBackgroundColor="@color/white"
-        app:menuSelectedIcon="@mipmap/iv_icon_down"
+        app:menuSelectedIcon="@mipmap/star_small_on"
         app:menuTextSize="14sp"
-        app:menuUnSelectedIcon="@mipmap/iv_icon_up"
+        app:menuUnSelectedIcon="@mipmap/star_small_off"
         app:textSelectdColor="@color/drop_down_selected"
         app:textUnSelectdColor="@color/drop_down_unselected"
         app:underlineColor="@color/gray"></auto.cn.appinspection.ui.DropDownMemu>

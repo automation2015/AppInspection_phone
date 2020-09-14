@@ -30,8 +30,6 @@ public class AtyPlanManager extends BaseActivity {
     TextView tvPlanCheck;
     @Bind(R.id.tv_plan_history)
     TextView tvPlanHistory;
-    @Bind(R.id.tv_plan_upload)
-    TextView tvPlanUpload;
     @Bind(R.id.tv_plan_delete)
     TextView tvPlanDelete;
     private DbHelper dbHelper;
@@ -110,10 +108,6 @@ public class AtyPlanManager extends BaseActivity {
     public void getPlanHis() {
         goToActivity(AtyPlanHis.class, null);
     }
-    //上传巡检记录
-    @OnClick(R.id.tv_plan_upload)
-    public void uploadRecord() {
 
-    }
 
 }

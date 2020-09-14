@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:drawableLeft="@mipmap/icon_maintainance_manage"
+                android:drawableLeft="@mipmap/icon_check"
                 android:text="点巡检" />
 
 
@@ -39,8 +39,8 @@
 
             <TextView
                 android:id="@+id/tv_plan_history"
-                android:text="巡检历史"
-                android:drawableLeft="@mipmap/icon_hidden_manage"
+                android:text="巡检记录"
+                android:drawableLeft="@mipmap/icon_write"
                 android:layout_width="match_parent"
                 style="@style/MoreTextStyle" />
 
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/divider_line"></View>
-
+<!--
                 <TextView
                     android:id="@+id/tv_plan_upload"
                     android:text="计划上传"
@@ -60,7 +60,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/divider_line"></View>
+                android:background="@color/divider_line"></View>-->
             <TextView
                 android:id="@+id/tv_plan_delete"
                 android:text="清空数据库"

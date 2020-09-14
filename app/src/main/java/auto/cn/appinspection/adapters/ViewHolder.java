@@ -7,6 +7,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import auto.cn.appinspection.ui.RoundProgress;
 
@@ -85,6 +88,7 @@ public class ViewHolder {
 		tv.setTextColor(colorRes);
 		return this;
 	}
+	//toggleButton点击事件
 	public ViewHolder tvOnClick(int viewId,CompoundButton.OnCheckedChangeListener listener){
 		ToggleButton tb=getView(viewId);
 		tb.setOnCheckedChangeListener(listener);
@@ -105,6 +109,18 @@ public class ViewHolder {
 		View view=getView(viewId);
 		view.setVisibility(visiable);
 		//rp.setProgress(progress);
+		return this;
+	}
+	//按钮点击事件
+	public ViewHolder btnOnClick(int viewId, View.OnClickListener listener){
+		Button btn=getView(viewId);
+		btn.setOnClickListener(listener);
+		return this;
+	}
+	//设置图片
+	public ViewHolder setImageUrl(int viewId, File file) {
+		ImageView iv = getView(viewId);
+		Picasso.with(mContext).load(file).into(iv);
 		return this;
 	}
 }

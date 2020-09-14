@@ -5,17 +5,23 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,9 +31,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.adapters.DropDownAdapter;
@@ -36,6 +47,7 @@ import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.commons.DbHelper;
 import auto.cn.appinspection.nfc.MyNfcRecordParse;
 import auto.cn.appinspection.ui.DropDownMemu;
+import auto.cn.appinspection.utils.BitmapUtils;
 import auto.cn.appinspection.utils.LogUtil;
 import auto.cn.appinspection.utils.UIUtils;
 import auto.cn.greendaogenerate.AreaList;
@@ -45,6 +57,9 @@ import auto.cn.greendaogenerate.ItemList;
 import auto.cn.greendaogenerate.PartList;
 import butterknife.Bind;
 import butterknife.OnClick;
+
+import static auto.cn.appinspection.commons.Constant.CAMERA;
+import static auto.cn.appinspection.commons.Constant.PICTURE;
 
 public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClickListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -60,18 +75,20 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     private DbHelper dbHelper;
     private String headers[] = {"设备", "部位", "项目", "内容"};
     private List<View> popViews = new ArrayList<>();
-
-    List<Equiplist> equipLists;
-    List<PartList> partLists;
-    List<ItemList> itemLists;
-    List<ContentList> contentLists;
+    //数据集合
+    private List<Equiplist> equipLists;
+    private List<PartList> partLists;
+    private List<ItemList> itemLists;
+    private List<ContentList> contentLists;
+    //adapters
     private DropDownAdapter<Equiplist> equipAdapter;
     private DropDownAdapter<PartList> partAdapter;
     private DropDownAdapter<ItemList> itemAdapter;
     private DropDownAdapter<ContentList> contentAdapter;
-
+    //Nfc
     private NfcAdapter mAdapter;
     private PendingIntent mPendingIntent;
+    //
     private String areaData;
     private String equipSelected;
     private String partSelected;
@@ -93,14 +110,15 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     private EditText etCheckQuantify;
     private ToggleButton tbCheckStatus;
     private ToggleButton tbCheckQuantify;
-    private FloatingActionButton fabCheckBack;
-    private FloatingActionButton fabCheckForward;
+    private Button btnCheckBack;
+    private Button btnCheckForward;
     private LinearLayout llCheckStatus, llCheckQuantify;
     private String contentStandard;
     private String currenArea = "";
     private int position = 0;
     private String contentAlarmH1;
     private String quantify;
+    private boolean checkWay = true;
 
     @Override
     protected int getLayoutId() {
@@ -138,6 +156,71 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         //初始化DropDownMenu
         initViews();
+    }
+    @OnClick(R.id.iv_title_setting)
+    public void openCamera(){
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(camera, CAMERA);
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA && resultCode == RESULT_OK && data != null) {//相机
+            //获取intent中的图片对象
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = (Bitmap) extras.get("data");
+            //对获取到的bitmap进行压缩、圆形处理
+            bitmap = BitmapUtils.zoom(bitmap, 300, 300);
+           // bitmap = BitmapUtils.circleBitmap(bitmap);
+
+            //加载显示
+            //ivMeIcon.setImageBitmap(bitmap);
+            //上传到服务器
+
+            //保存到本地
+            saveImage(bitmap);
+        } else {
+            UIUtils.toast("获取图片失败，请重试！",false);
+
+        }
+    }
+    //将Bitmap保存到本地的操作
+
+    /**
+     * 数据的存储。（5种）
+     * Bimap:内存层面的图片对象。
+     * 存储--->内存：
+     * BitmapFactory.decodeFile(String filePath);
+     * BitmapFactory.decodeStream(InputStream is);
+     * 内存--->存储：
+     * bitmap.compress(Bitmap.CompressFormat.PNG,100,OutputStream os);
+     */
+    private void saveImage(Bitmap bitmap) {
+        File filesDir;
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {//判断sd卡是否挂载
+            //路径1：storage/sdcard/Android/data/包名/files
+            filesDir = this.getExternalFilesDir("");
+        } else {//手机内部存储
+            //路径：data/data/包名/files
+            filesDir = this.getFilesDir();
+        }
+        FileOutputStream fos = null;
+        try {
+            String photoName=UUID.randomUUID().toString()+".png";
+            File file = new File(filesDir, photoName);
+            fos = new FileOutputStream(file);
+            if(bitmap!=null){
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);}
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     //初始化DropDownMenu
@@ -217,16 +300,16 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         tvCheckStandard = contentView.findViewById(R.id.tv_check_standard);
         etCheckDesc = contentView.findViewById(R.id.et_check_desc);
         etCheckQuantify = contentView.findViewById(R.id.et_check_quantify);
-        fabCheckBack = contentView.findViewById(R.id.fab_check_back);
-        fabCheckForward = contentView.findViewById(R.id.fab_check_forward);
+        btnCheckBack = contentView.findViewById(R.id.btn_check_back);
+        btnCheckForward = contentView.findViewById(R.id.btn_check_forward);
         tbCheckQuantify = contentView.findViewById(R.id.toggle_check_quantify);
         tbCheckStatus = contentView.findViewById(R.id.toggle_check_status);
         llCheckStatus = contentView.findViewById(R.id.ll_check_desc);
         llCheckQuantify = contentView.findViewById(R.id.ll_check_quantify);
         tbCheckStatus.setOnCheckedChangeListener(this);
         tbCheckQuantify.setOnCheckedChangeListener(this);
-        fabCheckBack.setOnClickListener(this);
-        fabCheckForward.setOnClickListener(this);
+        btnCheckBack.setOnClickListener(this);
+        btnCheckForward.setOnClickListener(this);
         dropDownMenu.setDropDownMenu(Arrays.asList(headers), popViews, contentView);
 
     }
@@ -480,7 +563,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fab_check_back:
+            case R.id.btn_check_back:
                 if (TextUtils.isEmpty(areaData)) {
                     UIUtils.toast("请先扫描区域标签！", false);
                 } else {
@@ -510,7 +593,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                     }
                 }
                 break;
-            case R.id.fab_check_forward:
+            case R.id.btn_check_forward:
                 if (TextUtils.isEmpty(areaData)) {
                     UIUtils.toast("请先扫描区域标签！", false);
                 } else {
@@ -540,6 +623,9 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                     } else {
 
                     }
+                    if (contentPosSelected != -1) {
+                        contentLists.get(contentPosSelected).setCONTENT_FINISH(true);
+                    }
                 }
                 break;
         }
@@ -551,10 +637,10 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         itemLists.clear();
         itemLists.addAll(equipLists.get(equipPosSelected).getItems());
         switch (v.getId()) {
-            case R.id.fab_check_back:
+            case R.id.btn_check_back:
                 itemPosSelected = itemLists.size() - 1;
                 break;
-            case R.id.fab_check_forward:
+            case R.id.btn_check_forward:
                 itemPosSelected = 0;
                 break;
         }
@@ -571,10 +657,10 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         contentLists.clear();
         contentLists.addAll(itemLists.get(itemPosSelected).getContents());
         switch (v.getId()) {
-            case R.id.fab_check_back:
+            case R.id.btn_check_back:
                 contentPosSelected = contentLists.size() - 1;
                 break;
-            case R.id.fab_check_forward:
+            case R.id.btn_check_forward:
                 contentPosSelected = 0;
                 break;
         }
@@ -583,20 +669,21 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     }
 
     private void setContentData(View v) {
+        if (contentPosSelected == -1) return;
         contentAdapter.setCheckItem(contentPosSelected);
         ContentList curContent = contentLists.get(contentPosSelected);
         tvCheckContent.setText(curContent.getCONTENT_NAME());
         tvCheckStandard.setText(curContent.getCONTENT_STANDARD());
-        boolean checkWay = curContent.getCONTENT_ALARM_STYLE().equals("定性");
+        checkWay = curContent.getCONTENT_ALARM_STYLE().equals("定性");
         if (checkWay) {
             tbCheckQuantify.setChecked(false);
-            tbCheckStatus.setChecked(false);
+            //tbCheckStatus.setChecked(false);
             llCheckQuantify.setVisibility(View.GONE);
-            llCheckStatus.setVisibility(View.GONE);
+            //llCheckStatus.setVisibility(View.GONE);
         } else {
             tbCheckQuantify.setChecked(true);
             llCheckQuantify.setVisibility(View.VISIBLE);
-            llCheckStatus.setVisibility(View.VISIBLE);
+            // llCheckStatus.setVisibility(View.VISIBLE);
             quantify = etCheckQuantify.getText().toString().trim();
             contentAlarmH1 = curContent.getCONTENT_ALARM_H1();
             if (TextUtils.isEmpty(quantify)) {
@@ -609,53 +696,82 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                         .show();
                 contentPosSelected--;
             } else {
+                curContent.setTEMP_VALUE(quantify);
                 if (Integer.valueOf(quantify) > Integer.valueOf(contentAlarmH1)) {
                     tbCheckStatus.setChecked(true);
+                    curContent.setCONTENT_STATUS("异常");
                 } else {
                     tbCheckStatus.setChecked(false);
+                    curContent.setCONTENT_STATUS("正常");
                 }
             }
         }
-        if(tbCheckStatus.isChecked()){
-            ivTitleSetting.setBackgroundResource(R.mipmap.icon_camera);
-            ivTitleSetting.setVisibility(View.VISIBLE);
-            String unusualDesc = etCheckDesc.getText().toString().trim();
-            if (TextUtils.isEmpty(unusualDesc)) {
-                new AlertDialog.Builder(AtyPlanCheck.this)
-                        .setTitle("提示")
-                        .setMessage("请输入异常信息！")
-                        .setCancelable(false)
-                        .setPositiveButton("确定", null)
-                        .create()
-                        .show();
-                contentPosSelected--;
-            } else {
-                etCheckQuantify.setText("");
-                etCheckDesc.setText("");
-                tbCheckQuantify.setChecked(false);
-                tbCheckStatus.setChecked(false);
-            }
+        if (tbCheckStatus.isChecked()) {
+            //设置控件状态
+            setUnusualStatus(curContent);
+        } else {
+            setUsualStatus();
         }
+        if (contentPosSelected != -1) {
+            dbHelper.insertOrReplace(contentLists.get(contentPosSelected));
+        }
+    }
+
+    //异常，设置控件选中状态
+    private void setUnusualStatus(ContentList curContent) {
+        //异常
+        llCheckStatus.setVisibility(View.VISIBLE);
+        ivTitleSetting.setBackgroundResource(R.mipmap.icon_camera);
+        ivTitleSetting.setVisibility(View.VISIBLE);
+        curContent.setCONTENT_STATUS("异常");
+        UIUtils.toast("请填写异常信息或者拍照上传！", false);
+        String unusualDesc = etCheckDesc.getText().toString().trim();
+        if (TextUtils.isEmpty(unusualDesc)) {
+            new AlertDialog.Builder(AtyPlanCheck.this)
+                    .setTitle("提示")
+                    .setMessage("请输入异常信息！")
+                    .setCancelable(false)
+                    .setPositiveButton("确定", null)
+                    .create()
+                    .show();
+            contentPosSelected--;
+        } else {
+            etCheckQuantify.setText("");
+            etCheckDesc.setText("");
+            tbCheckQuantify.setChecked(false);
+            tbCheckStatus.setChecked(false);
+            //curContent.setContentUnusuadInfo(unusualDesc);
+        }
+    }
+
+    //    正常,设置控件状态
+    private void setUsualStatus() {
+        //正常
+        llCheckStatus.setVisibility(View.GONE);
+        ivTitleSetting.setVisibility(View.GONE);
+        etCheckDesc.setText("");
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.toggle_check_status:
+
                 if (isChecked) {
-                    //异常
-                    llCheckStatus.setVisibility(View.VISIBLE);
-                    ivTitleSetting.setBackgroundResource(R.mipmap.icon_camera);
-                    ivTitleSetting.setVisibility(View.VISIBLE);
-                    UIUtils.toast("请填写异常信息或者拍照上传！", false);
-                    String unusualDesc = etCheckDesc.getText().toString().trim();
+                    //异常,设置控件状态
+                    setUnusualStatus(contentLists.get(contentPosSelected));
                 } else {
-                    //正常
-                    llCheckStatus.setVisibility(View.GONE);
-                    ivTitleSetting.setVisibility(View.GONE);
+                    //正常,设置控件状态
+                    setUsualStatus();
+
                 }
                 break;
             case R.id.toggle_check_quantify:
+                if (checkWay) {
+                    buttonView.setClickable(false);
+                } else {
+                    buttonView.setClickable(true);
+                }
                 if (isChecked) {
                     //量化
                     llCheckQuantify.setVisibility(View.VISIBLE);
@@ -666,4 +782,6 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 break;
         }
     }
+
+
 }

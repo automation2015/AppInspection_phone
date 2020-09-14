@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
@@ -13,8 +12,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +33,7 @@ import auto.cn.greendaogenerate.PlanList;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class AtyPlanDesc extends BaseActivity {
+public class AtyPlanDesc extends BaseActivity implements View.OnClickListener {
 
     private static final String KEY_PLAN_NAME = "plan_name";
     private static final String KEY_PLAN_ID = "plan_id";
@@ -55,11 +53,6 @@ public class AtyPlanDesc extends BaseActivity {
     TextView tvDescPlan;
     @Bind(R.id.tv_desc_shift)
     TextView tvDescShift;
-    //    private List<AreaList> areaLists = new ArrayList<>();
-//    private List<Equiplist> equipLists = new ArrayList<>();
-//    private List<PartList> partLists = new ArrayList<>();
-//    private List<ItemList> itemLists = new ArrayList<>();
-    //private List<ContentList> contentLists = new ArrayList<>();
     private List<ContentDescBean> contentDescLists = new ArrayList<>();
     private CommonBaseAdapter<ContentDescBean> mAdapter;
     private DbHelper dbHelper;
@@ -97,7 +90,7 @@ public class AtyPlanDesc extends BaseActivity {
         swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                //再次查询数据库数据
                 queryRecords();
                 if (querySuccess) {
                     UIUtils.toast("已经是最新数据了！", false);
@@ -109,39 +102,67 @@ public class AtyPlanDesc extends BaseActivity {
         });
         //查询数据库数据
         queryRecords();
+        //初始化适配器
+        setAdapter();
+        //设置适配器
+        lvPlanDesc.setAdapter(mAdapter);
+    }
+
+    //初始化适配器
+    private void setAdapter() {
         mAdapter = new CommonBaseAdapter<ContentDescBean>(this, contentDescLists, R.layout.item_plan_desc) {
             @Override
-            public void convert(ViewHolder holder, ContentDescBean contentDescBean) {
+            public void convert(final ViewHolder holder, final ContentDescBean contentDescBean) {
                 if (!contentDescBean.areaIsMaintenance()) {
-                    holder.setBackground(R.id.ll_desc, Color.rgb(255, 255, 255));
+                    //巡检区域正常使用
+                    holder.setBackground(R.id.rl_desc, Color.rgb(255, 255, 255));
+                    String contentStatus = contentDescBean.getContentStatus();
                     holder.setText(R.id.tv_desc_content, contentDescBean.getContent())
                             .setText(R.id.tv_desc_standard, contentDescBean.getStandard())
-
-                            .setText(R.id.tv_desc_status, contentDescBean.getContentStatus())
+                            .setText(R.id.tv_desc_status, contentStatus)
                             .setText(R.id.tv_desc_area, contentDescBean.getAreaName())
                             .setText(R.id.tv_desc_area_status, "正常")
                             .setText(R.id.tv_desc_equip, contentDescBean.getEquipName())
                             .setText(R.id.tv_desc_part, contentDescBean.getPartName())
                             .setText(R.id.tv_desc_item, contentDescBean.getItemName());
                     //设置温度显示
-                    if(!contentDescBean.getCheckWay().equals("114")){
-                        holder.setVisiable(R.id.ll_desc_temprature,View.GONE);
+                    if (!contentDescBean.getCheckWay().equals("114")) {
+                        //定性检查
+                        holder.setVisiable(R.id.ll_desc_temprature, View.GONE);
 
-                    }else{
-                        holder.setVisiable(R.id.ll_desc_temprature,View.VISIBLE);
-                        holder.setText(R.id.tv_desc_temprature,contentDescBean.getTemperature());
+                    } else {
+                        //定量检查
+                        holder.setVisiable(R.id.ll_desc_temprature, View.VISIBLE);
+                        holder.setText(R.id.tv_desc_temprature, contentDescBean.getTemperature());
                     }
-                    //设置查看异常照片
-                    if(contentDescBean.getContentStatus().equals("异常")){
-                        holder.setVisiable(R.id.btn_desc_photo,View.VISIBLE);
+                    //设置查看异常照片 TODO 有异常，需测试
+                    if (!TextUtils.isEmpty(contentStatus) && contentStatus.equals("异常")) {
+                        //异常情况，查看照片
+                        holder.setVisiable(R.id.btn_desc_photo, View.GONE);
 
                         //holder.setImageUrl(R.id.iv_desc_photo,"");
-                    }else{
-                        holder.setVisiable(R.id.btn_desc_photo,View.GONE);
+                    } else {
+                        //正常情况，没有照片
+                        holder.setVisiable(R.id.btn_desc_photo, View.VISIBLE);
                     }
+                    holder.btnOnClick(R.id.btn_desc_photo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String photoPath = contentDescBean.getPhotoPath();
+                            if (TextUtils.isEmpty(photoPath)) {
+                                UIUtils.toast("没有可供显示的异常照片！", false);
+                            } else {
+                                File file = new File(photoPath);
+
+                                holder.setVisiable(R.id.iv_desc_photo, View.VISIBLE);
+                                holder.setImageUrl(R.id.iv_desc_photo, file);
+                            }
+                        }
+                    });
 
                 } else {
-                    holder.setBackground(R.id.ll_desc, Color.rgb(255, 255, 200));
+                    //巡检区域检修
+                    holder.setBackground(R.id.rl_desc, Color.rgb(255, 255, 200));
                     holder.setText(R.id.tv_desc_content, "")
                             .setText(R.id.tv_desc_standard, "")
                             .setText(R.id.tv_desc_temprature, "")
@@ -151,12 +172,9 @@ public class AtyPlanDesc extends BaseActivity {
                             .setText(R.id.tv_desc_equip, "")
                             .setText(R.id.tv_desc_part, "")
                             .setText(R.id.tv_desc_item, "");
-
-
                 }
             }
         };
-        lvPlanDesc.setAdapter(mAdapter);
     }
 
     //查询数据库数据
@@ -191,12 +209,18 @@ public class AtyPlanDesc extends BaseActivity {
                                         contentDescBean.setPhotoPath(contentList.getPHOTO_PATH());
                                         contentDescBean.setAreaName(areaLists.get(i).getPL_AREA_NAME());
                                         contentDescBean.setEquipName(equiplists.get(j).getEL_NAME());
-                                         contentDescBean.setPartName(partLists.get(m).getPART_NAME());
+                                        contentDescBean.setPartName(partLists.get(m).getPART_NAME());
                                         contentDescBean.setItemName(itemLists.get(k).getITEM_NAME());
                                         contentDescBean.setCheckWay(contentList.getCONTENT_WAY());
-                            contentDescBean.setContentStatus(contentList.getCONTENT_STATUS());
-                                        datas.add(contentDescBean);
-                                    }
+                                        contentDescBean.setContentStatus(contentList.getCONTENT_STATUS());
+                                            if (areaLists.get(i).getAREA_NORNAL() != null&&areaLists.get(i).getAREA_NORNAL().equals("检修")) {
+                                                contentDescBean.setAreaIsMaintenance(true);
+                                            } else {
+                                                contentDescBean.setAreaIsMaintenance(false);
+                                            }
+                                            datas.add(contentDescBean);
+                                        }
+
                                 }
                             }
                         }
@@ -207,7 +231,6 @@ public class AtyPlanDesc extends BaseActivity {
                     querySuccess = false;
                     return null;
                 }
-
             }
 
             @Override
@@ -243,4 +266,9 @@ public class AtyPlanDesc extends BaseActivity {
         context.startActivity(intent);
     }
 
+    //查看照片
+    @Override
+    public void onClick(View v) {
+
+    }
 }

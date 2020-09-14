@@ -96,15 +96,18 @@ public class AreaFragment extends BaseFragment implements AdapterView.OnItemClic
 
             adapter = new CommonBaseAdapter<AreaList>(getActivity(), areaLists, R.layout.item_drop_down_lv) {
                 @Override
-                public void convert(ViewHolder holder, AreaList areaList) {
+                public void convert(ViewHolder holder, final AreaList areaList) {
                     holder.setText(R.id.tv_drop_down_area, areaList.getPL_AREA_NAME());
                     holder.tvOnClick(R.id.tb_drop_down_area, new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             if (isChecked) {
                                 //TODO 为数据库添加一个标识字段
+                                areaList.setAREA_NORNAL("检修");
+                                long insertCount = dbHelper.insertOrReplace(areaList);
                                 UIUtils.toast("检修", false);
                             } else {
+                                areaList.setAREA_NORNAL("正常");
                                 UIUtils.toast("正常", false);
                             }
                         }
