@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -35,10 +33,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import auto.cn.appinspection.R;
 import auto.cn.appinspection.adapters.DropDownAdapter;
@@ -59,7 +58,6 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 import static auto.cn.appinspection.commons.Constant.CAMERA;
-import static auto.cn.appinspection.commons.Constant.PICTURE;
 
 public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClickListener, View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -119,6 +117,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     private String contentAlarmH1;
     private String quantify;
     private boolean checkWay = true;
+    private String photoPath;//异常照片的存储路径
 
     @Override
     protected int getLayoutId() {
@@ -157,11 +156,13 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         //初始化DropDownMenu
         initViews();
     }
+
     @OnClick(R.id.iv_title_setting)
-    public void openCamera(){
+    public void openCamera() {
         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(camera, CAMERA);
     }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA && resultCode == RESULT_OK && data != null) {//相机
@@ -169,17 +170,17 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
             //对获取到的bitmap进行压缩、圆形处理
-            bitmap = BitmapUtils.zoom(bitmap, 300, 300);
-           // bitmap = BitmapUtils.circleBitmap(bitmap);
+           // bitmap = BitmapUtils.zoom(bitmap, 700, 700);
+            // bitmap = BitmapUtils.circleBitmap(bitmap);
 
             //加载显示
             //ivMeIcon.setImageBitmap(bitmap);
             //上传到服务器
 
             //保存到本地
-            saveImage(bitmap);
+            photoPath = saveImage(bitmap);
         } else {
-            UIUtils.toast("获取图片失败，请重试！",false);
+            UIUtils.toast("获取图片失败，请重试！", false);
 
         }
     }
@@ -194,7 +195,8 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
      * 内存--->存储：
      * bitmap.compress(Bitmap.CompressFormat.PNG,100,OutputStream os);
      */
-    private void saveImage(Bitmap bitmap) {
+    private String saveImage(Bitmap bitmap) {
+        photoPath = "";
         File filesDir;
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {//判断sd卡是否挂载
             //路径1：storage/sdcard/Android/data/包名/files
@@ -205,13 +207,24 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         }
         FileOutputStream fos = null;
         try {
-            String photoName=UUID.randomUUID().toString()+".png";
-            File file = new File(filesDir, photoName);
-            fos = new FileOutputStream(file);
-            if(bitmap!=null){
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);}
+            if (equipPosSelected != -1 && itemPosSelected != -1 ) {
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmm");
+                String  photoName= sdf.format(new Date()) +equipLists.get(equipPosSelected).getEL_ID() + itemLists.get(itemPosSelected).getITEM_ID()
+                         +  ".png";
+                File file = new File(filesDir, photoName);
+                fos = new FileOutputStream(file);
+                if (bitmap != null) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    photoPath=file.getAbsolutePath();
+                }
+                return photoPath;
+            }else {
+                return null;
+            }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return null;
         } finally {
             if (fos != null) {
                 try {
@@ -336,10 +349,18 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 itemLists.clear();
                 itemLists.addAll(equipLists.get(position).getItems());
                 itemAdapter.notifyDataSetChanged();
-                tvCheckArea.setText(areaData);
 
+                contentLists.clear();
+                contentLists.addAll(itemLists.get(0).getContents());
+                contentAdapter.notifyDataSetChanged();
+
+                tvCheckArea.setText(areaData);
                 tvCheckEquip.setText(equipSelected);
                 tvCheckEquip.setTextColor(Color.BLACK);
+                tvCheckPart.setText(partLists.get(0).getPART_NAME());
+                tvCheckItem.setText(itemLists.get(0).getITEM_NAME());
+                tvCheckContent.setText(itemLists.get(0).getContents().get(0).getCONTENT_NAME());
+                tvCheckStandard.setText(itemLists.get(0).getContents().get(0).getCONTENT_STANDARD());
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list3://part
@@ -349,6 +370,9 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 dropDownMenu.setTabText(position == -1 ? headers[2] : partLists.get(position).getPART_NAME());
                 tvCheckPart.setText(partSelected);
                 tvCheckPart.setTextColor(Color.BLACK);
+                tvCheckItem.setText(itemLists.get(0).getITEM_NAME());
+                tvCheckContent.setText(itemLists.get(0).getContents().get(0).getCONTENT_NAME());
+                tvCheckStandard.setText(itemLists.get(0).getContents().get(0).getCONTENT_STANDARD());
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list4://item
@@ -361,6 +385,8 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
                 contentAdapter.notifyDataSetChanged();
                 tvCheckItem.setText(itemSelected);
                 tvCheckItem.setTextColor(Color.BLACK);
+                tvCheckContent.setText(contentLists.get(0).getCONTENT_NAME());
+                tvCheckStandard.setText(contentLists.get(0).getCONTENT_STANDARD());
                 dropDownMenu.closeMenu();
                 break;
             case R.id.list5://content
@@ -712,6 +738,13 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         } else {
             setUsualStatus();
         }
+        if(!TextUtils.isEmpty(photoPath)){
+            curContent.setCONTENT_IS_PHOTO(1);
+            curContent.setPHOTO_PATH(photoPath);
+        }else{
+            curContent.setCONTENT_IS_PHOTO(0);
+            curContent.setPHOTO_PATH("");
+        }
         if (contentPosSelected != -1) {
             dbHelper.insertOrReplace(contentLists.get(contentPosSelected));
         }
@@ -724,7 +757,7 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
         ivTitleSetting.setBackgroundResource(R.mipmap.icon_camera);
         ivTitleSetting.setVisibility(View.VISIBLE);
         curContent.setCONTENT_STATUS("异常");
-        UIUtils.toast("请填写异常信息或者拍照上传！", false);
+        //UIUtils.toast("请填写异常信息或者拍照上传！", false);
         String unusualDesc = etCheckDesc.getText().toString().trim();
         if (TextUtils.isEmpty(unusualDesc)) {
             new AlertDialog.Builder(AtyPlanCheck.this)
@@ -756,10 +789,10 @@ public class AtyPlanCheck extends BaseActivity implements AdapterView.OnItemClic
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.toggle_check_status:
-
                 if (isChecked) {
                     //异常,设置控件状态
-                    setUnusualStatus(contentLists.get(contentPosSelected));
+                    if(contentPosSelected!=-1){
+                    setUnusualStatus(contentLists.get(contentPosSelected));}
                 } else {
                     //正常,设置控件状态
                     setUsualStatus();

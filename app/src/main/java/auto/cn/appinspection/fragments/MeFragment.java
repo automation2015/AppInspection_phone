@@ -115,8 +115,6 @@ public class MeFragment extends BaseFragment {
         setGesturePassword();
         //重置手势密码
         resetGesture();
-
-
     }
     private void getGestureStatus() {
         boolean isOpen = sp.getBoolean("isOpen", false);

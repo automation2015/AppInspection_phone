@@ -5,14 +5,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +29,7 @@ import auto.cn.appinspection.bases.BaseActivity;
 import auto.cn.appinspection.beans.ContentDescBean;
 import auto.cn.appinspection.commons.Constant;
 import auto.cn.appinspection.commons.DbHelper;
+import auto.cn.appinspection.ui.CustomDialog;
 import auto.cn.appinspection.utils.UIUtils;
 import auto.cn.greendaogenerate.AreaList;
 import auto.cn.greendaogenerate.ContentList;
@@ -32,6 +39,7 @@ import auto.cn.greendaogenerate.PartList;
 import auto.cn.greendaogenerate.PlanList;
 import butterknife.Bind;
 import butterknife.OnClick;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class AtyPlanDesc extends BaseActivity implements View.OnClickListener {
 
@@ -53,12 +61,22 @@ public class AtyPlanDesc extends BaseActivity implements View.OnClickListener {
     TextView tvDescPlan;
     @Bind(R.id.tv_desc_shift)
     TextView tvDescShift;
+
     private List<ContentDescBean> contentDescLists = new ArrayList<>();
     private CommonBaseAdapter<ContentDescBean> mAdapter;
     private DbHelper dbHelper;
     private String planId;
     private ProgressDialog pd;
     private boolean querySuccess;
+    private PlanList planList;
+    private List<AreaList> areaLists;
+    private List<Equiplist> equiplists;
+    private List<PartList> partLists;
+    private List<ItemList> itemLists;
+    private List<ContentList> contentLists;
+    private CustomDialog dialog;
+    private PhotoViewAttacher mAttecher;
+    private ImageView ivPhoto;
 
     @Override
     protected int getLayoutId() {
@@ -84,6 +102,10 @@ public class AtyPlanDesc extends BaseActivity implements View.OnClickListener {
 
         tvDescPlan.setText(planName);
         tvDescShift.setText(shift);
+        //初始化dialog
+        dialog=new CustomDialog(this,LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT
+                ,R.layout.item_photo_dialog,R.style.Theme_dialog,Gravity.CENTER,R.style.pop_anim_style);
+        ivPhoto = dialog.findViewById(R.id.iv_photo_dialog);
         //设置下拉刷新控件的颜色
         swiperefresh.setColorSchemeColors(Color.BLUE);
         //设置下拉刷新监听
@@ -138,24 +160,32 @@ public class AtyPlanDesc extends BaseActivity implements View.OnClickListener {
                     //设置查看异常照片 TODO 有异常，需测试
                     if (!TextUtils.isEmpty(contentStatus) && contentStatus.equals("异常")) {
                         //异常情况，查看照片
-                        holder.setVisiable(R.id.btn_desc_photo, View.GONE);
+                        holder.setVisiable(R.id.btn_desc_photo, View.VISIBLE);
+
 
                         //holder.setImageUrl(R.id.iv_desc_photo,"");
                     } else {
                         //正常情况，没有照片
-                        holder.setVisiable(R.id.btn_desc_photo, View.VISIBLE);
+                        holder.setVisiable(R.id.btn_desc_photo, View.GONE);
                     }
                     holder.btnOnClick(R.id.btn_desc_photo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             String photoPath = contentDescBean.getPhotoPath();
+
                             if (TextUtils.isEmpty(photoPath)) {
                                 UIUtils.toast("没有可供显示的异常照片！", false);
                             } else {
                                 File file = new File(photoPath);
-
-                                holder.setVisiable(R.id.iv_desc_photo, View.VISIBLE);
-                                holder.setImageUrl(R.id.iv_desc_photo, file);
+                                if (file.exists()) {
+                                    //加载图片
+                                    Picasso.with(AtyPlanDesc.this).load(file).into(ivPhoto);
+                                    //缩放
+                                    mAttecher=new PhotoViewAttacher(ivPhoto);
+                                    //刷新
+                                    mAttecher.update();
+                                    dialog.show();
+                                }
                             }
                         }
                     });
@@ -188,17 +218,17 @@ public class AtyPlanDesc extends BaseActivity implements View.OnClickListener {
                 dbHelper.openDb();
                 dbHelper.setDebug();
                 //根据planId查询数据
-                PlanList planList = dbHelper.queryPlanById(planId);
+                planList = dbHelper.queryPlanById(planId);
                 if (planList != null) {
-                    List<AreaList> areaLists = planList.getAreas();
+                    areaLists = planList.getAreas();
                     for (int i = 0; i < areaLists.size(); i++) {
-                        List<Equiplist> equiplists = areaLists.get(i).getEquips();
+                        equiplists = areaLists.get(i).getEquips();
                         for (int j = 0; j < equiplists.size(); j++) {
-                            List<PartList> partLists = equiplists.get(j).getParts();
-                            List<ItemList> itemLists = equiplists.get(j).getItems();
+                            partLists = equiplists.get(j).getParts();
+                            itemLists = equiplists.get(j).getItems();
                             for (int m = 0; m < partLists.size(); m++) {
                                 for (int k = 0; k < itemLists.size(); k++) {
-                                    List<ContentList> contentLists = itemLists.get(k).getContents();
+                                    contentLists = itemLists.get(k).getContents();
                                     for (int l = 0; l < contentLists.size(); l++) {
                                         ContentList contentList = contentLists.get(l);
                                         ContentDescBean contentDescBean = new ContentDescBean();
@@ -213,13 +243,18 @@ public class AtyPlanDesc extends BaseActivity implements View.OnClickListener {
                                         contentDescBean.setItemName(itemLists.get(k).getITEM_NAME());
                                         contentDescBean.setCheckWay(contentList.getCONTENT_WAY());
                                         contentDescBean.setContentStatus(contentList.getCONTENT_STATUS());
-                                            if (areaLists.get(i).getAREA_NORNAL() != null&&areaLists.get(i).getAREA_NORNAL().equals("检修")) {
-                                                contentDescBean.setAreaIsMaintenance(true);
-                                            } else {
-                                                contentDescBean.setAreaIsMaintenance(false);
-                                            }
-                                            datas.add(contentDescBean);
+                                        contentDescBean.setPlanId(planId);
+                                        contentDescBean.setAreaId(String.valueOf(areaLists.get(i).getPL_AREA_ID()));
+                                        contentDescBean.setEquipId(equiplists.get(j).getEL_ID());
+                                        contentDescBean.setPartId(partLists.get(m).getPART_ID());
+                                        contentDescBean.setItemId(itemLists.get(k).getITEM_ID());
+                                        if (areaLists.get(i).getAREA_NORNAL() != null && areaLists.get(i).getAREA_NORNAL().equals("检修")) {
+                                            contentDescBean.setAreaIsMaintenance(true);
+                                        } else {
+                                            contentDescBean.setAreaIsMaintenance(false);
                                         }
+                                        datas.add(contentDescBean);
+                                    }
 
                                 }
                             }
@@ -271,4 +306,31 @@ public class AtyPlanDesc extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
 
     }
-}
+
+    private String readImage() {
+        File fileDir;
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            //判断sd卡是否绑定
+            //路径1：storage/sdcard/Android/data/包名/files
+            //fileDir = this.getActivity().getFilesDir();
+            fileDir = this.getExternalFilesDir("");
+        } else {
+            //手机内部存储
+            //路径：data/data/包名/files
+            fileDir = this.getFilesDir();
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+//        String photoName = equipLists.get(equipPosSelected).getEL_ID() + itemLists.get(itemPosSelected).getITEM_ID()
+//                + sdf.format(new Date()) + ".png";
+        File file = new File(fileDir, "icon.png");
+        if (file.exists()) {
+            //存储-->内存
+            // Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            //ivMeIcon.setImageBitmap(bitmap);
+            //return true;
+            return file.getAbsolutePath();
+        }
+        return null;
+    }
+    }
+

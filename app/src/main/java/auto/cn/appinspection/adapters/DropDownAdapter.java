@@ -56,8 +56,7 @@ public  abstract class DropDownAdapter<T> extends BaseAdapter {
             if (checkItemPosition == position) {
                 holder.tvId.setTextColor(context.getResources().getColor(R.color.drop_down_selected));
                 holder.tvName.setTextColor(context.getResources().getColor(R.color.drop_down_selected));
-                holder.tvName.setCompoundDrawablesWithIntrinsicBounds(null, null, context.getResources().getDrawable(R.mipmap.icon_drop_down_selected), null);
-                holder.tvName.setCompoundDrawablePadding(370);
+                holder.tvName.setCompoundDrawablesWithIntrinsicBounds(null, null, context.getResources().getDrawable(R.mipmap.star_small_on), null);
             } else {
                 holder.tvId.setTextColor(context.getResources().getColor(R.color.drop_down_unselected));
                 holder.tvName.setTextColor(context.getResources().getColor(R.color.drop_down_unselected));

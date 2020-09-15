@@ -38,6 +38,7 @@
             style="@style/text_desc_data"
             />
     </LinearLayout>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"

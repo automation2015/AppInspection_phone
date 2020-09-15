@@ -4,14 +4,12 @@ public class ContentDescBean {
     private String areaName;
     private String equipName;
     private String partName;
+    private String areaId;
+    private String equipId;
+    private String partId;
+    private String itemId;
+    private String planId;
 
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
 
     private String itemName;
     private boolean areaIsMaintenance;
@@ -22,6 +20,54 @@ public class ContentDescBean {
     private boolean isPhoto;
     private String contentStatus;
     private String checkWay;
+
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
+    }
+
+    public String getEquipId() {
+        return equipId;
+    }
+
+    public void setEquipId(String equipId) {
+        this.equipId = equipId;
+    }
+
+    public String getPartId() {
+        return partId;
+    }
+
+    public void setPartId(String partId) {
+        this.partId = partId;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
 
     public String getContentStatus() {
         return contentStatus;
